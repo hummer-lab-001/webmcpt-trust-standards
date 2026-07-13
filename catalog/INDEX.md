@@ -63,6 +63,13 @@ Evidence: ★ primary-confirmed / ☆ secondary-confirmed / score = axes confirm
 | pandas-dev/pandas | Data analysis | BSD-3 | NumFOCUS-governed |
 | git/git | Version control | GPL-2.0 only | Self-evident + version-pinning philosophy |
 
+## Payments & fintech (added post-release — the provisional→verified cycle in action)
+
+| Repository | Domain | License | Axes confirmed | Notes |
+|---|---|---|---|---|
+| juspay/hyperswitch | Payment orchestration | Apache-2.0 ★ | 5 of 6 (axis 5 ◇) | Quality gates primary-verified: mandatory `cargo clippy --all-features`, nightly rustfmt, coverage tooling, Cypress integration tests. Governance docs cover commit format, git workflow (no force-push to shared branches, no squash during review), style, and test policy. Maintainer activity current as of 2026-07. Production proof stays ☆: the vendor's own case-studies page names Recurly, Zurich, ShopLC and others, but the individual adopter statements have not yet been read first-hand — so ☆, not ★. Independent third-party citation (axis 5) not yet found: ◇. |
+| medusajs/medusa | E-commerce platform | MIT ★ | 2 of 6 (production proof ☆) | Official docs cite Patyna (WooCommerce migration, 30% shorter purchase flow) and EKI (20M+ product configurations migrated from Magento); sources mix official docs with partner blogs, so ☆. Payment module is a clean provider-strategy pattern (`AbstractPaymentProvider` registry); no marketplace/split-payment support found in official docs — recorded as a limit, not assumed. |
+
 ## Considered and declined (recorded, not hidden)
 
 redis, elasticsearch (Type A; both later re-added an AGPL-3.0 option — still

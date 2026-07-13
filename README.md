@@ -21,6 +21,30 @@ Everything is packaged as Skills (`SKILL.md` + topic-split `references/`), so an
 load exactly the depth it needs: a one-line description, a ~100-line procedure, or the full
 worked evidence.
 
+## Quickstart — use it in 30 seconds
+
+**With an AI coding agent (Claude Code, Cursor, or any MCP/Skills-aware agent):**
+
+1. Clone or add this repo where your agent can read it:
+   ```bash
+   git clone https://github.com/hummer-lab-001/webmcpt-trust-standards
+   ```
+2. Point your agent at it and ask, in plain language:
+   > "Using `skills/c4-selection-criteria/SKILL.md`, judge whether **<repo>** is safe to
+   > reuse and production-grade — score it on the 6 axes and read the LICENSE text before
+   > deciding, don't trust the GitHub label."
+
+That's the whole loop: the agent loads the 6-axis checklist, applies it to the repo you
+name, and returns a scored verdict grounded in the LICENSE file itself.
+
+**Just want a fast license/exemplar answer?** Open [`catalog/INDEX.md`](catalog/INDEX.md) —
+the repository you're evaluating may already be there, with its license (read from the
+LICENSE text, not the GitHub label) and evidence level. Declined repos are listed too,
+each with the exact disqualifying clause.
+
+**Building your own catalog?** Copy [`skills/c4-selection-criteria/`](skills/c4-selection-criteria/)
+— it's MIT, self-contained, and the 6-axis method transfers to any domain.
+
 ## Why "WebMCPT" in the name
 
 WebMCPT is a trust-evaluation protocol concept: evaluate every connection to an AI model
