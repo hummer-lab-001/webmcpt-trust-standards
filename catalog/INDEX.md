@@ -62,6 +62,7 @@ Evidence: ★ primary-confirmed / ☆ secondary-confirmed / score = axes confirm
 | numpy/numpy | Numerical computing | BSD-3 | Nature paper |
 | pandas-dev/pandas | Data analysis | BSD-3 | NumFOCUS-governed |
 | git/git | Version control | GPL-2.0 only | Self-evident + version-pinning philosophy |
+| SigNoz/signoz | APM | MIT (ee/ dir: Enterprise License) | Mailmodo case study (VP Eng, named): ~200GB/day logs (peak 500-600GB), 200+ microservices |
 
 ## Payments & fintech (added post-release — the provisional→verified cycle in action)
 

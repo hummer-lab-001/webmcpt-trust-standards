@@ -65,6 +65,98 @@ The guide states its own unifying principle directly: it optimizes for
 code spends far more of its lifetime being read and maintained than being
 written — a philosophy that generalizes past these two languages.
 
+## Java: compiler legality as a floor, not a target
+
+Google's Java Style Guide treats what Java itself permits as a starting
+point, not a target — several rules demand more than the compiler requires
+(exhaustive switches, mandatory braces, near-unconditional `@Override`),
+while at least one explicitly declines to add a requirement the language
+doesn't need (horizontal alignment). In both directions, the stated
+justification is reviewer cost or bug prevention, not compiler correctness:
+
+- **A 100-character column limit** — "Java code has a column limit of 100
+  characters." No justification for the specific number appears in the
+  passage read; unlike several other rules in this section, this one is
+  stated as a bare limit without an accompanying rationale in the text
+  confirmed here.
+- **Wildcard imports are banned outright** — "Wildcard ('on-demand') imports,
+  static or otherwise, are not used." Stated as an unconditional prohibition,
+  covering both static and non-static wildcard imports.
+- **`@Override` is required whenever it is legal — with one named
+  exception** — "A method is marked with the @Override annotation whenever
+  it is legal." The guide immediately qualifies this: "@Override may be
+  omitted when the parent method is @Deprecated." So a method overriding a
+  `@Deprecated` superclass method is the one documented case where the
+  annotation may be left off.
+- **`switch` statements must be exhaustive, even where Java doesn't require
+  it** — "Google Style requires every switch to be exhaustive, even those
+  where the language itself does not require it." The rule is framed
+  explicitly as going beyond the language's own requirement.
+- **Horizontal alignment of code is not required** — the guide does not
+  mandate lining up tokens across adjacent lines; its stated reason is that
+  keeping such alignment intact through later edits costs reviewer time and
+  creates further problems down the line.
+- **Constants must be deeply immutable, not merely held in a `final`
+  reference** — "Constants are static final fields whose contents are deeply
+  immutable and whose methods have no detectable side effects." A mutable
+  object referenced by a `static final` field does not qualify and should
+  not be named in `UPPER_SNAKE_CASE`.
+- **Swallowing an exception in a `catch` block requires a comment defending
+  it** — "When it truly is appropriate to take no action whatsoever in a
+  catch block, the reason this is justified is explained in a comment."
+  Silence is permitted only when explicitly justified in writing.
+- **Braces are always required for `if`/`else`/`for`/`do`/`while`** —
+  mandatory even when the body is a single statement or empty.
+- **Local variables are declared close to first use** — each local variable
+  is declared near the point it is first used, rather than all declarations
+  being grouped at the top of a block.
+- **Array declarations take only the `String[] args` form** — the C-style
+  placement of brackets after the variable name, as in `String args[]`, is
+  disallowed.
+
+This is Google's own style guide for Google's own codebases — one company's
+stated preferences for one language, not a Java-wide standard.
+
+## Go: naming, interface ownership, and concurrency decisions
+
+Read directly from the Decisions page of Google's public Go Style Guide — not
+the Guide or Best Practices companion pages Google also publishes for Go. The
+rules below are Google's own stated conventions for its Go codebase, not a
+general Go-community consensus; some carry an absoluteness of phrasing that
+echoes the C++ guide above.
+
+- **Avoid the `Get`/`get` prefix on functions and methods** — the guide's own
+  words: "Function and method names should not use a Get or get prefix,
+  unless the underlying concept uses the word 'get'." The exception is
+  narrow and concept-driven, not a matter of brevity.
+- **The interface consumer defines the interface, not the implementer** —
+  stated directly: "The consumer of the interface should define it (not the
+  package implementing the interface)." Because Go's interface satisfaction
+  is implicit, nothing forces the implementing package to declare or depend
+  on the interface at all.
+- **Side-effect-only imports are confined to `main` or tests that need
+  them** — verbatim: "Packages that are imported only for their side effects
+  (using the syntax `import _ "package"`) may only be imported in a main
+  package, or in tests that require them." A library package may not carry a
+  hidden blank import for its own side effects, and even a test may only
+  pull one in if the test itself requires it.
+- **`context.Context` is always the first parameter** — "When passed to a
+  function or method, context.Context is always the first parameter." A
+  fixed positional convention rather than a case-by-case judgment.
+- **No custom context types, with no stated exceptions** — the guide's
+  strongest phrasing on this list: "Do not create custom context types or
+  use interfaces other than context.Context in function signatures. There
+  are no exceptions to this rule."
+- **Prefer synchronous functions over asynchronous ones** — "Prefer
+  synchronous functions over asynchronous functions." The guide's own
+  verbatim rationale: synchronous functions "keep goroutines localized
+  within a call," which "helps to reason about their lifetimes, and avoid
+  leaks and data races," and are "easier to test... without the need for
+  polling or synchronization." It adds that a caller can add concurrency
+  later by wrapping the call in a goroutine, but warns the reverse is hard:
+  "it is quite difficult (sometimes impossible) to remove unnecessary
+  concurrency at the caller side."
+
 ## Cross-language pattern (relative to this catalog's other findings)
 
 The same "restrict what the language allows, for a stated scale-driven or
@@ -76,6 +168,22 @@ guides apply at the syntax level.
 
 ## Honesty note
 
-Only Python and C++ have been read in full at time of writing; Google's other
-public guides (Go, Java, Shell, TypeScript, etc.) are ◇ — not yet read
-first-hand, not assumed to follow the same pattern.
+Python and C++ have been read in full at time of writing. Ten specific Java
+rules — 100-character column limit, wildcard-import ban, `@Override` policy
+(including its `@Deprecated`-parent exception), exhaustive-switch
+requirement, no mandatory horizontal alignment, deep constant immutability,
+commented-exception-swallowing, mandatory braces, local-variable declaration
+placement, and array-declaration form (see the Java section above) — have
+been confirmed first-hand against
+google.github.io/styleguide/javaguide.html; the rest of that guide (package
+structure, Javadoc conventions, naming beyond constants, and more) has not
+yet been read and is not assumed to follow the same pattern. Six specific Go
+rules — the `Get`/`get`-prefix convention, interface-consumer-defines-it,
+the side-effect-import restriction, `context.Context`-as-first-parameter,
+the ban on custom context types, and the synchronous-over-asynchronous
+preference (see the Go section above) — have been confirmed first-hand
+against the Decisions page of google.github.io/styleguide/go/decisions; the
+Guide and Best Practices companion pages Google also publishes for Go have
+not yet been read and are not assumed to follow the same pattern. Google's
+other public guides (Shell, TypeScript, etc.) remain ◇ — not yet read
+first-hand.
