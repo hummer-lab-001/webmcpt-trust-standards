@@ -157,6 +157,66 @@ echoes the C++ guide above.
   "it is quite difficult (sometimes impossible) to remove unnecessary
   concurrency at the caller side."
 
+## TypeScript: canonical exports, restrained any usage, and type-system-native visibility
+
+Read directly from Google's public TypeScript Style Guide
+(google.github.io/styleguide/tsguide.html) — this is Google's own style guide
+for Google's own codebases, one company's stated preferences for one
+language, not a TypeScript-community-wide standard. The first three rules
+below were confirmed first-hand across two separate verbatim read-throughs
+of the guide and are quoted directly; the remaining four come from a single
+earlier summary pass over the same page and are paraphrased below without
+quotation marks, rather than quoted verbatim.
+
+- **No default exports** (Exports section) — "Do not use default exports.
+  This ensures that all imports follow a uniform pattern." Stated reason:
+  "Default exports provide no canonical name, which makes central
+  maintenance difficult with relatively little benefit to code owners,
+  including potentially decreased readability".
+- **`any` is discouraged, not banned** (`any` Type section) — the guide's
+  own words: "Consider _not_ to use `any`. In circumstances where you want
+  to use `any`, consider one of:"
+  - "Provide a more specific type"
+  - "Use `unknown`"
+  - "Suppress the lint warning and document why"
+
+  Stated reason: "TypeScript's `any` type is a super and subtype of all
+  other types, and allows dereferencing all properties. As such, `any` is
+  dangerous - it can mask severe programming errors, and its use undermines
+  the value of having static types in the first place."
+- **No `#private` fields — use TypeScript's own `private` keyword**
+  (Class Members — No #private fields section) — "Do not use private
+  fields (also known as private identifiers)... Instead, use TypeScript's
+  visibility annotations." Stated reason: "Private identifiers cause
+  substantial emit size and performance regressions when down-leveled by
+  TypeScript, and are unsupported before ES2015. They can only be
+  downleveled to ES2015, not lower. At the same time, they do not offer
+  substantial benefits when static type checking is used to enforce
+  visibility."
+- **`const enum` is prohibited outright, not merely discouraged** — the
+  guide treats this as a hard rule rather than a preference. `const enum`
+  is a separate, optimization-only language feature that strips the enum
+  out of the emitted JavaScript entirely, making it invisible to plain
+  JavaScript consumers at compile time; because that breaks
+  interoperability for anything consumed outside the compiling project,
+  plain `enum` is required instead.
+- **Static methods must be called on the class that defines them — no
+  dynamic dispatch** — the guide restricts static methods to being invoked
+  through the declaring class itself, closing off calling them dynamically
+  through a variable or reference that might actually hold a subclass.
+- **`this` is disallowed inside static code — a separate rule from the one
+  above** — because static members aren't inherited the way instance
+  members are, a subclass can effectively override what a given static
+  member resolves to; referencing `this` inside a static method body can
+  therefore silently pick up a different value depending on which class
+  actually invoked it, rather than behaving the way `this` does in
+  instance code.
+- **Prefer relative imports within a project** — for files inside the same
+  logical project, the guide favors relative import paths (`./foo`,
+  `../bar`) over absolute ones, so that relocating files or directories
+  within the codebase doesn't force updates to import paths that point
+  outside the moved tree.
+
 ## Cross-language pattern (relative to this catalog's other findings)
 
 The same "restrict what the language allows, for a stated scale-driven or
@@ -184,6 +244,21 @@ the ban on custom context types, and the synchronous-over-asynchronous
 preference (see the Go section above) — have been confirmed first-hand
 against the Decisions page of google.github.io/styleguide/go/decisions; the
 Guide and Best Practices companion pages Google also publishes for Go have
-not yet been read and are not assumed to follow the same pattern. Google's
-other public guides (Shell, TypeScript, etc.) remain ◇ — not yet read
-first-hand.
+not yet been read and are not assumed to follow the same pattern.
+
+Google's TypeScript Style Guide (google.github.io/styleguide/tsguide.html)
+has since been read: three rules — the default-export ban, the
+`any`-avoidance guidance, and the `#private`-fields ban (see the TypeScript
+section above) — were confirmed first-hand across two separate verbatim
+passes over that page and are quoted directly; four further rules — the
+`const enum` prohibition, the no-dynamic-dispatch-on-statics rule, the
+no-`this`-in-static-code rule, and the relative-import preference (see the
+TypeScript section above) — come from a single earlier summary pass over the
+same page and are recorded above as paraphrase, not verbatim quotation; the
+rest of that guide has not yet been read and is not assumed to follow the
+same pattern. Shell is not the only guide still unread, however: Google's
+public style-guide catalog (google.github.io/styleguide/) lists well over a
+dozen further guides — among them AngularJS, Common Lisp, C#, HTML/CSS,
+JavaScript, JSON, Markdown, Objective-C, R, Swift, and Vim script, in
+addition to Shell — none of which have been read first-hand and none of
+which should be assumed to follow this pattern.
