@@ -42,7 +42,7 @@ Evidence: ★ primary-confirmed / ☆ secondary-confirmed / score = axes confirm
 | openssl/openssl | Cryptography | Apache-2.0 | CLA-level contribution governance |
 | microsoft/TypeScript | Compiler | Apache-2.0 | Airbnb ts-migrate, primary |
 | sqlalchemy/sqlalchemy | ORM | MIT | AOSA textbook chapter; Gerrit review |
-| JanusGraph/janusgraph | Graph DB | Apache-2.0 | eBay, Target, Red Hat (official page) |
+| JanusGraph/janusgraph | Graph DB | Apache-2.0 | eBay, Target, Red Hat (official page); peer-reviewed survey listing + vendor-benchmark subject (Database/OUP, 2021) |
 | open-telemetry/opentelemetry-collector | Observability | Apache-2.0 | CNCF "de-facto standard" statement, 2,800+ orgs |
 | chartjs/Chart.js | Visualization | MIT | Image-baseline regression testing |
 | memcached/memcached | Distributed cache | BSD-3 | USENIX NSDI'13 paper; MIT course material |
