@@ -217,6 +217,72 @@ quotation marks, rather than quoted verbatim.
   within the codebase doesn't force updates to import paths that point
   outside the moved tree.
 
+## Shell: readability floors, forbidden features, and structural discipline
+
+Read directly from Google's public Shell Style Guide
+(google.github.io/styleguide/shellguide.html) — this is Google's own style
+guide for Google's own codebases, one company's stated preferences for shell
+scripting conventions, not a shell-scripting-community-wide standard. The
+first five rules below were confirmed first-hand across two separate
+verbatim read-throughs of the guide and are quoted directly; the remaining
+five come from a single earlier summary pass over the same page and are
+paraphrased below without quotation marks, rather than quoted verbatim. One
+narrow caveat on the five quoted below: independent re-checks of the page
+have not consistently agreed on character-level typography — underscore vs.
+asterisk emphasis, and three-dot vs. Unicode ellipsis inside the bracket
+examples — so those specific glyphs, unlike the wording itself, should be
+treated as provisional pending a direct browser view-source check.
+
+- **A 100-line ceiling forces a rewrite in a more structured language** (When
+  to use Shell section) — "If you are writing a script that is more than 100
+  lines long, or that uses non-straightforward control flow logic, you
+  should rewrite it in a more structured language _now_." Either
+  condition — excess length or non-straightforward control flow — is stated
+  as sufficient on its own to trigger the rewrite.
+- **SUID and SGID are forbidden outright, with no exception offered**
+  (SUID/SGID section) — the guide's own words, quoted here as the two
+  separate sentences that appear together in that section rather than as
+  one continuous passage: "SUID and SGID are _forbidden_ on shell scripts."
+  "There are too many security issues with shell that make it nearly
+  impossible to secure sufficiently to allow SUID/SGID."
+- **`[[ ... ]]` is preferred over `[ ... ]`, `test`, and `/usr/bin/[`** (Test,
+  `[ ... ]`, and `[[ ... ]]` section) — "`[[ ... ]]` is preferred over
+  `[ ... ]`, `test` and `/usr/bin/[`. `[[ ... ]]` reduces errors as no
+  pathname expansion or word splitting takes place between `[[` and `]]`."
+  The stated reason is a correctness property of the syntax itself, not a
+  stylistic preference.
+- **`$(command)` is required over backticks** (Command Substitution
+  section) — "Use `$(command)` instead of backticks. Nested backticks
+  require escaping the inner ones with `\`. The `$(command)` format doesn't
+  change when nested and is easier to read."
+- **Variables should be quoted, brace form preferred — but the guide itself
+  flags this as non-mandatory** (Variable expansion section) — the guide's
+  own words: "Stay consistent with what you find; quote your variables;
+  prefer `"${var}"` over `"$var"`." Elsewhere in that section the guide
+  characterizes this kind of quoting guidance as a strong recommendation
+  rather than a hard mandate — a materially weaker force than the
+  forbidden-outright SUID/SGID rule above. Unlike the sentence just quoted,
+  that specific characterization is this document's paraphrase, not a
+  confirmed verbatim sentence.
+- **Function-local variables should be marked `local`** — variables
+  declared inside a function should carry the `local` keyword, so a
+  function's working state doesn't leak into, or collide with, the global
+  namespace.
+- **Avoid piping into a `while` loop — prefer process substitution or
+  `readarray`** — a pipe runs its right-hand side in a subshell, so
+  variable assignments made inside the loop body do not survive back into
+  the calling shell once the loop exits.
+- **Arithmetic should use double parentheses exclusively — not `let`,
+  square-bracket expressions, or `expr`** — the shell's own built-in
+  arithmetic (`((...))`, `$((...))`) is faster and avoids the portability
+  concerns the external or legacy forms (`let`, `$[...]`, `expr`) carry.
+- **Functions belong together, just below constants, with no executable
+  code between them** — grouping them at the top of the file this way is
+  stated as a readability and debugging aid.
+- **A script with more than one function needs a `main` function, called at
+  the file's end** — this gives the program one explicit entry point, and
+  lets the script itself use `local` the way its other functions do.
+
 ## Cross-language pattern (relative to this catalog's other findings)
 
 The same "restrict what the language allows, for a stated scale-driven or
@@ -256,9 +322,27 @@ no-`this`-in-static-code rule, and the relative-import preference (see the
 TypeScript section above) — come from a single earlier summary pass over the
 same page and are recorded above as paraphrase, not verbatim quotation; the
 rest of that guide has not yet been read and is not assumed to follow the
-same pattern. Shell is not the only guide still unread, however: Google's
-public style-guide catalog (google.github.io/styleguide/) lists well over a
-dozen further guides — among them AngularJS, Common Lisp, C#, HTML/CSS,
-JavaScript, JSON, Markdown, Objective-C, R, Swift, and Vim script, in
-addition to Shell — none of which have been read first-hand and none of
-which should be assumed to follow this pattern.
+same pattern.
+
+Google's Shell Style Guide (google.github.io/styleguide/shellguide.html) has
+since been read: five rules — the 100-line-or-non-straightforward-control-flow
+rewrite trigger, the SUID/SGID prohibition, the `[[ ... ]]`-over-`[ ... ]`/
+`test`/`/usr/bin/[` preference, the `$(command)`-over-backticks rule, and the
+variable-quoting/brace-form guidance (see the Shell section above) — were
+confirmed first-hand across two separate verbatim passes over that page and
+are quoted directly; note that the guide's own text characterizes the last of
+those five — variable quoting — as a strong recommendation rather than a hard
+mandate, a materially weaker force than the forbidden-outright SUID/SGID rule
+beside it, though that specific characterization is this document's
+paraphrase rather than a confirmed verbatim sentence. Five further rules — the
+mandatory-`local`-in-functions convention, the avoid-piping-into-`while`
+convention, the double-parenthesis-only arithmetic convention, the
+functions-grouped-below-constants convention, and the mandatory-`main`-
+function convention (see the Shell section above) — come from a single
+earlier summary pass over the same page and are recorded above as paraphrase,
+not verbatim quotation; the rest of that guide has not yet been read and is
+not assumed to follow the same pattern. With Shell now read, Google's public
+style-guide catalog (google.github.io/styleguide/) still lists well over a
+dozen further guides that remain unread first-hand — among them AngularJS,
+Common Lisp, C#, HTML/CSS, JavaScript, JSON, Markdown, Objective-C, R, Swift,
+and Vim script — none of which should be assumed to follow this pattern.
