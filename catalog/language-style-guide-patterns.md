@@ -432,6 +432,138 @@ ecosystem names its fields — many widely used JSON APIs (including some
 cataloged elsewhere in this repository) do not follow camelCase, the
 `kind`/`items` ordering, or the reserved top-level property names above.
 
+## HTML/CSS: one guide, two languages, and an internal quotation-mark contradiction the guide names itself
+
+Read directly from Google's public HTML/CSS Style Guide
+(google.github.io/styleguide/htmlcssguide.html) — this is Google's own
+style guide for HTML and CSS in its own codebases, one company's stated
+preferences, not an HTML/CSS-industry-wide standard. Unlike every other
+guide in this catalog, this single page governs two markup/style
+languages together: a "General" section states rules that apply to both
+before the guide splits into HTML-specific and CSS-specific sections — a
+structural choice not seen elsewhere here. Cross-checking method: two
+independent full read-throughs were run blind to each other; most rules
+below matched character-for-character between the two on first pass, and
+the remainder — where one pass returned a shorter, truncated version of a
+sentence the other pass returned in full, or where only one pass surfaced
+the rule at all — were resolved with additional short, targeted re-fetches
+asking only for that one rule's exact wording (the same short-fragment
+workaround the JSON section above introduced for this page-summarizer's
+character-count limit). Every rule quoted below reflects at least two
+independent confirmations, whether that was two matching initial passes or
+an initial pass plus a targeted re-fetch.
+
+- **Quotation marks split by language, with one exception carved back
+  across the split** — HTML requires double quotes, CSS requires single
+  quotes, except for one CSS at-rule that reverts to double. HTML:
+  "When quoting attributes values, use double quotation marks." / "Use
+  double (\"\") rather than single quotation marks ('') around attribute
+  values." CSS: "Use single ('') rather than double (\"\") quotation marks
+  for attribute selectors and property values." / "Do not use quotation
+  marks in URI values (url())." — then the guide names its own exception:
+  "Exception: If you do need to use the `@charset` rule, use double
+  quotation marks—single quotation marks are not permitted." The guide
+  does not merely differ by language; it states a rule, then a
+  contradicting exception to that same rule, entirely in its own words.
+- **Avoiding `id` attributes is a correctness rule about a JavaScript
+  side effect, not a naming-style preference** — "Avoid unnecessary id
+  attributes." / "Prefer class attributes for styling and data attributes
+  for scripting." Stated reason: "When an element has an id attribute,
+  browsers will make that available as a named property on the global
+  `window` prototype, which may cause unexpected behavior." Where an `id`
+  is unavoidable: "Where id attributes are strictly required, always
+  include a hyphen in the value to ensure it does not match the JavaScript
+  identifier syntax, e.g. use `user-profile` rather than just `profile` or
+  `userProfile`." This is a second, independent instance — in a completely
+  different artifact type (HTML markup, not a JSON payload) — of a Google
+  guide shaping a naming convention specifically to protect JavaScript's
+  implicit global/property namespace; see the JSON section's camelCase
+  rule above, whose own stated reason is that it "mirror[s] the guidelines
+  for naming JavaScript identifiers." The two guides reach the same
+  underlying concern (JavaScript's implicit property/namespace behavior)
+  from opposite directions — one naming data fields, one naming markup
+  attributes — independently confirmed against each guide's own text
+  rather than assumed from the resemblance alone.
+- **Class names must be hyphen-delimited; underscores and bare
+  concatenation are both disallowed** — "Use meaningful or generic class
+  names." / "Instead of presentational or cryptic names, always use class
+  names that reflect the purpose of the element in question, or that are
+  otherwise generic." Stated reason: "Using functional or generic names
+  reduces the probability of unnecessary document or template changes."
+  The delimiter is a separate, explicit rule: "Separate words in class
+  names by a hyphen." / "Do not concatenate words and abbreviations in
+  selectors by any characters (including none at all) other than hyphens,
+  in order to improve understanding and scannability."
+- **ID selectors are avoided entirely in CSS, not merely discouraged in
+  favor of classes** — "Avoid ID selectors." Stated reason: "ID attributes
+  are expected to be unique across an entire page, which is difficult to
+  guarantee when a page contains many components worked on by many
+  different engineers. Class selectors should be preferred in all
+  situations." A page-scale correctness argument (uniqueness is hard to
+  guarantee across many contributors), not a stylistic taste.
+- **`type` attributes on stylesheet and script elements are prohibited,
+  not merely optional** — "Omit type attributes for style sheets and
+  scripts." / "Do not use type attributes for style sheets (unless not
+  using CSS) and scripts (unless not using JavaScript)." Stated reason:
+  "Specifying type attributes in these contexts is not necessary as HTML5
+  implies text/css and text/javascript as defaults." A rule justified by
+  what the spec already guarantees by default, rather than by a
+  readability or scale argument.
+- **Capitalization is lowercase-only, across both languages, with one
+  named exception** — "Use only lowercase." / "All code has to be
+  lowercase: This applies to HTML element names, attributes, attribute
+  values (unless text/CDATA), CSS selectors, properties, and property
+  values (with the exception of strings)." No further rationale is stated
+  in the passage confirmed here beyond the rule itself.
+- **Trailing whitespace is banned for a stated diff-hygiene reason** —
+  "Remove trailing white spaces." Stated reason: "Trailing white spaces
+  are unnecessary and can complicate diffs." — this is the only rule in
+  this catalog's language-guide sections so far whose stated reason names
+  diff cleanliness specifically, as distinct from readability, performance,
+  or correctness.
+- **Shorthand CSS properties are required even when only one value is
+  being set** — "Use shorthand properties where possible." / "CSS offers a
+  variety of shorthand properties (like font) that should be used whenever
+  possible, even in cases where only one value is explicitly set." Stated
+  reason: "Using shorthand properties is useful for code efficiency and
+  understandability."
+- **Units are omitted after a zero value unless the specific property
+  requires one** — "Omit unit specification after \"0\" values, unless
+  required." / "Do not use units after 0 values unless they are required."
+  No further elaboration was found on which specific properties fall
+  under the "required" exception.
+- **Three-character hexadecimal color notation is preferred where the
+  color value permits it** — "Use 3 character hexadecimal notation where
+  possible." Stated reason: "For color values that permit it, 3 character
+  hexadecimal notation is shorter and more succinct." — a compression
+  argument, not a correctness one.
+- **Indentation is 2 spaces, uniformly, with no stated rationale** —
+  "Indent by 2 spaces at a time." / "Don't use tabs or mix tabs and spaces
+  for indentation." Applies identically across HTML and CSS in this single
+  guide; unlike several rules above, no justification accompanies this
+  specific pair of sentences in the passage confirmed here.
+
+**A closing observation worth flagging as a hedge, not a claim**: the
+guide's own closing "Parting Words" section reads, in part: "*Be
+consistent.* If you're editing code, take a few minutes to look at the
+code around you and determine its style... The point of having style
+guidelines is to have a common vocabulary of coding so people can
+concentrate on what you're saying rather than on how you're saying it...
+If code you add to a file looks drastically different from the existing
+code around it, it throws readers out of their rhythm." This closing
+sentiment strongly resembles the well-known "a foolish consistency" theme
+associated with PEP 8 and Google's own Python guide — but that specific
+resemblance has not been re-verified word-for-word against either of
+those documents here, so it is recorded as a noted similarity in spirit,
+not a claim of shared or copied wording.
+
+**Scope note**: this is Google's own convention for Google's own HTML/CSS
+codebases, not an HTML or CSS specification and not a claim about how the
+wider web-development community formats markup or stylesheets — many
+widely used frontend codebases (including projects cataloged elsewhere in
+this repository) use double-quoted CSS, `id`-heavy markup, or 4-space
+indentation, all of which this guide argues against.
+
 ## Cross-language pattern (relative to this catalog's other findings)
 
 The same "restrict what the language allows, for a stated scale-driven or
@@ -527,8 +659,35 @@ repeated in the section above. Note also that this guide governs a data
 format, not a programming language, and is scoped accordingly (see the
 Scope note in the JSON section above).
 
-With JSON now read, Google's public style-guide catalog
+Google's HTML/CSS Style Guide (google.github.io/styleguide/htmlcssguide.html)
+has since been read: eleven rules — the HTML-double/CSS-single quotation-mark
+split with its `@charset` exception, the `id`-attribute avoidance rule and its
+`window`-prototype rationale, the class-naming rule, the class-name hyphen
+delimiter rule, the ID-selector avoidance rule, the `type`-attribute omission
+rule, the lowercase-only capitalization rule, the trailing-whitespace rule,
+the shorthand-properties rule, the zero-value-units rule, and the
+three-character hex-notation rule (see the HTML/CSS section above) — were
+each confirmed by at least two independent sources: either two blind
+full read-throughs that matched character-for-character on first pass, or
+one read-through plus a short targeted re-fetch used to resolve a wording
+gap or single-pass-only finding (the same short-fragment technique
+introduced in the JSON section above, used here because several sentences
+ran past this page-summarizer's per-quote character limit); all are quoted
+directly. The 2-space-indentation rule is recorded as confirmed but with
+no rationale found in the passage read. The "Parting Words" closing section was read and quoted, but its
+resemblance to PEP 8's "foolish consistency" passage is noted as an
+unverified similarity in spirit, not a confirmed textual match — that
+specific cross-check has not been performed. Several sections of the guide
+have not been read at all and are not assumed to follow the same pattern:
+Comments, Action Items, Document Type, HTML Validity, Semantics, Multimedia
+Fallback, Separation of Concerns, Entity References, Optional Tags, HTML
+Line-Wrapping, CSS Validity, Class Name Style, Prefixes, Type Selectors,
+Important Declarations, Hacks, Declaration Order, Block Content Indentation,
+Declaration Stops, Property Name Stops, Declaration Block Separation,
+Selector and Declaration Separation, Rule Separation, and Section Comments.
+
+With HTML/CSS now read, Google's public style-guide catalog
 (google.github.io/styleguide/) still lists well over a dozen further guides
 that remain unread first-hand — among them AngularJS, Common Lisp, C#,
-HTML/CSS, Markdown, Objective-C, R, Swift, and Vim script — none of
+Markdown, Objective-C, R, Swift, and Vim script — none of
 which should be assumed to follow this pattern.
