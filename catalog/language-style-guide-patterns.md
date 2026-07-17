@@ -564,6 +564,162 @@ widely used frontend codebases (including projects cataloged elsewhere in
 this repository) use double-quoted CSS, `id`-heavy markup, or 4-space
 indentation, all of which this guide argues against.
 
+## Markdown: a documentation-writing convention, not a syntax-restriction guide
+
+Read directly from Google's public Markdown Style Guide
+(google.github.io/styleguide/docguide/style.html) — canonical URL
+independently confirmed two ways before quoting began: by reading the page
+itself (title "Markdown style guide," a GitHub "Improve this page" link
+pointing at `docguide/style.md` in the same `google/styleguide` repo) and
+by re-finding the same URL from the link text "Markdown Style Guide" on
+Google's own style-guide index page, rather than trusting the URL as
+handed down secondhand. This is Google's own convention for its
+documentation corpus, one company's stated preferences, not a
+Markdown-industry-wide or CommonMark-spec-level standard. Unlike every
+programming-language guide above, this one is not primarily about
+restricting what a language allows — Markdown barely has restrictable
+syntax — it is about how a large, multi-author documentation corpus stays
+searchable, scannable, and maintainable over time, closer in spirit to a
+writing style guide than a syntax guide. Cross-checking method: two
+independent full read-throughs were run blind to each other, followed by
+targeted re-fetches for wording gaps or single-pass-only findings — the
+same method used in the JSON and HTML/CSS sections above. Two rules below
+(the anchor-link rationale for unique heading names, and the short-list
+numbering rationale) surfaced the same interesting case of this method
+actually helping: the two initial passes each quoted a different half of
+what turned out to be one continuous sentence, and only a targeted
+re-fetch revealed they were fragments of the same sentence rather than
+two competing or partial rationales.
+
+- **A recommended document skeleton, ending in a dedicated
+  "miscellaneous links" section** — "In general, documents benefit from
+  some variation of the following layout:" — "The first heading should be
+  a level-one heading, ideally the same or nearly the same as the
+  filename." / "The first level-one heading is used as the page `<title>`."
+  The skeleton's last piece: "`## See also`: Put miscellaneous links at
+  the bottom for the user who wants to know more or didn't find what they
+  needed." — an explicit "put the noise at the end, not the top" ordering
+  rule.
+- **An 80-character line-length convention, justified by habit rather
+  than a technical constraint, with named exceptions** — "Markdown content
+  follows the residual convention of an 80-character line limit." Stated
+  reason, informal in tone compared to most rationales in this catalog:
+  "Why? Because it's what most of us do for code." "Exceptions to the
+  80-character rule include:" links, tables, headings, and code blocks —
+  content where forcing a wrap would break the content itself rather than
+  just the prose around it.
+- **Trailing whitespace is banned for two distinct reasons — a spec-level
+  correctness risk and a mundane tooling reality** — "Don't use trailing
+  whitespace. Use a trailing backslash to break lines." The correctness
+  risk: "The CommonMark spec decrees that two spaces at the end of a line
+  should insert a `<br />` tag." — meaning trailing whitespace is not just
+  untidy, it can silently change rendered output under the CommonMark
+  spec. The tooling reality, a separate and more mundane reason: "many
+  directories have a presubmit check for trailing whitespace, and many
+  IDEs will clean it up anyway."
+- **ATX-style headings (`#`, `##`) are required; Setext-style underline
+  headings (`===`, `---`) are rejected as ambiguous** — "Headings with `=`
+  or `-` underlines can be annoying to maintain and don't fit with the
+  rest of the heading syntax." The guide then illustrates the ambiguity
+  concern with a rhetorical question rather than leaving it as an
+  abstract claim: "An editor has to ask: Does `---` mean H1 or H2?" The
+  guide's own in-page example is annotated
+  "DO NOT DO THIS." directly beneath a Setext-style heading shown as a
+  counter-example.
+- **Every heading, including sub-sections, needs a unique and fully
+  descriptive name — the rationale is about anchor links, not
+  readability** — "Use unique and fully descriptive names for each
+  heading, even for sub-sections." Full stated reason (see the
+  cross-check note above on how this sentence was reconstructed): "Since
+  link anchors are constructed from headings, this helps ensure that the
+  automatically-constructed anchor links are intuitive and clear." A
+  vague heading like "Overview" repeated across sections would collide or
+  produce unintuitive anchor URLs; the rule is a namespacing concern
+  wearing a readability rule's clothing.
+- **Exactly one H1 per document, functioning as the title; everything
+  else is H2 or deeper** — "Use one H1 heading as the title of your
+  document. Subsequent headings should be H2 or deeper." No further
+  rationale is given beyond the rule itself in the passage confirmed here.
+- **Ordered lists get one of two opposite numbering conventions depending
+  on whether the list is expected to change** — long or frequently-edited
+  lists: "For longer lists that may change, especially long nested lists,
+  use \"lazy\" numbering:" (every item literally marked `1.`), justified
+  because "Markdown is smart enough to let the resulting HTML render your
+  numbered lists correctly" regardless of the literal digits used in
+  source. Short, stable lists get the opposite treatment: "However, if the
+  list is small and you don't anticipate changing it, prefer fully
+  numbered lists, because it's nicer to read in source." Two different
+  rules for the same syntax feature, each with its own distinct
+  rationale — and, like the anchor-link rationale above, this second
+  sentence was also reconstructed from two initial passes that had each
+  quoted only half of it, then confirmed whole on a third, targeted pass.
+- **Nested list items take a 4-space indent, for both numbered and
+  bulleted lists** — "When nesting lists, use a 4-space indent for both
+  numbered and bulleted lists:" — a single indent width applied uniformly
+  regardless of which list-marker style is nested.
+- **Inline code backticks are for literal rendering, not just
+  decoration** — "`Backticks` designate `inline code` that will be
+  rendered literally. Use them for short code quotations, field names,
+  and more:" — confirmed as one continuous two-sentence passage on direct
+  re-verification, after two independent passes each surfaced only one of
+  the two sentences.
+- **Fenced code blocks are strongly recommended over 4-space-indented
+  ones, for three separately stated reasons** — "Four-space indenting is
+  also interpreted as a code block," but "we strongly recommend fencing
+  for all code blocks" because: "You cannot specify the language. Some
+  Markdown features are tied to language specifiers." / "The beginning
+  and end of the code block are ambiguous." / "Indented code blocks are
+  harder to search for in Code Search." Three independently stated
+  reasons — a missing capability, an ambiguity/correctness concern, and a
+  tooling-specific searchability concern — stacked behind one
+  recommendation rather than a single justification.
+- **The language must be declared explicitly on a fenced code block** —
+  "It is best practice to explicitly declare the language, so that
+  neither the syntax highlighter nor the next editor must guess." A rule
+  justified for two different readers at once: the automated tool
+  (syntax highlighter) and the next human editor.
+- **Link text must be written for scanning readers, not linear ones —
+  with a concrete rewriting instruction, not just a prohibition** —
+  stated reason first: "Users often do not read documents; they scan
+  them." Then the prohibition: titling a link "here," "link," or simply
+  duplicating the target URL "tells the hasty reader precisely nothing
+  and is a waste of space." Then the guide gives an actual rewriting
+  procedure rather than leaving the fix to the reader's judgment:
+  "Instead, write the sentence naturally, then go back and wrap the most
+  appropriate phrase with the link:"
+- **Reference-style links trade source-scannability for prose
+  readability — the guide states the cost of its own recommendation** —
+  "Use reference links where the length of the link would detract from
+  the readability of the surrounding text if it were inlined." The guide
+  does not pretend this is free: "Reference links make it harder to see
+  the destination of a link in source text, and add additional syntax."
+  Placement rule for the reference definition itself: "We recommend
+  putting reference link definitions just before the next heading, at the
+  end of the section in which they're first used."
+- **Tables are reserved for data that is genuinely tabular and scannable;
+  lists are the stated default otherwise** — "Use tables when they make
+  sense: for the presentation of tabular data that needs to be scanned
+  quickly." / "Avoid using tables when your data could easily be
+  presented in a list." Stated reason: "Lists are much easier to write
+  and read in Markdown."
+- **The guide's closing rule pushes the opposite direction of the
+  HTML/CSS guide catalogued above it in this same file** — "Please prefer
+  standard Markdown syntax wherever possible and avoid HTML hacks."
+  Stated reason: "Every bit of HTML hacking reduces the readability and
+  portability of our Markdown corpus." Where the HTML/CSS guide above
+  spends its entire page prescribing how to write HTML and CSS well, this
+  guide's final rule is to avoid writing HTML at all inside a Markdown
+  document — the two guides, read together, describe adjacent territories
+  with a policed border between them rather than a shared one.
+
+**Scope note**: this is Google's own documentation convention for its own
+corpus, not a Markdown or CommonMark specification and not a claim about
+how the wider open-source or technical-writing community formats
+Markdown — many widely used README and documentation corpora (including
+projects cataloged elsewhere in this repository) do not enforce an
+80-character line limit, lazy numbering, or a hard ban on embedded HTML,
+all of which this guide recommends.
+
 ## Cross-language pattern (relative to this catalog's other findings)
 
 The same "restrict what the language allows, for a stated scale-driven or
@@ -686,8 +842,41 @@ Important Declarations, Hacks, Declaration Order, Block Content Indentation,
 Declaration Stops, Property Name Stops, Declaration Block Separation,
 Selector and Declaration Separation, Rule Separation, and Section Comments.
 
-With HTML/CSS now read, Google's public style-guide catalog
+Google's Markdown Style Guide (google.github.io/styleguide/docguide/style.html)
+has since been read: fifteen rules — the document-layout skeleton and its
+"See also" closing section, the 80-character line limit and its stated
+exceptions, the trailing-whitespace ban and both of its distinct reasons
+(the CommonMark `<br />`-insertion risk and the presubmit/IDE tooling
+reason), the ATX-vs-Setext heading rule, the unique-heading-names rule and
+its anchor-link rationale, the single-H1 rule, both branches of the
+ordered-list numbering rule (lazy vs. fully numbered) with their separate
+rationales, the nested-list 4-space-indent rule, the inline-code-backticks
+rule, the fenced-vs-indented code block rule with all three of its stated
+reasons, the declare-the-language rule, the informative-link-titles rule
+and its rewriting instruction, the reference-links rule with its stated
+readability tradeoff and placement sub-rule, the tables-vs-lists rule, and
+the closing prefer-Markdown-over-HTML rule (see the Markdown section
+above) — were each confirmed by at least two independent sources: two
+blind full read-throughs that matched or reconciled into one sentence
+between them, or one read-through plus a short targeted re-fetch; all are
+quoted directly. Two rationales (the anchor-link reason for unique heading
+names, and the short-list numbering reason) each required a third
+confirming pass specifically because the two initial passes had each
+quoted a different half of the same sentence — see the cross-check notes
+in the Markdown section above. Two additional
+single-pass findings from the initial extraction — a rule about using
+explicit root-relative paths for internal Markdown links, and a rule
+about avoiding relative paths (`../`) across directories — were not
+independently re-confirmed and are not included above; they are recorded
+here only as leads for a future pass. Several sections of the guide have
+not been read at all and are not assumed to follow the same pattern:
+Minimum viable documentation, Better is better than best, Capitalization
+(both the top-level section and the titles/headers sub-rule), the
+add-spacing-to-headings sub-rule, escape-newlines-in-code-blocks, nesting
+code blocks within lists, and the Images section.
+
+With Markdown now read, Google's public style-guide catalog
 (google.github.io/styleguide/) still lists well over a dozen further guides
 that remain unread first-hand — among them AngularJS, Common Lisp, C#,
-Markdown, Objective-C, R, Swift, and Vim script — none of
+Objective-C, R, Swift, and Vim script — none of
 which should be assumed to follow this pattern.
