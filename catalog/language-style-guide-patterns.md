@@ -283,6 +283,87 @@ treated as provisional pending a direct browser view-source check.
   the file's end** — this gives the program one explicit entry point, and
   lets the script itself use `local` the way its other functions do.
 
+## JavaScript: restricting a dynamic language ahead of its own TypeScript successor
+
+Read directly from Google's public JavaScript Style Guide
+(google.github.io/styleguide/jsguide.html) — this is Google's own style guide
+for Google's own codebases, one company's stated preferences for one
+language, not a JavaScript-community-wide standard. Google's guide page
+itself now recommends TypeScript for new code and points to the TypeScript
+guide above; the JavaScript guide is read here for its own historical
+pattern set, not as a claim that Google prefers it going forward. The seven
+rules below were confirmed first-hand across two separate verbatim
+read-throughs of the guide (both passes returned character-identical text)
+and are quoted directly; the remaining three come from a single pass and are
+paraphrased below without quotation marks, rather than quoted verbatim.
+
+- **The variadic `Array` constructor is banned, a literal is required
+  instead** — heading: "Do not use the variadic `Array` constructor."; body
+  text directly beneath it: "The constructor is error-prone if arguments are
+  added or removed. Use a literal instead." (quoted here as two separate
+  verbatim fragments — the heading has no trailing period on the source
+  page, unlike the body sentences, so the two are not one continuous
+  quotation). A single-argument `new Array(length)` call is separately
+  permitted, so the rule targets the ambiguous multi-argument form
+  specifically, not `Array`-construction as such.
+- **The `with` keyword is banned outright** — "Do not use the `with`
+  keyword. It makes your code harder to understand and has been banned in
+  strict mode since ES5." The stated reason combines a readability claim
+  with a language-specification fact (its own strict-mode rejection).
+- **`eval` and the `Function(...string)` constructor are banned, with one
+  named exception** — "Do not use `eval` or the `Function(...string)`
+  constructor (except for code loaders). These features are potentially
+  dangerous and simply do not work in CSP environments." The stated
+  rationale is dual: a security concern and a deployment-environment fact
+  (Content Security Policy incompatibility), not a style preference alone.
+- **Default exports are banned** — "Do not use default exports. Importing
+  modules must give a name to these values, which can lead to
+  inconsistencies in naming across modules." The opening prohibition
+  ("Do not use default exports.") is identical, word for word, to the
+  TypeScript guide's rule above; the stated rationale differs in wording
+  between the two guides (this one names naming *inconsistency* directly,
+  while the TypeScript guide's own quoted text names the lack of a
+  "canonical name" and "central maintenance difficult"), though both stay
+  on the same naming-related theme. Two separate Google language guides
+  independently banning the same feature, even with differently worded
+  reasoning, is still a convergence worth noting — just not a claim of
+  identical wording throughout.
+- **Identity operators are required over loose equality, with documented
+  exceptions** — "Use identity operators (`===`/`!==`) except in the cases
+  documented below." The guide frames this as a default with named carve-outs
+  rather than an absolute ban on `==`/`!=`.
+- **ES module cycles are banned even though the language permits them** —
+  "Do not create cycles between ES modules, even though the ECMAScript
+  specification allows this." The guide explicitly names the gap between
+  what the specification allows and what Google's style requires — the same
+  "restrict what the language permits" pattern seen throughout this file,
+  stated here in its most self-aware form: the rule text itself names the
+  permissiveness it is overriding.
+- **`var` is banned outright; `const` is the default, `let` the fallback** —
+  "Declare all local variables with either `const` or `let`. Use `const` by
+  default, unless a variable needs to be reassigned. The `var` keyword must
+  not be used." No stated rationale accompanies this specific sentence in
+  the passage confirmed here (unlike several rules above); `var`'s
+  function-scoping and hoisting behavior is the well-known reason in the
+  wider JavaScript community, but that is not asserted as this guide's own
+  stated words.
+- **Built-in objects and their prototypes must never be modified** —
+  paraphrased: extending or altering `Object`, `Array`, or other built-in
+  types/prototypes is disallowed outright, protecting code that depends on
+  standard built-in behavior remaining unchanged.
+- **Primitive wrapper objects must never be constructed with `new`** —
+  paraphrased: `Boolean`, `Number`, and `String` may be called as coercion
+  functions but must never be instantiated as objects via `new`, since a
+  wrapper object and its underlying primitive behave differently in ways the
+  guide characterizes as surprising (e.g. a wrapped `Boolean(false)` is
+  still truthy as an object).
+- **Braces are mandatory for all control structures, with a narrow
+  single-line exception** — paraphrased: `if`/`else`/`for`/`do`/`while`
+  bodies must be braced even for a single statement, except that a short
+  `if` with no `else` may stay unbraced on one line when it does not harm
+  readability — the same brace-discipline pattern as Java's unconditional
+  version above, but with an explicit carve-out Java's guide does not grant.
+
 ## Cross-language pattern (relative to this catalog's other findings)
 
 The same "restrict what the language allows, for a stated scale-driven or
@@ -341,8 +422,27 @@ functions-grouped-below-constants convention, and the mandatory-`main`-
 function convention (see the Shell section above) — come from a single
 earlier summary pass over the same page and are recorded above as paraphrase,
 not verbatim quotation; the rest of that guide has not yet been read and is
-not assumed to follow the same pattern. With Shell now read, Google's public
-style-guide catalog (google.github.io/styleguide/) still lists well over a
-dozen further guides that remain unread first-hand — among them AngularJS,
-Common Lisp, C#, HTML/CSS, JavaScript, JSON, Markdown, Objective-C, R, Swift,
-and Vim script — none of which should be assumed to follow this pattern.
+not assumed to follow the same pattern.
+
+Google's JavaScript Style Guide (google.github.io/styleguide/jsguide.html)
+has since been read: seven rules — the variadic-`Array`-constructor ban, the
+`with`-keyword ban, the `eval`/`Function(...string)` ban, the
+default-exports ban, the identity-operator requirement, the ES-module-cycle
+ban, and the `var`-ban/`const`-default rule (see the JavaScript section
+above) — were confirmed first-hand across two separate verbatim passes over
+that page (both passes returned character-identical text) and are quoted
+directly; three further rules — the no-modifying-built-ins rule, the
+no-`new`-on-primitive-wrappers rule, and the braces-mandatory-with-a-narrow-
+exception rule (see the JavaScript section above) — come from a single pass
+and are recorded above as paraphrase, not verbatim quotation; the rest of
+that guide (JSDoc conventions beyond the two rules noted, naming rules
+beyond constants, and more) has not yet been read and is not assumed to
+follow the same pattern. Note also that Google's own JavaScript guide page
+now recommends TypeScript for new code — it was read here for its own
+pattern set, not as a claim that Google currently prefers it.
+
+With JavaScript now read, Google's public style-guide catalog
+(google.github.io/styleguide/) still lists well over a dozen further guides
+that remain unread first-hand — among them AngularJS, Common Lisp, C#,
+HTML/CSS, JSON, Markdown, Objective-C, R, Swift, and Vim script — none of
+which should be assumed to follow this pattern.
