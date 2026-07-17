@@ -720,6 +720,207 @@ projects cataloged elsewhere in this repository) do not enforce an
 80-character line limit, lazy numbering, or a hard ban on embedded HTML,
 all of which this guide recommends.
 
+## C#: a guide that names its own borrowed lineage, and an unnamed one its examples give away
+
+Read directly from Google's public C# Style Guide
+(google.github.io/styleguide/csharp-style.html) — canonical URL
+independently confirmed two ways before quoting began: by the link text
+"C# Style Guide" on Google's own style-guide index page, and by the
+page's own GitHub "Improve this page" edit link, which points at
+`csharp-style.md` in the same `google/styleguide` repository. This is
+Google's own convention for its own C# codebases, one company's stated
+preferences, not a C#-community-wide or Microsoft-specification-level
+standard — though, uniquely among the guides read so far, this one
+explicitly defers to another company's standard for its core naming
+convention rather than inventing its own (see below). Cross-checking
+method: two independent full read-throughs, followed by targeted
+re-fetches for wording gaps and single-pass-only findings — the same
+method used throughout this file. One specific claim was checked before
+being written up here at all: a suggestion (from outside this
+cross-check process) that this guide carries Unity-game-engine-specific
+content. A full-page search for the literal words "Unity" and "game"
+found neither anywhere on the page; the only trace is discussed below,
+and it turned out to be more interesting, and more precisely stated, than
+the original suggestion.
+
+- **The naming convention explicitly defers to Microsoft's own C#
+  guidelines rather than being Google-invented** — "Names of classes,
+  methods, enumerations, public fields, public properties, namespaces:
+  PascalCase." / "Names of local variables, parameters: camelCase." /
+  "Names of private, protected, internal and protected internal fields
+  and properties: `_camelCase`." Stated reason, confirmed identically
+  across both independent passes: "Naming rules follow Microsoft's C#
+  naming guidelines." This catalog's JSON section above cites RFC 3339
+  and ISO 8601 for narrow date and duration formatting, but this is the
+  first guide read here to defer an entire naming-convention system —
+  not just one formatting detail — to another organization's published
+  standard, by name, as the stated rationale.
+- **Interfaces get an `I` prefix; acronyms count as one word for casing
+  purposes, not letter-by-letter** — "Names of interfaces start with `I`,
+  e.g. `IInterface`." / "For casing, a \"word\" is anything written
+  without internal spaces, including acronyms. For example, `MyRpc`
+  instead of `MyRPC`." A specific, machine-checkable definition of what
+  counts as a single "word" for casing purposes — closing off the
+  otherwise-ambiguous question of whether an acronym like RPC should stay
+  all-caps inside a PascalCase or camelCase identifier.
+- **Filenames are PascalCase and should match their main class; one core
+  class per file is the stated default** — "Filenames and directory
+  names are `PascalCase`, e.g. `MyFile.cs`." / "Where possible the file
+  name should be the same as the name of the main class in the file, e.g.
+  `MyClass.cs`." / "In general, prefer one core class per file."
+- **A single, fixed, fifteen-keyword modifier order, with no stated
+  exceptions** — "Modifiers occur in the following order: `public
+  protected internal private new abstract virtual override sealed static
+  readonly extern unsafe volatile async`." No rationale accompanies this
+  sentence in the passage confirmed here; the rule is stated as a bare,
+  total ordering.
+- **`using` declarations are alphabetical, with one named exception for
+  `System`** — "Namespace `using` declarations go at the top, before any
+  namespaces." / "`using` import order is alphabetical, apart from
+  `System` imports which always go first." A single, unconditional
+  carve-out inside an otherwise mechanical alphabetical rule.
+- **Class members are ordered on two independent axes at once — by kind,
+  then by access level within each kind** — first axis: "Group class
+  members in the following order:" nested types/enums/delegates/events,
+  then static/const/readonly fields, then fields and properties, then
+  constructors and finalizers, then methods. Second axis, applied inside
+  each of those groups: "Within each group, elements should be in the
+  following order:" Public, Internal, Protected internal, Protected,
+  Private. A closing preference layered on top of both: "Where possible,
+  group interface implementations together."
+- **Whitespace and brace rules are stated as directly inherited from
+  Google's own Java guide, not independently derived** — "A maximum of
+  one statement per line." / "A maximum of one assignment per statement."
+  / "Indentation of 2 spaces, no tabs." / "Column limit: 100." / "Braces
+  used even when optional." / "No line break before opening brace." / "No
+  line break between closing brace and `else`." Stated origin, confirmed
+  identically across both independent passes: "Developed from Google Java
+  style." This catalog's own Java section above independently confirmed
+  a 100-character column limit and mandatory braces as Java's own rules —
+  the C# guide names Java as its source for the same pair of rules here,
+  rather than this catalog inferring the resemblance from the outside.
+- **`const` first, `readonly` as fallback, named constants over magic
+  numbers** — "Variables and fields that can be made `const` should
+  always be made `const`." / "If `const` isn't possible, `readonly` can
+  be a suitable alternative." / "Prefer named constants to magic
+  numbers."
+- **Expression-bodied properties are preferred for single-line read-only
+  properties, and the guide dates its own rule as provisional** — "For
+  single line read-only properties, prefer expression body properties
+  (`=>`) when possible." / "For everything else, use the older `{ get;
+  set; }` syntax." / "Don't use on method definitions." The guide then
+  attaches a self-dated commitment to revisit the rule: "This will be
+  reviewed when C# 7 is live, which uses this syntax heavily." C# 7 has
+  since shipped (in 2017, per Microsoft's own release history rather than
+  anything stated on this page), so the future-tense sentence now reads
+  as a fossil of the guide's own drafting period, left in place rather
+  than updated or removed. It is not an isolated slip: see the
+  struct-defaults rule below, where the guide again defers a decision to
+  a stated future condition. Two such sentences in one guide look less
+  like an oversight than like a house habit of committing open questions
+  to the text rather than resolving or hiding them.
+- **Struct return values prefer a success-flag-plus-`out` shape over
+  nullables — and the guide openly leaves the better answer unbuilt** —
+  "Prefer returning a 'success' boolean value and a struct `out` value."
+  Nullables are permitted only under a stated two-part condition: "Where
+  performance isn't a concern and the resulting code significantly more
+  readable (e.g. chained null conditional operators vs deeply nested if
+  statements) nullable structs are acceptable." The guide then names its
+  own discomfort with the concession it just made: "Nullable structs are
+  convenient, but reinforce the general 'null is failure' pattern Google
+  prefers to avoid." And then defers the fix: "We will investigate a
+  `StatusOr` equivalent in the future, if there is enough demand." This
+  is the second future-deferred commitment in the same guide (the
+  expression-bodied-properties C#-7 note above is the first), and the
+  more revealing of the two — the guide states a house-wide principle
+  ("null is failure" is to be avoided), admits its own current rule
+  partially violates that principle, allows the violation anyway on
+  pragmatic grounds, and records the unbuilt alternative in the open,
+  conditional on demand that may never materialize.
+- **"Almost always use a class"; structs are reserved for small,
+  short-lived, value-like data — illustrated with three real Unity
+  engine type names, though the guide never names Unity itself** —
+  "Structs are always passed and returned by value." / "Almost always
+  use a class." / "Consider struct when the type can be treated like
+  other value types" — stated reason: "if instances of the type are
+  small and commonly short-lived or are commonly embedded in other
+  objects." The guide's own example list: "Good examples include
+  Vector3, Quaternion and Bounds." `Vector3`, `Quaternion`, and `Bounds`
+  are not generic C# or .NET types — they are specific, well-known types
+  from Unity's own scripting API (`UnityEngine.Vector3`,
+  `UnityEngine.Quaternion`, `UnityEngine.Bounds`). Despite this, a
+  full-page search found "Unity" nowhere as a standalone capitalized
+  word, and "game" nowhere at all; the string "unity" occurs exactly once
+  on the page, lowercased inside an example project name in an unrelated
+  namespace-naming rule — "For leaf 'application' code, such as
+  `unity_app`, namespaces are not necessary." — which is an incidental
+  example identifier, not a game-development guidance point.
+  The guide's example choices reveal a likely origin or audience the
+  guide's own text never states outright — a pattern worth recording
+  precisely as "the examples say Unity, the prose never does," rather
+  than as a claim that this is officially a Unity or game-development
+  style guide, which it does not present itself as.
+- **Extension methods are discouraged by default, not merely
+  situational** — "Only use an extension method when the source of the
+  original class is not available" / "or else when changing the source
+  is not feasible." Stated reason: "Be aware that using extension
+  methods always obfuscates the code, so err on the side of not adding
+  them." An unconditional claim ("always obfuscates") used to justify a
+  default-off stance rather than case-by-case judgment.
+- **`ref` and `out` carry several independent, narrowly scoped
+  restrictions — and one uses British rather than American spelling** —
+  "Use `out` for returns that are not also inputs." / "Place `out`
+  parameters after all other parameters in the method definition." /
+  "`ref` should be used rarely, when mutating an input is necessary." /
+  "Do not use `ref` as an `optimisation` for passing structs." / "Do not
+  use `ref` to pass a modifiable container into a method. `ref` is only
+  required when the supplied container needs be replaced with an
+  entirely different container instance." The spelling "optimisation"
+  (rather than "optimization") is confirmed as written on the page — a
+  minor textual detail, noted here rather than silently normalized to
+  American spelling, in keeping with this catalog's practice of quoting
+  exactly what a source says rather than what a reader might expect it to
+  say.
+- **LINQ: single-line calls preferred over long chains; member syntax
+  preferred over SQL-style query keywords** — "In general, prefer single
+  line LINQ calls and imperative code, rather than long chains of LINQ."
+  Stated reason: "Mixing imperative code and heavily chained LINQ is
+  often hard to read." A second, narrower preference in the same
+  section: prefer member extension methods over SQL-style LINQ keywords,
+  e.g. `myList.Where(x)` over `myList where x`. A third: avoid
+  `Container.ForEach(...)` for anything longer than a single statement.
+- **`var` is encouraged or discouraged by a stated readability test, not
+  a blanket rule either way** — "Use of `var` is encouraged if it aids
+  readability by avoiding type names that are noisy, obvious, or
+  unimportant." Encouraged specifically: when the type is obvious, or for
+  transient variables passed directly to other methods. Discouraged
+  specifically: when working with basic types, or with compiler-resolved
+  built-in numeric types. The same "restrict a permissive language
+  feature along a stated readability axis rather than ban or allow it
+  outright" shape seen in this catalog's TypeScript `any`-avoidance rule
+  above, applied here to type inference rather than to a loose type.
+
+Several further narrowly scoped rules were confirmed but are compressed
+here rather than given full entries: calling a delegate should use
+`Invoke()` with the null-conditional operator (`SomeDelegate?.Invoke()`),
+justified as both more readable at the call site and "concise and robust
+against threading race conditions"; Object Initializer syntax is
+reserved for "plain old data" types and avoided for classes or structs
+with constructors; string concatenation should default to whatever reads
+most easily, with a stated performance caveat that chained `operator+`
+"will be slower and cause significant memory churn" and that
+`StringBuilder` is faster for multiple concatenations; and a named class
+type is preferred over `Tuple<>` as a return type, particularly for
+complex return shapes.
+
+**Scope note**: this is Google's own convention for Google's own C#
+codebases, not a C# language specification and not a claim about how the
+wider .NET or Unity-development community writes C# — many widely used
+C# codebases (including Unity projects themselves, and projects cataloged
+elsewhere in this repository) use `PascalCase` for private fields, embrace
+`var` more broadly, or follow Microsoft's own .NET naming conventions
+directly rather than this guide's `_camelCase` private-field convention.
+
 ## Cross-language pattern (relative to this catalog's other findings)
 
 The same "restrict what the language allows, for a stated scale-driven or
@@ -875,8 +1076,49 @@ Minimum viable documentation, Better is better than best, Capitalization
 add-spacing-to-headings sub-rule, escape-newlines-in-code-blocks, nesting
 code blocks within lists, and the Images section.
 
-With Markdown now read, Google's public style-guide catalog
+Google's C# Style Guide (google.github.io/styleguide/csharp-style.html)
+has since been read: fifteen rules — the Microsoft-deferred naming
+convention, the interface-`I`-prefix and acronym-casing rules, the
+file-naming rules, the fixed modifier order, the `using`-declaration
+ordering rule, the two-axis class-member-ordering rule, the
+Java-inherited whitespace/brace rules, the `const`/`readonly`/magic-number
+rule, the expression-bodied-properties rule and its self-dated C#-7
+review note, the structs-vs-classes rule with its Unity-adjacent example
+list, the struct-defaults rule and its deferred `StatusOr` commitment,
+the extension-methods rule, the `ref`/`out` rules (including the
+British-spelling observation), the LINQ preferences, and the `var`
+readability test (see the C# section above) — were each confirmed by at
+least two independent sources: two blind full read-throughs that matched
+on shared sentences, one read-through plus a short targeted re-fetch, or
+in a few cases a single pass plus one dedicated targeted re-fetch aimed
+at that exact sentence; all are quoted directly. Four further,
+narrower-scope rules — calling delegates via `Invoke()` with the
+null-conditional operator, Object Initializer syntax being reserved for
+plain-data types, the string-concatenation performance caveat, and the
+named-class-over-`Tuple<>` return-type preference (see the C# section
+above) — were each confirmed by at least one full pass plus one targeted
+re-fetch and are compressed into a single paragraph rather than given
+full entries, for length rather than confidence reasons. The claim that
+this guide contains Unity-game-engine-specific content was checked before
+being incorporated at all, not assumed: a full-page search found "Unity"
+nowhere as a standalone capitalized word and "game" nowhere at all, with
+the string "unity" occurring exactly once, lowercased inside the example
+project name `unity_app`. That occurrence and the
+Vector3/Quaternion/Bounds example list are the only Unity-adjacent traces
+in the document, and are presented in the C# section above as exactly
+that — traces, not a claim that this is a Unity-branded guide. One
+observation in that section rests on knowledge from outside this page and
+is flagged as such in the text: that C# 7 has since shipped, which is
+what makes the guide's future-tense "when C# 7 is live" sentence readable
+as a fossil; the page itself carries no dates. Several sections of the
+guide have not been read at all and are not assumed to follow the same
+pattern: `IEnumerable` vs `IList` vs `IReadOnlyList`, Generators vs
+containers, Field initializers, Array vs List, Folders and file
+locations, Namespace naming (beyond the `unity_app` example noted above),
+Removing from containers while iterating, and Attributes.
+
+With C# now read, Google's public style-guide catalog
 (google.github.io/styleguide/) still lists well over a dozen further guides
-that remain unread first-hand — among them AngularJS, Common Lisp, C#,
-Objective-C, R, Swift, and Vim script — none of
-which should be assumed to follow this pattern.
+that remain unread first-hand — among them AngularJS, Common Lisp,
+Objective-C, R, Swift, and Vim script — none of which should be assumed
+to follow this pattern.
