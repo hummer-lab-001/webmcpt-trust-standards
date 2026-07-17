@@ -364,6 +364,74 @@ paraphrased below without quotation marks, rather than quoted verbatim.
   readability — the same brace-discipline pattern as Java's unconditional
   version above, but with an explicit carve-out Java's guide does not grant.
 
+## JSON: a data-format style guide, not a language style guide
+
+Read directly from Google's public JSON Style Guide
+(google.github.io/styleguide/jsoncstyleguide.xml) — this is Google's own
+style guide for JSON payloads used by its own APIs, one company's stated
+preferences for a data-interchange format, not a JSON-industry-wide
+standard. Unlike the seven guides above, this one does not govern a
+programming language's syntax; it governs the shape of data that crosses
+an API boundary, so several of its rules (reserved property names,
+top-level envelope structure) have no analogue in the language guides
+above. The five rules below were confirmed first-hand across two separate
+verbatim read-throughs of the guide (both passes returned character-identical
+text) and are quoted directly; the remaining rules come from a single pass
+and are paraphrased below without quotation marks, rather than quoted
+verbatim.
+
+- **Property names must be camelCase ASCII, with a narrow character rule
+  for the first letter** — "Property names must be camel-cased, ascii
+  strings. The first character must be a letter, an underscore (_) or a
+  dollar sign ($). Subsequent characters can be a letter, a digit, an
+  underscore, or a dollar sign." Stated reason: this "mirror[s] the
+  guidelines for naming JavaScript identifiers," so a JavaScript client can
+  access a property using plain dot notation rather than bracket-and-string
+  access.
+- **`kind` must be the first property when present, `items` must be the
+  last** — "If the kind object is present, it should be the first property
+  in the object" and, separately, "If items exists, it should be the last
+  property in the data object." The guide's stated reason for the `items`
+  placement: this "allows all of the collection's properties to be read
+  before reading each individual item," so a client with a large `items`
+  array can read the surrounding metadata without first parsing the whole
+  array.
+- **A response carries `data` or `error`, never both — and `error` wins on
+  conflict** — "A JSON response should contain either a data object or an
+  error object, but not both. If both data and error are present, the error
+  object takes precedence." A structural rule for the top-level envelope, not
+  a naming convention — it fixes how a client should resolve an
+  otherwise-ambiguous response shape rather than just naming a field.
+- **A `deleted` marker must be `true` when present — `false` is explicitly
+  disallowed, not merely discouraged** — "If deleted is present, its value
+  must be true; a value of false can cause confusion and should be avoided."
+  The guide treats the field's mere presence as the deletion signal, so a
+  `"deleted": false` would create a value that contradicts its own field's
+  reason for existing.
+- **No comments in JSON objects** — "Comments should not be included in
+  JSON objects." The guide immediately concedes its own examples break this
+  rule for teaching purposes only: "Some of the examples in this style
+  guide include comments. However this is only to clarify the examples" —
+  the guide names the exception to its own rule in the same breath as the
+  rule itself, the same self-aware carve-out pattern seen in the JavaScript
+  guide's ES-module-cycle rule above.
+
+Paraphrased (single-pass, not verbatim): enum values should be represented
+as strings rather than numbers, so that a client can gracefully handle a
+value it doesn't recognize instead of failing on an unmapped integer;
+optional properties with an empty or `null` value should generally be
+dropped from the payload rather than sent as `null`, unless there is a
+specific semantic reason to assert the absence explicitly; array-typed
+properties should carry plural names while all other properties should be
+singular; and date values should follow RFC 3339 while time-duration
+values should follow ISO 8601.
+
+**Scope note**: this is a data-interchange convention for Google's own
+APIs, not a JSON specification and not a claim about how the wider JSON
+ecosystem names its fields — many widely used JSON APIs (including some
+cataloged elsewhere in this repository) do not follow camelCase, the
+`kind`/`items` ordering, or the reserved top-level property names above.
+
 ## Cross-language pattern (relative to this catalog's other findings)
 
 The same "restrict what the language allows, for a stated scale-driven or
@@ -441,8 +509,26 @@ follow the same pattern. Note also that Google's own JavaScript guide page
 now recommends TypeScript for new code — it was read here for its own
 pattern set, not as a claim that Google currently prefers it.
 
-With JavaScript now read, Google's public style-guide catalog
+Google's JSON Style Guide (google.github.io/styleguide/jsoncstyleguide.xml)
+has since been read: five rules — the camelCase-property-name rule, the
+`kind`-first/`items`-last ordering rules, the `data`-xor-`error` envelope
+rule, the `deleted`-marker-must-be-`true` rule, and the no-comments rule
+(see the JSON section above) — were confirmed first-hand across two separate
+verbatim passes over that page (both passes returned character-identical
+text) and are quoted directly; the remaining rules — enum-values-as-strings,
+drop-empty-or-null-properties, plural-for-arrays/singular-otherwise, and the
+RFC 3339 / ISO 8601 date and duration formats (see the JSON section above) —
+come from a single pass and are recorded above as paraphrase, not verbatim
+quotation; the full list of reserved top-level and `data`-object property
+names (`apiVersion`, `context`, `id`, `method`, `params`, `etag`, `lang`,
+paging properties, link properties, and the `error` object's sub-properties)
+has not been individually re-verified beyond that single pass and is not
+repeated in the section above. Note also that this guide governs a data
+format, not a programming language, and is scoped accordingly (see the
+Scope note in the JSON section above).
+
+With JSON now read, Google's public style-guide catalog
 (google.github.io/styleguide/) still lists well over a dozen further guides
 that remain unread first-hand — among them AngularJS, Common Lisp, C#,
-HTML/CSS, JSON, Markdown, Objective-C, R, Swift, and Vim script — none of
+HTML/CSS, Markdown, Objective-C, R, Swift, and Vim script — none of
 which should be assumed to follow this pattern.
