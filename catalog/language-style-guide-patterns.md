@@ -517,10 +517,11 @@ an initial pass plus a targeted re-fetch.
   in the passage confirmed here beyond the rule itself.
 - **Trailing whitespace is banned for a stated diff-hygiene reason** —
   "Remove trailing white spaces." Stated reason: "Trailing white spaces
-  are unnecessary and can complicate diffs." — this is the only rule in
-  this catalog's language-guide sections so far whose stated reason names
-  diff cleanliness specifically, as distinct from readability, performance,
-  or correctness.
+  are unnecessary and can complicate diffs." — a justification distinct
+  from the readability, performance, and correctness arguments that carry
+  most rules in this file. It is not unique: the Swift section below
+  records a trailing-comma rule resting on the same "cleaner diffs"
+  reasoning, in an otherwise unrelated area of syntax.
 - **Shorthand CSS properties are required even when only one value is
   being set** — "Use shorthand properties where possible." / "CSS offers a
   variety of shorthand properties (like font) that should be used whenever
@@ -730,9 +731,11 @@ page's own GitHub "Improve this page" edit link, which points at
 `csharp-style.md` in the same `google/styleguide` repository. This is
 Google's own convention for its own C# codebases, one company's stated
 preferences, not a C#-community-wide or Microsoft-specification-level
-standard — though, uniquely among the guides read so far, this one
-explicitly defers to another company's standard for its core naming
-convention rather than inventing its own (see below). Cross-checking
+standard — though this one explicitly defers to another company's
+standard for its core naming convention rather than inventing its own
+(see below). The Swift section further down does the same thing more
+strongly, and the two together are discussed in the Cross-language
+pattern section. Cross-checking
 method: two independent full read-throughs, followed by targeted
 re-fetches for wording gaps and single-pass-only findings — the same
 method used throughout this file. One specific claim was checked before
@@ -751,10 +754,12 @@ the original suggestion.
   and properties: `_camelCase`." Stated reason, confirmed identically
   across both independent passes: "Naming rules follow Microsoft's C#
   naming guidelines." This catalog's JSON section above cites RFC 3339
-  and ISO 8601 for narrow date and duration formatting, but this is the
-  first guide read here to defer an entire naming-convention system —
-  not just one formatting detail — to another organization's published
-  standard, by name, as the stated rationale.
+  and ISO 8601 for narrow date and duration formatting, but this rule
+  defers an entire naming-convention system — not just one formatting
+  detail — to another organization's published standard, by name, as the
+  stated rationale. The Swift section below records a second, stronger
+  instance of the same move; the two are compared in the Cross-language
+  pattern section.
 - **Interfaces get an `I` prefix; acronyms count as one word for casing
   purposes, not letter-by-letter** — "Names of interfaces start with `I`,
   e.g. `IInterface`." / "For casing, a \"word\" is anything written
@@ -921,6 +926,206 @@ elsewhere in this repository) use `PascalCase` for private fields, embrace
 `var` more broadly, or follow Microsoft's own .NET naming conventions
 directly rather than this guide's `_camelCase` private-field convention.
 
+## Swift: a guide hosted outside its own repository, which absorbs another company's document by reference
+
+Read directly from Google's public Swift Style Guide
+(google.github.io/swift/) — canonical URL independently confirmed two
+ways before quoting began: by the link text "Swift Style Guide" on
+Google's own style-guide index page, and by the README of the `gh-pages`
+branch of `github.com/google/swift`, which states it is the source for
+this site. This is Google's own convention for its own Swift code, one
+company's stated preferences, not a Swift-community-wide standard —
+though it defers to Apple more completely than any guide in this catalog
+defers to anyone (see the first rule below).
+
+**A structural anomaly worth recording**: of the twelve guides read in
+this file, this is the only one that does not live under
+`google.github.io/styleguide/`. It is
+published from the `gh-pages` branch of `google/swift` — a repository
+whose main branch is a fork of the Swift language itself, archived
+read-only in January 2023. The style guide's branch outlived the
+repository's stated purpose. Nothing in the guide's content depends on
+this, but a reader trying to locate or contribute to the guide from the
+`google/styleguide` repo alone would not find it.
+
+**A methodological upgrade, and an honest note about what it implies for
+the sections above**: for this guide the raw Markdown source is directly
+retrievable (`raw.githubusercontent.com/google/swift/gh-pages/index.md`),
+so every load-bearing quotation below was checked against literal source
+text rather than against a rendered page mediated by a summarizing
+fetch layer. That is a stronger guarantee than any earlier section in
+this file had available, and it is stated here rather than quietly
+enjoyed: the character-level caveats recorded in the Shell and JavaScript
+sections above exist precisely because those guides offered no such raw
+route. Where the raw source carries Markdown emphasis markup (for
+instance the semicolon rule is written with `**not used**` and the
+trailing-comma rule with `_required_`), the rendered wording is quoted
+below and the emphasis is described rather than reproduced.
+
+- **Apple's naming guidelines are not merely followed — they are declared
+  to be part of this document** — "Apple's [official Swift naming and API
+  design guidelines](https://swift.org/documentation/api-design-guidelines/)
+  hosted on swift.org are considered part of this style guide and are
+  followed as if they were repeated here in their entirety." This is
+  incorporation by reference, and it is materially stronger than the
+  closest parallel in this catalog: the C# section above records "Naming
+  rules follow Microsoft's C# naming guidelines," which commits to
+  obeying an external document; this one declares the external document
+  to *be* inside Google's own. The guide's opening sentence sets up the
+  same lineage more softly — "This style guide is based on Apple's
+  excellent Swift standard library style and also incorporates feedback
+  from usage across multiple Swift projects within Google." Note the two
+  registers are doing different work: "is based on" describes provenance,
+  "are followed as if they were repeated here in their entirety" creates
+  an obligation. Both were confirmed against the raw Markdown source.
+- **Semicolons are banned outright, with the permitted remainder stated
+  as a closed set** — "Semicolons (`;`) are not used, either to terminate
+  or separate statements." (the source emphasizes "not used"). Rather
+  than leave the exception surface implicit, the guide closes it
+  explicitly: "In other words, the only location where a semicolon may
+  appear is inside a string literal or a comment." A prohibition plus an
+  exhaustive statement of where the character may still legally occur.
+- **A 100-character column limit, matching the Java and C# guides above** —
+  "Swift code has a column limit of 100 characters." This is the third
+  guide in this catalog to land on 100 specifically — Java's own limit and
+  the C# guide's "Column limit: 100" (which the C# guide attributes to
+  "Developed from Google Java style"). The Swift guide does not state
+  where its own number came from, so the three-way agreement is recorded
+  here as an observation, not as a claimed inheritance chain.
+- **Trailing commas are required in vertically laid-out literals, for a
+  diff-hygiene reason** — "Trailing commas in array and dictionary
+  literals are required when each element is placed on its own line."
+  (the source emphasizes "required"). Stated reason: "Doing so produces
+  cleaner diffs when items are added to those literals later." This is
+  the second rule in this catalog whose stated justification is diff
+  cleanliness — the HTML/CSS section's trailing-whitespace rule was the
+  first, and was noted there as the only such case at the time. Two
+  independent guides reaching for the same justification, in rules that
+  are otherwise unrelated (whitespace hygiene vs. literal syntax), makes
+  "keep the diff readable" a genuine recurring rationale in this corpus
+  rather than a one-off.
+- **Force-unwrapping and force-casting are named as code smells, and a
+  comment is required where they survive** — "Force-unwrapping and
+  force-casting are often code smells and are strongly discouraged."
+  / "Unless it is extremely clear from surrounding code why such an
+  operation is safe, a comment should be present that describes the
+  invariant that ensures that the operation is safe." The rule does not
+  ban the construct; it prices it, requiring the author to write down the
+  invariant that makes it safe.
+- **Implicitly unwrapped optionals are called inherently unsafe** —
+  "Implicitly unwrapped optionals are inherently unsafe and should be
+  avoided whenever possible in favor of non-optional declarations or
+  regular `Optional` types." The guide then carves out named exceptions
+  rather than leaving the rule absolute.
+- **Sentinel values are rejected in favour of `Optional`** — "Sentinel
+  values are avoided when designing algorithms (for example, an "index"
+  of −1 when an element was not found in a collection)." Stated reason:
+  sentinel values "can easily and accidentally propagate through other
+  layers of logic" because the type system does not distinguish them from
+  valid data. (The raw source writes the −1 with a Unicode minus sign
+  rather than an ASCII hyphen — recorded because this catalog quotes what
+  a source says rather than what a reader expects.)
+- **Errors are thrown rather than folded into the return type** — "Error
+  types are used when there are multiple possible error states." /
+  "Throwing errors instead of merging them with the return type cleanly
+  separates concerns in the API." A separation-of-concerns argument about
+  API shape, not a stylistic one.
+- **`guard` is preferred for early exits, on a stated readability
+  argument** — "A guard statement, compared to an `if` statement with an
+  inverted condition, provides visual emphasis that the condition being
+  tested is a special case that causes early exit from the enclosing
+  scope." The guide's fuller rationale names the failure mode it is
+  avoiding: with `guard`, "failure conditions are closely coupled to the
+  conditions that trigger them and the main logic remains flush left
+  within its scope," whereas without it "the main logic is buried at an
+  arbitrary nesting level and the thrown errors are separated from their
+  conditions by a great distance." (Both independent passes also reported
+  the phrase "pyramid of doom" in this section, but disagreed on whether
+  the surrounding quotation marks are straight or curly; the phrase is
+  therefore described rather than quoted with glyph-level precision.)
+- **Naming conventions are explicitly not a substitute for access
+  control** — "Restricted access control (`internal`, `fileprivate`, or
+  `private`) is preferred for the purposes of hiding information from
+  clients, rather than naming conventions." Underscore-prefix conventions
+  are confined to "rare situations" where a declaration must be given
+  higher visibility than wanted in order to work around a language
+  limitation. A rule that tells the reader which of two available
+  mechanisms is load-bearing, rather than merely styling one of them.
+- **Imports name exactly what is used, and never rely on transitive
+  availability** — "A source file imports exactly the top-level modules
+  that it needs; nothing more and nothing less." / "Imports of whole
+  modules are preferred to imports of individual declarations or
+  submodules." / "Import statements are not line-wrapped." The rule is
+  illustrated with the platform the guide openly targets: "If a source
+  file uses definitions from both `UIKit` and `Foundation`, it imports
+  both explicitly; it does not rely on the fact that some Apple
+  frameworks transitively import others as an implementation detail."
+- **Documentation comments use `///`, and Javadoc-style blocks are
+  prohibited** — "Documentation comments are written using the format
+  where each line is preceded by a triple slash (`///`)." /
+  "Javadoc-style block comments (`/** ... */`) are not permitted." A
+  syntax available in the language is closed off in favour of a single
+  house form — the same shape as the language-restriction pattern running
+  through this file, applied to comments rather than to code.
+- **At most one statement per line, with a single-statement-block
+  exception** — "There is at most one statement per line, and each
+  statement is followed by a line break, except when the line ends with a
+  block that also contains zero or one statements." The guide adds an
+  always-available escape hatch: "Wrapping the body of a single-statement
+  block onto its own line is always allowed."
+- **Line-wrapping is governed by cardinal rules, one of which forbids
+  mixed orientation** — "If the entire declaration, statement, or
+  expression fits on one line, then do that." / "Comma-delimited lists are
+  only laid out in one direction: horizontally or vertically." /
+  "In other words, all elements must fit on the same line, or each element
+  must be on its own line." The +2-indent convention is justified by the
+  visual artefact it avoids: it "prevents the zig-zag effect that would be
+  present if the arguments are indented based on opening" delimiters.
+
+**Two hypotheses were tested against this guide and both came back
+negative — recorded because a negative result is a result.** Both came
+from patterns observed in the C# section above, and checking a second
+guide is what distinguishes "a characteristic of that guide" from "a
+characteristic of Google's guides":
+
+1. *Does this guide flag its own rules as provisional, as the C# guide
+   twice does?* **No.** A full-text scan for deferral language ("will be
+   reviewed", "for now", "subject to change", "we will investigate",
+   "revisit", "not yet", "under review", and roughly thirty further
+   variants) returned no instance of the guide deferring one of its own
+   rules. Two apparent hits were the substring "pending" inside
+   "depending"; other uses of "future" and "currently" refer to user code
+   or to the Swift language, not to the guide's rules. The closest thing
+   is a blanket meta-statement in the introduction — "It is a living
+   document and the basis upon which the formatter is implemented" —
+   which says the document evolves without marking any specific rule as
+   unsettled. The C# guide's habit of recording open questions inline
+   therefore stands, on present evidence, as a characteristic of that
+   guide rather than a house style across Google's guides.
+2. *Do this guide's examples reveal a platform its prose never names, as
+   the C# guide's Unity-typed struct examples do?* **No — the opposite.**
+   The examples are heavily Apple-platform (`UIViewController`,
+   `UITableView`, `UIScrollView`, `UIView`, `UIColor`, `URLSession`,
+   `CGFloat`, `NSCoder`, `NSRegularExpression`, `@IBOutlet`), but the
+   prose names the platform openly: "Apple" appears in the introduction
+   and again in the delegate-methods section, and `UIKit`, `Foundation`
+   and Xcode are all named in running prose. There is no gap between what
+   the examples assume and what the text admits. ("macOS", "SwiftUI" and
+   "AppKit" are absent; "Cocoa" appears only inside a `developer.apple.com`
+   link URL, not in prose — an earlier pass asserted a prose phrase
+   containing "Cocoa" that a targeted re-check could not reproduce, so it
+   is excluded here as unconfirmed.) The C# guide's silent-platform
+   pattern is thus *not* general; it is specific to that guide, which
+   makes it more interesting, not less.
+
+**Scope note**: this is Google's own convention for Google's own Swift
+code, not a Swift language specification, not Apple's own guidance
+(though it incorporates Apple's naming document by reference), and not a
+claim about how the wider Swift community writes Swift — many widely used
+Swift codebases permit semicolon-free-but-differently-wrapped styles, use
+a 120-column or unlimited line budget, or adopt SwiftLint defaults that
+differ from the rules above.
+
 ## Cross-language pattern (relative to this catalog's other findings)
 
 The same "restrict what the language allows, for a stated scale-driven or
@@ -929,6 +1134,32 @@ correctness reason" pattern recurs independently outside Google's guides too
 convergence (Kong, prettier, hugo, npm/cli, Chart.js, apollo-server), which is
 the *project-governance* form of the same instinct these *language* style
 guides apply at the syntax level.
+
+**Naming is where these guides outsource.** Two of the guides read here
+defer their naming conventions to an outside organization's published
+document, by name, as the stated basis for the rule — and in both cases
+the deference is concentrated in the naming section specifically rather
+than spread across the guide. Google's C# guide: "Naming rules follow
+Microsoft's C# naming guidelines." Google's Swift guide, more strongly
+still: Apple's swift.org naming and API design guidelines "are considered
+part of this style guide and are followed as if they were repeated here
+in their entirety." Both languages have a dominant platform vendor with a
+published naming standard, and in both cases Google declines to compete
+with it while writing its own rules for everything else. Recorded as an
+observed two-case pattern with a plausible common cause, not as a claim
+about guides not read here — the Python, C++, Java, Go, TypeScript,
+Shell, JavaScript, JSON, HTML/CSS and Markdown sections above state their
+naming conventions without citing an external owner.
+
+**Two negative results are recorded in the Swift section above**, and
+they matter to how the rest of this file should be read: patterns first
+observed in a single guide (the C# guide's habit of flagging its own
+rules as provisional, and its examples silently revealing a platform its
+prose never names) were tested against a second guide and did *not*
+recur. Single-guide observations in this file should therefore be read as
+characteristics of that guide until a second instance is actually found —
+which is why each such observation names the guide it came from rather
+than being generalized to "Google's guides."
 
 ## Honesty note
 
@@ -1117,8 +1348,39 @@ containers, Field initializers, Array vs List, Folders and file
 locations, Namespace naming (beyond the `unity_app` example noted above),
 Removing from containers while iterating, and Attributes.
 
-With C# now read, Google's public style-guide catalog
+Google's Swift Style Guide (google.github.io/swift/) has since been read,
+and is the first guide in this file whose quotations were verified against
+literal raw Markdown source
+(`raw.githubusercontent.com/google/swift/gh-pages/index.md`) rather than a
+rendered page mediated by a summarizing fetch layer. Fourteen rules — the
+incorporation-by-reference of Apple's naming guidelines, the semicolon
+ban, the 100-column limit, the trailing-comma requirement and its
+diff-hygiene reason, the force-unwrap/force-cast rule, the
+implicitly-unwrapped-optionals rule, the sentinel-values rule, the
+error-types rule, the `guard` early-exit rule, the
+naming-is-not-access-control rule, the import rules, the `///`
+documentation-comment rule, the one-statement-per-line rule, and the
+line-wrapping cardinal rules (see the Swift section above) — are quoted
+directly, with the load-bearing quotations among them checked against
+that raw source. Where the raw source carries Markdown emphasis markup,
+the rendered wording is quoted and the emphasis described rather than
+reproduced. One phrase is deliberately *not* quoted at glyph level: the
+two independent passes disagreed on whether the quotation marks around
+"pyramid of doom" in the `guard` section are straight or curly, so it is
+described instead. Two hypotheses carried over from the C# section were
+tested and both returned negative; the negatives are recorded in full in
+the Swift section above rather than omitted. Several sections of the
+guide have not been read closely and are not assumed to follow the same
+pattern: Special Escape Sequences, Invisible Characters and Modifiers,
+String Literals, File Comments, Overloaded Declarations, Horizontal
+Alignment, Vertical Whitespace, Parentheses, Switch Statements, Enum
+Cases, Numeric Literals, Attributes, Initializers, Types with Shorthand
+Names, Nesting and Namespacing, `for-where` Loops, `fallthrough`, Pattern
+Matching, Tuple Patterns, Playground Literals, Trapping vs. Overflowing
+Arithmetic, Defining New Operators, and Overloading Existing Operators.
+
+With Swift now read, Google's public style-guide catalog
 (google.github.io/styleguide/) still lists well over a dozen further guides
 that remain unread first-hand — among them AngularJS, Common Lisp,
-Objective-C, R, Swift, and Vim script — none of which should be assumed
+Objective-C, R, and Vim script — none of which should be assumed
 to follow this pattern.
