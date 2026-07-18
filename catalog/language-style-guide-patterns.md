@@ -938,8 +938,8 @@ company's stated preferences, not a Swift-community-wide standard —
 though it defers to Apple more completely than any guide in this catalog
 defers to anyone (see the first rule below).
 
-**A structural anomaly worth recording**: of the twelve guides read in
-this file, this is the only one that does not live under
+**A structural anomaly worth recording**: of the guides read in this
+file, this is the only one that does not live under
 `google.github.io/styleguide/`. It is
 published from the `gh-pages` branch of `google/swift` — a repository
 whose main branch is a fork of the Swift language itself, archived
@@ -1126,6 +1126,113 @@ Swift codebases permit semicolon-free-but-differently-wrapped styles, use
 a 120-column or unlimited line budget, or adopt SwiftLint defaults that
 differ from the rules above.
 
+## Objective-C: a guide with a named "Principles" section — including a rule about which rules to have
+
+Read directly from Google's public Objective-C Style Guide
+(google.github.io/styleguide/objcguide.html) — canonical URL confirmed
+two ways: the link on Google's style-guide index page, and the page's own
+GitHub edit link pointing at `objcguide.md` in `google/styleguide`. Like
+the Swift section above, every load-bearing quotation below was verified
+against the raw Markdown source
+(`raw.githubusercontent.com/google/styleguide/gh-pages/objcguide.md`)
+rather than a summarizer-mediated rendering, across two independent
+passes plus targeted re-checks. This is Google's own convention for its
+own Objective-C and Objective-C++ code, one company's stated preferences,
+not an Objective-C-community-wide standard.
+
+- **The only guide read in this file with a section literally titled
+  "Principles"** — four named principles stated before any concrete
+  rule. (The Markdown guide above also opens with philosophy-flavored
+  sections — "Minimum viable documentation", "Better is better than
+  best" — but those were recorded there as unread, so the comparison
+  stops at the section titles.) The four: "Optimize for the reader, not the writer"
+  ("Codebases often have extended lifetimes and more time is spent
+  reading the code than writing it."), "Be consistent" ("Using one style
+  consistently throughout a codebase lets engineers focus on other (more
+  important) issues."), "Be consistent with Apple SDKs" ("Consistency
+  with the way Apple SDKs use Objective-C has value for the same reasons
+  as consistency within our code base."), and the remarkable fourth one
+  below. The C++ section above records the reader-over-writer principle
+  as something that guide states; here it is elevated to a named,
+  numbered principle. (A fifth subsection, "Inclusive Language", appears
+  in the same Principles block but was not read closely.)
+- **"Style rules should pull their weight" — a meta-rule governing which
+  rules the guide itself is allowed to contain** — "The benefit of a
+  style rule must be large enough to justify asking engineers to
+  remember it." The guide then explains that this principle "mostly
+  explains the rules we don't have, rather than the rules we do: for
+  example, goto contravenes many of the following principles, but is not
+  discussed due to its extreme rarity." None of the sections read so far
+  in this file state a cost-benefit test for the guide's own rule set, or
+  explain an *absence* of rules (unread sections elsewhere may — see each
+  section's unread list). The guide is reasoning in public about its own
+  scope, the same self-aware register as the C# guide's provisional-rule
+  notes, but aimed at the rulebook itself rather than at any one rule.
+- **A third deference to the platform vendor — and the weakest of the
+  three, completing a gradient** — "Apple has already written a very
+  good, and widely accepted, Cocoa Coding Guidelines for Objective-C.
+  Please read it in addition to this guide." And in the Naming section:
+  "Names should be as descriptive as possible, within reason. Follow
+  standard Objective-C naming rules." — the latter linking to Apple's
+  same Coding Guidelines document. Three guides in this file now defer to
+  the platform vendor's published standard, at three distinct strengths:
+  Objective-C says *read it alongside* this guide; C# says naming rules
+  *follow* Microsoft's; Swift *incorporates* Apple's document as if
+  repeated in its entirety. Once again the strongest deference sits in
+  the naming section — see the Cross-language pattern section below.
+- **The platform vendor's namespace reservation shapes the prefix
+  rule** — "Classes and protocols in code shared across multiple
+  applications must have an appropriate prefix (e.g. GTMSendMessage)."
+  followed by: "WARNING: Apple reserves two-letter prefixes—see
+  Conventions in Programming with Objective-C—so prefixes with a minimum
+  of three characters are considered best practice." A naming rule whose
+  boundary is drawn by another company's reservation of part of the
+  namespace — not a style preference at all, but a collision-avoidance
+  rule against the platform owner.
+- **A 100-column line limit** — "The maximum line length for Objective-C
+  files is 100 columns." The fourth guide in this file to land on 100
+  (after Java, C#, and Swift). As with Swift, no origin for the number is
+  stated, so the four-way agreement remains an observation rather than a
+  claimed inheritance chain.
+- **Objective-C exceptions are not thrown but must still be caught** —
+  "Don't `@throw` Objective-C exceptions, but you should be prepared to
+  catch them from third-party or OS calls." An asymmetric rule: the
+  feature is banned on the producing side while remaining mandatory to
+  handle on the consuming side, because the surrounding ecosystem still
+  uses it — a shape none of the outright bans elsewhere in this file
+  (C++ exceptions, `with`, `eval`, semicolons) have needed.
+- **`BOOL`'s platform-dependent definition drives a correctness rule,
+  with the platforms named openly in prose** — "`BOOL` on some Apple
+  platforms (notably Intel macOS, watchOS, and 32-bit iOS) is defined as
+  a signed `char`, so it may have values other than `YES` (`1`) and `NO`
+  (`0`)." / "When converting a general integral value to a BOOL, use
+  conditional operators to return a YES or NO value." Like the Swift
+  guide and unlike the C# guide, the prose names its platforms outright —
+  further evidence that the C# guide's silent-platform pattern is
+  specific to that guide.
+- **Sending a message to `nil` is defined behavior, and the guide says
+  exactly what it returns** — "Sending a message to nil reliably returns
+  nil as a pointer, zero as an integer or floating-point value, structs
+  initialized to 0, and _Complex values equal to {0, 0}." A
+  language-semantics statement recorded as the factual basis for the
+  guide's nil-handling rules rather than as a rule itself.
+- **Two-space indentation, spaces only** — "Use only spaces, and indent
+  2 spaces at a time." / "Do not use tabs in your code." The same
+  2-space convention as the HTML/CSS, C#, and Swift sections above; as
+  with the column limit, recorded as recurrence, not lineage.
+- **Small functions preferred, stated without a numeric ceiling** —
+  "Prefer small and focused functions." Unlike the C++ guide's ~40-line
+  figure or the Shell guide's 100-line rewrite trigger, no number is
+  attached in the sentence confirmed here.
+
+**Scope note**: this is Google's own convention for Google's own
+Objective-C code, not an Objective-C language specification and not
+Apple's own guidance (though it points to Apple's twice), and not a claim
+about how the wider iOS/macOS community writes Objective-C — and given
+that Apple itself has directed new development toward Swift for years,
+this guide governs an aging surface, which the guide itself does not
+discuss.
+
 ## Cross-language pattern (relative to this catalog's other findings)
 
 The same "restrict what the language allows, for a stated scale-driven or
@@ -1135,21 +1242,26 @@ convergence (Kong, prettier, hugo, npm/cli, Chart.js, apollo-server), which is
 the *project-governance* form of the same instinct these *language* style
 guides apply at the syntax level.
 
-**Naming is where these guides outsource.** Two of the guides read here
-defer their naming conventions to an outside organization's published
-document, by name, as the stated basis for the rule — and in both cases
-the deference is concentrated in the naming section specifically rather
-than spread across the guide. Google's C# guide: "Naming rules follow
-Microsoft's C# naming guidelines." Google's Swift guide, more strongly
-still: Apple's swift.org naming and API design guidelines "are considered
-part of this style guide and are followed as if they were repeated here
-in their entirety." Both languages have a dominant platform vendor with a
-published naming standard, and in both cases Google declines to compete
-with it while writing its own rules for everything else. Recorded as an
-observed two-case pattern with a plausible common cause, not as a claim
-about guides not read here — the Python, C++, Java, Go, TypeScript,
-Shell, JavaScript, JSON, HTML/CSS and Markdown sections above state their
-naming conventions without citing an external owner.
+**Naming is where these guides outsource.** Three of the guides read
+here defer to an outside organization's published document, by name, as a
+stated basis for their rules — and in all three the deference is
+concentrated in or anchored to the naming conventions specifically,
+rather than spread across the guide. They form a gradient of binding
+strength: Google's Objective-C guide asks the reader to *consult* Apple's
+document ("Please read it in addition to this guide", plus a Naming
+section that says "Follow standard Objective-C naming rules" with a link
+to the same Apple document); the C# guide *obeys* Microsoft's ("Naming
+rules follow Microsoft's C# naming guidelines"); the Swift guide
+*absorbs* Apple's — its naming guidelines "are considered part of this
+style guide and are followed as if they were repeated here in their
+entirety." All three languages have a dominant platform vendor with a
+published naming standard, and in all three cases Google declines to
+compete with it while writing its own rules for everything else.
+Recorded as an observed three-case pattern with a plausible common
+cause, not as a claim about guides not read here — the Python, C++,
+Java, Go, TypeScript, Shell, JavaScript, JSON, HTML/CSS and Markdown
+sections above state their naming conventions without citing an external
+owner.
 
 **Two negative results are recorded in the Swift section above**, and
 they matter to how the rest of this file should be read: patterns first
@@ -1379,8 +1491,33 @@ Names, Nesting and Namespacing, `for-where` Loops, `fallthrough`, Pattern
 Matching, Tuple Patterns, Playground Literals, Trapping vs. Overflowing
 Arithmetic, Defining New Operators, and Overloading Existing Operators.
 
-With Swift now read, Google's public style-guide catalog
-(google.github.io/styleguide/) still lists well over a dozen further guides
-that remain unread first-hand — among them AngularJS, Common Lisp,
-Objective-C, R, and Vim script — none of which should be assumed
-to follow this pattern.
+Google's Objective-C Style Guide (google.github.io/styleguide/objcguide.html)
+has since been read, with every load-bearing quotation verified against
+the raw Markdown source
+(`raw.githubusercontent.com/google/styleguide/gh-pages/objcguide.md`)
+across two independent passes plus targeted re-checks — the same raw-source
+method introduced for Swift above. Ten rules and principles — the four
+named Principles (including the "pull their weight" meta-rule and its
+`goto` absence-explanation), the Cocoa Coding Guidelines deference and the
+Naming section's "Follow standard Objective-C naming rules" link, the
+two/three-letter prefix rule with Apple's reservation warning, the
+100-column limit, the asymmetric exceptions rule, the `BOOL` pitfalls rule
+with its named platforms, the message-to-`nil` semantics statement, the
+spaces/2-space indentation rule, and the small-functions preference (see
+the Objective-C section above) — are quoted directly. The "Inclusive
+Language" principle subsection was noted but not read closely. Most of the
+guide's long tail has not been read and is not assumed to follow the same
+pattern — among the unread sections: File Names, Category Names, Function
+Names, Variable Names, Instance Variables, Constants, Method Declarations,
+Unsigned Integers, Types with Inconsistent Sizes, Floating Point
+Constants, all three Comments subsections, Object Ownership, Manual and
+Automatic Reference Counting, Macros, Nonstandard Extensions, Designated
+Initializers, `#import`/`#include` and Order of Includes, Umbrella
+Headers, Mutables and Copies, Lightweight Generics, Nullability,
+Containers Without Instance Variables, Delegate Pattern, Objective-C++,
+and most of Spacing and Formatting.
+
+With Objective-C now read, Google's public style-guide catalog
+(google.github.io/styleguide/) still lists further guides that remain
+unread first-hand — among them AngularJS, Common Lisp, R, and Vim
+script — none of which should be assumed to follow this pattern.
