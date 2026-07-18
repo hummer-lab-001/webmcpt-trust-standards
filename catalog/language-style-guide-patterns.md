@@ -1218,8 +1218,10 @@ not an Objective-C-community-wide standard.
   guide's nil-handling rules rather than as a rule itself.
 - **Two-space indentation, spaces only** — "Use only spaces, and indent
   2 spaces at a time." / "Do not use tabs in your code." The same
-  2-space convention as the HTML/CSS, C#, and Swift sections above; as
-  with the column limit, recorded as recurrence, not lineage.
+  2-space convention recorded in the HTML/CSS and C# sections above (the
+  Swift section above records a +2 continuation-line rule but not the
+  guide's base indentation, so Swift is not cited as a confirmed parallel
+  here); as with the column limit, recorded as recurrence, not lineage.
 - **Small functions preferred, stated without a numeric ceiling** —
   "Prefer small and focused functions." Unlike the C++ guide's ~40-line
   figure or the Shell guide's 100-line rewrite trigger, no number is
@@ -1702,13 +1704,17 @@ read for this file and none of its content is assumed. The R case also
 forced a revision of the Cross-language pattern section's causal
 hypothesis (from "platform vendor" to "dominant published style
 authority"), and the superseded wording is acknowledged there rather
-than silently replaced.
+than silently replaced. The "by far the shortest" claim in the R section
+was later re-verified by measurement rather than impression: the source
+file is 2,982 bytes against, for example, 14,234 bytes for the
+Vimscript guide's source (GitHub API `size` fields, checked when the
+Vimscript section was added).
 
 Google's Vimscript Style Guide
 (google.github.io/styleguide/vimscriptguide.xml) has since been read,
 with quotations checked across two passes — one against the rendered
 page, one against the raw XML source — which returned matching text.
-Ten rules and framing statements — the casual/heavy split and its
+Nine rules and framing statements — the casual/heavy split and its
 binding clause, the portability framing, the `normal!` rule, the `\m\C`
 regex prefix rule, the single-quoted-strings rule, the `:substitute`
 avoidance rule, the two-tier scope-prefix rule, the unsafe-comparisons
