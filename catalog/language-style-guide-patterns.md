@@ -1233,6 +1233,87 @@ that Apple itself has directed new development toward Swift for years,
 this guide governs an aging surface, which the guide itself does not
 discuss.
 
+## R: a style guide that is literally a patch against someone else's
+
+Read directly from Google's public R Style Guide
+(google.github.io/styleguide/Rguide.html) — canonical URL confirmed via
+Google's style-guide index page and the page's own GitHub edit link
+(`Rguide.md` in `google/styleguide`). Every quotation below was verified
+against the raw Markdown source
+(`raw.githubusercontent.com/google/styleguide/gh-pages/Rguide.md`) across
+two passes. This guide is by far the shortest read in this file — short
+enough that, unusually, the two passes between them covered essentially
+every rule sentence it contains.
+
+- **The entire guide is declared to be a fork of a community document —
+  not a platform vendor's** — "The Google R Style Guide is a fork of the
+  [Tidyverse Style Guide](https://style.tidyverse.org/) by Hadley Wickham
+  [license](https://creativecommons.org/licenses/by-sa/2.0/)." /
+  "Google modifications were developed in collaboration with the internal
+  R user community." This is a fourth instance of a Google guide building
+  on an external standard, and it breaks the pattern the first three
+  suggested in two ways at once. First, the external authority is not a
+  platform vendor: the Tidyverse Style Guide is a community standard
+  associated with an individual author, not the owner of the language or
+  platform. Second, the mechanism differs in kind from all three earlier
+  instances: a *fork* starts from a copy of the external document and
+  diverges from it, whereas Swift's incorporation-by-reference keeps the
+  external document live and authoritative inside the guide. A fork can
+  contradict its upstream; an incorporation cannot. See the revised
+  Cross-language pattern section below.
+- **What remains, once the upstream is subtracted, is mostly a list of
+  disagreements** — the guide's own sections are largely the points where
+  Google departs from what it forked: function naming
+  ("Google prefers identifying functions with `BigCamelCase` to clearly
+  distinguish them from other objects."), private-function naming ("The
+  names of private functions should begin with a dot. This helps
+  communicate both the origin of the function and its intended use."),
+  and the rules below. Structurally this is a new type in this file: not
+  a self-contained rulebook but a diff against another organization's.
+- **The guide narrates a reversal of its own former rule, in the open** —
+  "We previously recommended naming objects with `dot.case`. We're moving
+  away from that, as it creates confusion with S3 methods." Where the C#
+  guide's two future-deferred notes commit *forward* to reconsidering a
+  rule, this sentence records a reconsideration already carried out —
+  the past-tense counterpart of the same habit of leaving the guide's
+  decision history visible in its text rather than silently rewriting it.
+- **`attach()` is rejected in a single sentence** — "The possibilities
+  for creating errors when using `attach()` are numerous." The entire
+  section consists of that one sentence — the shortest complete rule
+  section read anywhere in this file, a prohibition justified by one
+  unelaborated risk claim.
+- **Right-hand assignment is not supported, with a searchability
+  rationale** — "We do not support using right-hand assignment." / "This
+  convention differs substantially from practices in other languages and
+  makes it harder to see in code where an object is defined." /
+  "E.g. searching for `foo <-` is easier than searching for `foo <-` and
+  `-> foo` (possibly split over lines)." A rule justified by grep-ability
+  — the first rule in this file whose stated reason is literally about
+  text search over the codebase.
+- **Explicit `return()` is required, against R's implicit-return
+  feature** — "Do not rely on R's implicit return feature. It is better
+  to be clear about your intent to `return()` an object." The same
+  "restrict what the language permits" shape as the rest of this file —
+  notable here because the guide's own upstream is widely associated with
+  the opposite convention, though that upstream position has not been
+  re-verified here and is not asserted.
+- **External functions must be namespace-qualified, and the guide prices
+  its own rule** — "Users should explicitly qualify namespaces for all
+  external functions." / "We discourage using the `@import` Roxygen tag
+  to bring in all functions into a NAMESPACE." Stated tradeoff, admitted
+  in the rule's own text: "While there is a small performance penalty for
+  using `::`, it makes it easier to understand dependencies in your
+  code." — the same name-the-cost honesty as the Swift guide's
+  reference-links rule above.
+
+**Scope note**: this is Google's own convention for Google's own R code,
+one company's patch against one community standard — not an R language
+specification, not the Tidyverse Style Guide itself (which should be read
+separately and is not summarized here), and not a claim about how the
+wider R community writes R — much of which follows the unforked tidyverse
+conventions, including `snake_case` function names, that this guide
+explicitly departs from.
+
 ## Cross-language pattern (relative to this catalog's other findings)
 
 The same "restrict what the language allows, for a stated scale-driven or
@@ -1242,26 +1323,33 @@ convergence (Kong, prettier, hugo, npm/cli, Chart.js, apollo-server), which is
 the *project-governance* form of the same instinct these *language* style
 guides apply at the syntax level.
 
-**Naming is where these guides outsource.** Three of the guides read
-here defer to an outside organization's published document, by name, as a
-stated basis for their rules — and in all three the deference is
-concentrated in or anchored to the naming conventions specifically,
-rather than spread across the guide. They form a gradient of binding
-strength: Google's Objective-C guide asks the reader to *consult* Apple's
-document ("Please read it in addition to this guide", plus a Naming
-section that says "Follow standard Objective-C naming rules" with a link
-to the same Apple document); the C# guide *obeys* Microsoft's ("Naming
-rules follow Microsoft's C# naming guidelines"); the Swift guide
-*absorbs* Apple's — its naming guidelines "are considered part of this
-style guide and are followed as if they were repeated here in their
-entirety." All three languages have a dominant platform vendor with a
-published naming standard, and in all three cases Google declines to
-compete with it while writing its own rules for everything else.
-Recorded as an observed three-case pattern with a plausible common
-cause, not as a claim about guides not read here — the Python, C++,
-Java, Go, TypeScript, Shell, JavaScript, JSON, HTML/CSS and Markdown
-sections above state their naming conventions without citing an external
-owner.
+**Where an external standard dominates, Google builds on it rather than
+against it — and the vendor hypothesis had to be revised.** Four of the
+guides read here explicitly build on an outside organization's published
+document, by name, at four distinct strengths: Google's Objective-C
+guide asks the reader to *consult* Apple's document ("Please read it in
+addition to this guide", plus a Naming section that says "Follow
+standard Objective-C naming rules" with a link to the same Apple
+document); the C# guide *obeys* Microsoft's ("Naming rules follow
+Microsoft's C# naming guidelines"); the Swift guide *absorbs* Apple's —
+its naming guidelines "are considered part of this style guide and are
+followed as if they were repeated here in their entirety"; and the R
+guide is *forked from* the Tidyverse Style Guide outright, existing
+mainly as a record of departures from it. The first three cases
+suggested a common cause of "dominant platform vendor with a published
+naming standard" — and an earlier revision of this paragraph said
+exactly that. The R case falsifies the vendor half of that hypothesis:
+the Tidyverse Style Guide is a community standard, not a platform
+owner's. What survives all four cases is the weaker, better statement:
+where a language already has one dominant published style authority —
+vendor or community — Google does not compete with it, and writes its
+own rules only in the space that remains. In the three vendor cases the
+deference anchors to naming specifically; the R fork is global, so the
+naming-concentration observation holds at n=3, not n=4. Recorded as an
+observed pattern, not a claim about guides not read here — the Python,
+C++, Java, Go, TypeScript, Shell, JavaScript, JSON, HTML/CSS and
+Markdown sections above state their conventions without citing an
+external owner.
 
 **Two negative results are recorded in the Swift section above**, and
 they matter to how the rest of this file should be read: patterns first
@@ -1517,7 +1605,29 @@ Headers, Mutables and Copies, Lightweight Generics, Nullability,
 Containers Without Instance Variables, Delegate Pattern, Objective-C++,
 and most of Spacing and Formatting.
 
-With Objective-C now read, Google's public style-guide catalog
+Google's R Style Guide (google.github.io/styleguide/Rguide.html) has
+since been read, verified against the raw Markdown source
+(`raw.githubusercontent.com/google/styleguide/gh-pages/Rguide.md`) across
+two passes. The guide is short enough that the two passes between them
+covered essentially every rule sentence it contains — the fork
+declaration and its CC BY-SA license credit, the `BigCamelCase` and
+private-dot-prefix naming rules, the recorded reversal of the former
+`dot.case` recommendation, the one-sentence `attach()` rejection, the
+right-hand-assignment rule with its searchability rationale, the
+explicit-`return()` rule, and the namespace-qualification rule with its
+admitted `::` performance cost (see the R section above); all are quoted
+directly. One deliberate omission: the claim that the explicit-`return()`
+rule contradicts the forked upstream's own convention is widely assumed
+but was *not* re-verified against the Tidyverse Style Guide's text here,
+and the R section states it only as an unasserted association. The
+Tidyverse Style Guide itself — the upstream of this fork — has not been
+read for this file and none of its content is assumed. The R case also
+forced a revision of the Cross-language pattern section's causal
+hypothesis (from "platform vendor" to "dominant published style
+authority"), and the superseded wording is acknowledged there rather
+than silently replaced.
+
+With R now read, Google's public style-guide catalog
 (google.github.io/styleguide/) still lists further guides that remain
-unread first-hand — among them AngularJS, Common Lisp, R, and Vim
+unread first-hand — among them AngularJS, Common Lisp, and Vim
 script — none of which should be assumed to follow this pattern.
