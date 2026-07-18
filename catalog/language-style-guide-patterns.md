@@ -1314,6 +1314,83 @@ wider R community writes R — much of which follows the unforked tidyverse
 conventions, including `snake_case` function names, that this guide
 explicitly departs from.
 
+## Vim script: a guide whose threat model is the user's own configuration
+
+Read directly from Google's public Vimscript Style Guide
+(google.github.io/styleguide/vimscriptguide.xml) — canonical URL
+confirmed via Google's style-guide index page; quotations were checked
+across two passes, one against the rendered page and one against the raw
+XML source
+(`raw.githubusercontent.com/google/styleguide/gh-pages/vimscriptguide.xml`),
+which returned matching text. This is Google's own convention for its own
+Vim plugin code, one company's stated preferences, not a
+Vim-community-wide standard.
+
+- **The guide names its own register, and splits itself into a casual
+  and a heavy half** — "This is a casual version of the vimscript style
+  guide, because vimscript is a casual language." Immediately followed by
+  the binding clause: "When submitting vim plugin code, you must adhere
+  to these rules." — casual tone, mandatory force. A companion document
+  carries the reasoning: "For clarifications, justifications, and
+  explanations about the finer points of vimscript, please refer to the
+  heavy guide." The Go section above records a multi-document split too
+  (Decisions vs. Guide vs. Best Practices), but that split is by topic;
+  this one is by *formality register* — the binding rules in the light
+  document, the justifications exiled to the heavy one.
+- **The organizing threat model is the user's own configuration — an
+  adversary no other guide in this file defends against** — "It's hard
+  to get vimscript right. Many commands depend upon the user's settings.
+  By following these guidelines, you can hope to make your scripts
+  portable." The concrete rules below are all instances of this one
+  concern: a Vim plugin runs inside an environment the *end user* has
+  already customized, so the guide's rules armor the script against its
+  own host. Other guides in this file defend against future maintainers,
+  reviewers, or scale; this one defends against the person the code is
+  running for.
+- **`normal!` is required over `normal`, because the unbanged form
+  executes through the user's key mappings** — "Always use normal!
+  instead of normal. The latter depends upon the user's key mappings and
+  could do anything." The stated failure mode — "could do anything" — is
+  the user's-configuration threat model at its starkest.
+- **All regexes are force-prefixed to neutralize the user's matching
+  settings** — "Prefix all regexes with \m\C" so that they "act like
+  nomagic and noignorecase are set" regardless of the user's actual
+  settings. The same armor-the-script move as `normal!`, applied to
+  pattern matching.
+- **Single-quoted strings are preferred for a semantic reason, not a
+  stylistic one** — "Prefer single quoted strings": "Double quoted
+  strings are semantically different in vimscript, and you probably
+  don't want them (they break regexes)."
+- **`:substitute` is avoided in scripts because of its side effects** —
+  "Avoid using :s[ubstitute] as it moves the cursor and prints error
+  messages." — with functions such as `search()` preferred as
+  script-suited alternatives. A command perfectly acceptable
+  interactively is rejected in scripts because its interactive
+  conveniences (cursor movement, messages) become side effects.
+- **Scope prefixes are split into a mandatory tier and a
+  consistency tier** — "g:, s:, and a: must always be used," while
+  "l: and v: should be used for consistency, future proofing, and to
+  avoid subtle bugs." A two-tier rule that separates what is required
+  from what is merely wise, in its own text.
+- **The guide documents the language's own unsafe comparisons as the
+  reason for its type rules** — "Vimscript has unsafe, unintuitive
+  behavior when dealing with some types. For instance, 0 == 'foo'
+  evaluates to true." The language's permissiveness is quoted as the
+  hazard, the same restrict-what-the-language-allows shape as the rest
+  of this file.
+- **Errors are matched by code, not by message text — for a
+  localization reason** — "Match error codes, not error text. Error text
+  may be locale dependent." The only rule read anywhere in this file so
+  far whose stated rationale is internationalization — checked against
+  the other fourteen sections before writing "only" (the standing lesson
+  from the C# review applied: search for the counterexample first).
+
+**Scope note**: this is Google's own convention for Google's own Vim
+plugin code, not a Vim or Vimscript specification and not a claim about
+how the wider Vim community writes plugins — and the guide's companion
+"heavy guide" has not been read for this file; none of its content is
+assumed.
+
 ## Cross-language pattern (relative to this catalog's other findings)
 
 The same "restrict what the language allows, for a stated scale-driven or
@@ -1627,7 +1704,25 @@ hypothesis (from "platform vendor" to "dominant published style
 authority"), and the superseded wording is acknowledged there rather
 than silently replaced.
 
-With R now read, Google's public style-guide catalog
-(google.github.io/styleguide/) still lists further guides that remain
-unread first-hand — among them AngularJS, Common Lisp, and Vim
-script — none of which should be assumed to follow this pattern.
+Google's Vimscript Style Guide
+(google.github.io/styleguide/vimscriptguide.xml) has since been read,
+with quotations checked across two passes — one against the rendered
+page, one against the raw XML source — which returned matching text.
+Ten rules and framing statements — the casual/heavy split and its
+binding clause, the portability framing, the `normal!` rule, the `\m\C`
+regex prefix rule, the single-quoted-strings rule, the `:substitute`
+avoidance rule, the two-tier scope-prefix rule, the unsafe-comparisons
+statement, and the match-error-codes-not-text rule (see the Vim script
+section above) — are quoted directly. The companion "heavy guide"
+(vimscriptfull) has not been read and none of its content is assumed;
+the guide's General Guidelines and Style sections were read only in
+part, and messaging/mapping/settings rules in them are not covered
+above. The "only i18n rationale in this file" claim was checked by
+searching the other fourteen sections for locale/localization
+counterexamples before being written (one false positive — Go's
+"goroutines localized" — was inspected and excluded).
+
+With Vim script now read, Google's public style-guide catalog
+(google.github.io/styleguide/) still lists two further guides that
+remain unread first-hand — AngularJS and Common Lisp — neither of which
+should be assumed to follow this pattern.
