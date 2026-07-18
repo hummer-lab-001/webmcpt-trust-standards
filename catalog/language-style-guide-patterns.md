@@ -940,7 +940,11 @@ defers to anyone (see the first rule below).
 
 **A structural anomaly worth recording**: of the guides read in this
 file, this is the only one that does not live under
-`google.github.io/styleguide/`. It is
+`google.github.io/styleguide/`. (It is not the only externally hosted
+guide Google's index links to — Effective Dart is hosted at
+dartlang.org and the Kotlin guide at developer.android.com — but those
+two have not been read for this file, so they are noted here rather than
+treated as counterexamples.) It is
 published from the `gh-pages` branch of `google/swift` — a repository
 whose main branch is a fork of the Swift language itself, archived
 read-only in January 2023. The style guide's branch outlived the
@@ -1243,9 +1247,11 @@ Google's style-guide index page and the page's own GitHub edit link
 (`Rguide.md` in `google/styleguide`). Every quotation below was verified
 against the raw Markdown source
 (`raw.githubusercontent.com/google/styleguide/gh-pages/Rguide.md`) across
-two passes. This guide is by far the shortest read in this file — short
-enough that, unusually, the two passes between them covered essentially
-every rule sentence it contains.
+two passes. This is the shortest guide in Google's entire style-guide
+repository by a wide margin — 2,982 bytes of source, against 12,751 for
+the next smallest (see the Honesty note for the measurement and its
+caveat) — short enough that, unusually, the two passes between them
+covered essentially every rule sentence it contains.
 
 - **The entire guide is declared to be a fork of a community document —
   not a platform vendor's** — "The Google R Style Guide is a fork of the
@@ -1393,6 +1399,142 @@ how the wider Vim community writes plugins — and the guide's companion
 "heavy guide" has not been read for this file; none of its content is
 assumed.
 
+## Common Lisp: a style guide written in the compliance vocabulary of a standards document
+
+Read directly from Google's public Common Lisp Style Guide
+(google.github.io/styleguide/lispguide.xml) — canonical URL confirmed via
+Google's style-guide index page. Every quotation below was taken from the
+raw XML source
+(`raw.githubusercontent.com/google/styleguide/gh-pages/lispguide.xml`)
+rather than a rendered page, across four targeted passes. Verification
+depth is uneven and is stated rather than smoothed over: the
+Norvig-and-Pitman sentence, the permission/forgiveness procedure and the
+"hit by a truck" sentence were each returned by two independent passes;
+the RFC 2119 keyword definitions, the "Future Topics" deferral, and the
+formatting and language rules further below each rest on a single
+targeted pass against raw source. Earlier sections in this file that
+claim two-pass confirmation had it; this one does not claim it where it
+does not hold.
+At 156,015 bytes of source this is the second-largest guide in Google's
+style-guide repository, behind only the C++ guide's 242,543 (GitHub API
+`size` fields; see the Honesty note's caveat about comparing markup-heavy
+sources to Markdown ones). It is not the longest Google publishes — a
+point worth stating because assuming so would have been easy and wrong.
+
+- **Every rule carries a graded compliance keyword borrowed from an IETF
+  standards document** — "Each guideline's level of importance is
+  indicated by use of the following keywords and phrases, adapted from
+  RFC 2119." The guide then defines each level in its own words: MUST
+  "means that the guideline is an absolute requirement"; MUST NOT "means
+  that the guideline is an absolute prohibition"; SHOULD means "There may
+  exist valid reasons in particular circumstances to ignore the demands
+  of the guideline, but the full implications must be understood and
+  carefully weighed before choosing a different course"; MAY "means that
+  an item is truly optional." No other guide read in this file grades the
+  binding strength of its individual rules with a formal, defined
+  vocabulary — the rest express force through ordinary prose ("strongly
+  discouraged", "avoid", "never"), leaving the reader to infer how hard
+  each rule is. This one makes the gradient explicit and machine-legible.
+- **And it names its own deviation from the standard it borrowed** —
+  "Unlike RFCs, we don't capitalize every instance of one of the above
+  keywords when it is used." A guide that adopts an external convention
+  and, in the same breath, records exactly where it departs from it. Note
+  the practical consequence for anyone parsing this guide mechanically: a
+  lowercase "must" in the body text may be a graded requirement rather
+  than ordinary prose.
+- **The compliance grades come with an enforcement procedure, naming who
+  grants relief** — "You must ask permission to violate a MUST." / "You
+  must ask forgiveness for violating a SHOULD." / "Permission comes from
+  the owners of your project. Forgiveness is requested in a comment near
+  the point of guideline violation, and is granted by your code
+  reviewer." The permission/forgiveness split maps the two keyword tiers
+  onto two different human authorities and two different moments — before
+  the fact from project owners, after the fact from a reviewer. This is
+  the only guide read in this file that specifies *who* may authorize a
+  departure from its rules and *how* that authorization is recorded;
+  the C++, Java, and Shell sections above state rules of comparable
+  firmness without naming a relief procedure.
+- **The reader-over-writer principle, with its own memorable name** —
+  stated cause: "Because good code is usually written once and read many
+  times by many people (including the same programmer who has to maintain
+  the program after having forgotten it)." And the requirement it
+  supports: "Every developer's code must be easy for another developer to
+  read, understand, and modify—even if the first developer isn't around
+  to explain it. (This is the 'hit by a truck' principle.)" The C++ and
+  Objective-C sections above record the same reader-over-writer premise;
+  this guide is the one that gives it a name and extends it explicitly to
+  the original author's own future forgetfulness.
+- **Macros are subordinated to functions by an absolute rule, with the
+  cost stated in reader terms** — "You must never use a macro where a
+  function will do. That is, if the semantics of what you are writing
+  conforms to the semantics of a function, then you must write it as a
+  function rather than a macro." The stated reason prices the language's
+  signature capability: macros bring "syntactic abstraction, which is a
+  wonderful thing... But it comes at a cost to the reader, which is
+  learning a new syntactic concept for each macro." This is the
+  restrict-what-the-language-allows pattern running through this file,
+  aimed at the feature the language is most famous for.
+- **`EVAL` is prohibited at runtime** — "You must not use EVAL at
+  runtime." Permitted uses are confined to interactive development tools,
+  build infrastructure, testing backdoors, and compile-time constant
+  folding. The JavaScript section above records a comparable `eval` ban
+  justified by security and Content Security Policy; here the same
+  construct is restricted in a language where it is far more idiomatic.
+- **Closing parentheses are gathered, never left alone on a line** —
+  "You must not place right parentheses by themselves on a line. A set of
+  consecutive trailing parentheses must appear on the same line." A rule
+  with no analogue elsewhere in this file, because no other language read
+  here accumulates closing delimiters the way Lisp does — and it runs
+  directly against the brace-per-line conventions that the Java, C#,
+  Swift, and Objective-C sections above all record.
+- **A 100-character line limit — the fifth guide in this file to land on
+  100** — "You should format source code so that no line is longer than
+  100 characters." Note the keyword: this is a SHOULD, not a MUST, so
+  under the guide's own vocabulary it is a rule a programmer may depart
+  from with reviewer forgiveness. After Java, C#, Swift and Objective-C,
+  the recurrence of 100 is recorded as an observation; none of these
+  guides states where the number came from, so no inheritance chain is
+  claimed.
+- **Tabs are excluded by instructing the reader to configure the
+  editor** — "You must set your editor to avoid inserting tab characters
+  in the files you edit." Where the Swift and Objective-C sections above
+  state the prohibition as a property of the code, this one states it as
+  a requirement on the programmer's tooling — a small but real difference
+  in where the rule is enforced.
+- **Global variables are marked by their names — the "earmuffs"
+  convention** — "Global variable names should start and end with
+  asterisks (also known in this context as earmuffs)." A naming rule that
+  encodes a variable's binding behaviour into its identifier, so that
+  dynamic scope is visible at every use site.
+- **Docstrings are expected on the public surface** — "You should use
+  document strings on all visible functions to explain how to use your
+  code," covering "top-level functions, types, classes, variables and
+  macros."
+
+**A second instance of the self-deferring pattern — and a more
+structural one than C#'s.** The C# section above records two inline
+sentences deferring a decision to the future, and the Swift section
+records that this pattern did *not* recur there. It recurs here, in a
+stronger form: an entire enumerated section titled "Future Topics",
+introduced as "There are many topics for additional standardization not
+covered by current version of this document, but deferred to future
+versions." The deferred list includes file and directory structure,
+packages and modularity, threads and locking, CLOS style, and when not to
+use conditional compilation. Where C# marked two individual rules as
+unsettled, this guide publishes a map of its own unfinished scope. Two
+instances across sixteen guides, in different forms, is enough to record
+the habit as real but not enough to call it a house style — the Swift
+negative stands as evidence against generalizing it.
+
+**Scope note**: this is Google's own convention for Google's own Common
+Lisp code, not an ANSI Common Lisp specification and not a claim about
+how the wider Lisp community writes Lisp — a community with strong,
+long-established and sometimes conflicting conventions of its own, some
+of which this guide explicitly declines to simply adopt (see its hedged
+treatment of Norvig and Pitman's guide, quoted in the Cross-language
+pattern section below). The guide's "Future Topics" list is itself an
+admission that several major areas of Lisp style are not covered here.
+
 ## Cross-language pattern (relative to this catalog's other findings)
 
 The same "restrict what the language allows, for a stated scale-driven or
@@ -1424,10 +1566,25 @@ where a language already has one dominant published style authority —
 vendor or community — Google does not compete with it, and writes its
 own rules only in the space that remains. In the three vendor cases the
 deference anchors to naming specifically; the R fork is global, so the
-naming-concentration observation holds at n=3, not n=4. Recorded as an
+naming-concentration observation holds at n=3, not n=4.
+
+The Common Lisp guide adds a fifth case that completes the range at the
+opposite end — the first *hedged* deference in the corpus: "For more
+detailed style guidance, take (with a pinch of salt) a look at Peter
+Norvig and Kent Pitman's style guide." The external document is
+recommended and distrusted in the same sentence. Set against Swift's
+incorporation-by-reference, the five cases now span from "these rules
+are part of this document" to "read this, but not uncritically" — and
+the same guide shows that deference and independence can coexist within
+one document, since it also adopts RFC 2119's compliance vocabulary
+wholesale while explicitly noting where it departs from it. What holds
+across all five is narrower than it first appeared: where a language has
+a dominant published style authority, Google positions itself relative to
+that authority explicitly rather than ignoring it — the *strength* of the
+positioning varies from absorption to open skepticism. Recorded as an
 observed pattern, not a claim about guides not read here — the Python,
-C++, Java, Go, TypeScript, Shell, JavaScript, JSON, HTML/CSS and
-Markdown sections above state their conventions without citing an
+C++, Java, Go, TypeScript, Shell, JavaScript, JSON, HTML/CSS, Markdown
+and Vim script sections above state their conventions without citing an
 external owner.
 
 **Two negative results are recorded in the Swift section above**, and
@@ -1705,10 +1862,16 @@ forced a revision of the Cross-language pattern section's causal
 hypothesis (from "platform vendor" to "dominant published style
 authority"), and the superseded wording is acknowledged there rather
 than silently replaced. The "by far the shortest" claim in the R section
-was later re-verified by measurement rather than impression: the source
-file is 2,982 bytes against, for example, 14,234 bytes for the
-Vimscript guide's source (GitHub API `size` fields, checked when the
-Vimscript section was added).
+was later re-verified by measurement rather than impression, against the
+whole corpus rather than one comparison: at 2,982 bytes of source,
+`Rguide.md` is the smallest of every guide in Google's style-guide
+repository, and the next smallest — `angularjs-google-style.html` at
+12,751 and `vimscriptguide.xml` at 14,234 — are four to five times its
+size (GitHub API `size` fields for the `gh-pages` branch). One caveat on
+all such comparisons in this file: these are raw source bytes, so
+markup-heavy `.html` and `.xml` sources carry overhead that `.md` sources
+do not, and the figures are therefore a rough proxy for prose volume
+rather than a measure of it.
 
 Google's Vimscript Style Guide
 (google.github.io/styleguide/vimscriptguide.xml) has since been read,
@@ -1728,7 +1891,42 @@ searching the other fourteen sections for locale/localization
 counterexamples before being written (one false positive — Go's
 "goroutines localized" — was inspected and excluded).
 
-With Vim script now read, Google's public style-guide catalog
-(google.github.io/styleguide/) still lists two further guides that
-remain unread first-hand — AngularJS and Common Lisp — neither of which
-should be assumed to follow this pattern.
+Google's Common Lisp Style Guide
+(google.github.io/styleguide/lispguide.xml) has since been read, with all
+quotations verified against the raw XML source
+(`raw.githubusercontent.com/google/styleguide/gh-pages/lispguide.xml`) —
+the guide's RFC 2119 keyword definitions, the "Unlike RFCs" deviation
+note, the permission/forgiveness procedure, the reader-over-writer and
+"hit by a truck" statements, the macro-subordination rule and its
+reader-cost rationale, the runtime `EVAL` prohibition, the trailing-paren
+rule, the 100-character SHOULD, the editor/tabs rule, the earmuffs
+convention, the docstring rule, the hedged Norvig-and-Pitman reference,
+and the "Future Topics" deferral list (see the Common Lisp section
+above) — are quoted directly from raw source across four targeted passes,
+though unlike several sections above not every quotation there was
+confirmed twice; the section itself states which were and which were not.
+Two "only guide in this file" claims in
+that section (graded compliance vocabulary; a named relief procedure for
+rule violations) were checked by searching the other fifteen sections for
+counterexamples before being written, per the standing rule; no
+counterexample was found, though this establishes only that no *recorded*
+rule in the other sections does so — unread portions of those guides may.
+The guide is the second-largest in Google's repository by source bytes,
+not the largest, which was confirmed by measurement rather than assumed.
+Large parts of this long guide have not been read and are not assumed to
+follow the same pattern — among them most of the Formatting section
+beyond the rules above, Data Representation, the CLOS and
+condition-system material, iteration constructs (`LOOP`/`ITERATE`),
+type declarations, and the guide's extended code examples; the guide's
+own "Future Topics" list separately marks areas it does not cover at all.
+The companion references it names — the Common Lisp HyperSpec, Practical
+Common Lisp, and Norvig and Pitman's style guide — have not been read for
+this file and none of their content is assumed.
+
+With Common Lisp now read, one guide from Google's public style-guide
+index remains unread first-hand among those covered by this file's
+scope — AngularJS — which should not be assumed to follow this pattern.
+The index also links guides hosted outside the `google/styleguide`
+repository (Effective Dart at dartlang.org, the Kotlin guide at
+developer.android.com) and a non-language XML document guide, none of
+which have been read here.
