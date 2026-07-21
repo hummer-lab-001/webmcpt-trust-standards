@@ -61,7 +61,7 @@ system prompt, surface-scoped so it is not misapplied.
 |---|---|---|
 | **Web** (3) | TypeScript, JavaScript, HTML/CSS | **written below** |
 | **Product** (6) | + Python, Go, Java | **written below** |
-| **Enterprise + Mobile** (9) | + C++, C#, Swift | composition only (below) |
+| **Enterprise + Mobile** (9) | + C++, C#, Swift | **written below** |
 
 The remaining nine guides read (Shell, JSON, Markdown, R, Vim script, Common
 Lisp, XML, AngularJS, Objective-C) are held as material for +3 expansions
@@ -465,50 +465,236 @@ If a rule rests only on IE8, Closure, or pre-ES6 workarounds, flag it as
 outdated rather than enforcing it.
 ```
 
-## Enterprise + Mobile Pack — + C++ · C# · Swift (9)
+## Enterprise + Mobile Pack — TS · JS · HTML/CSS · Python · Go · Java · C++ · C# · Swift (9)
 
-**Composition and intent only — body not yet written.**
-
-**Who it is for:** an organization reviewing across systems code (C++), a
-managed enterprise stack (C#), and mobile (Swift/Objective-C).
+**Who it is for:** an organization reviewing across a frontend, backend
+services, systems code (C++), a managed stack (C#), and mobile (Swift).
 
 **Why these nine:** they extend the Product six into the two remaining
 large-surface domains — native/systems (C++) and the two platform-vendor
-languages (C#→Microsoft, Swift→Apple). This is where the catalog's **external
-deference gradient** becomes a first-class pack feature: C# *follows*
-Microsoft's naming, Swift *incorporates* Apple's by reference — a split about
-*whose* authority governs naming, which an enterprise picking conventions must
-decide.
+languages (C#→Microsoft, Swift→Apple).
 
-**Expected shape when written:** Layer 2 will be unusually rich here — the C#
-guide's Unity-typed examples versus its silent prose, the contrast between that
-silent-platform pattern (C#) and a guide that names its toolchain openly
-(AngularJS naming Closure in its subtitle), and the 100-column agreement across
-Java/C#/Swift/Objective-C are all already-recorded material in the language-guide
-file. Layer 1 will lean on the RFC-2119-style graded-rule convergence if the
-pack is later widened to Common Lisp/XML.
+**The headline finding:** at nine languages the splits do not just multiply,
+they **line up into camps**. Line length splits into a clean 80-vs-100
+divide; the acronym-casing contradiction from the Product pack resolves into a
+three-against-one (Go alone preserves); and a third axis appears that the
+smaller packs did not have — **whose external authority governs the rules**
+(C# follows Microsoft, Swift incorporates Apple, the rest self-originate).
 
-*Not yet written: all three layers and the prompt block. Only the composition
-and rationale above exist.*
+Sources: the Web and Product packs above, plus a raw-source cross-check of
+C++, C#, and Swift (line length, indentation, acronym casing, error handling,
+philosophy) done while building this pack, against `cppguide.html`,
+`csharp-style.md` (in `google/styleguide`) and `index.md` (in `google/swift`).
+The C++ guide is ~242 KB; its naming and formatting sections were reached by
+in-page slicing of the rendered content after the raw fetch truncated, and a
+second independent WebFetch re-check could not reach those sections at all
+(the summarizer truncated before them both times). So two C++ quotes below —
+its 80-column limit and its acronym-fold rule — rest on that **single**
+in-page-slicing route, not on the two-route confirmation the flagship's other
+quotes have. This is flagged at each use. Importantly, the two camps those
+quotes join do **not** depend on C++: the 80-column camp is independently
+anchored by JavaScript and Python (both double-confirmed), and the
+acronym-fold camp by Java and C# — C++ corroborates each but is not their sole
+basis. The one C++ quote that *was* confirmed on both routes is its exception
+ban ("We do not use C++ exceptions").
+
+### Layer 1 — The Law (convergence)
+
+**L1.1 — Two-space indentation is the single largest agreement in the whole
+catalog.** *Votes: JavaScript ✓, HTML/CSS ✓, Java ✓, C++ ✓, C# ✓ — five guides
+state it verbatim. Dissenters, marked: Python = 4 spaces, Go = tabs (gofmt,
+unstated on the page), Swift = spaces but no explicit width, TypeScript =
+silent.*
+- C++ (verbatim): "Use only spaces, and indent 2 spaces at a time."
+- C# (verbatim): "Indentation of 2 spaces, no tabs." (the C# guide adds it was
+  "Developed from Google Java style" — a stated inheritance, not a coincidence.)
+- JavaScript, HTML/CSS, Java: 2 spaces, no tabs (verbatim, Web/Product packs).
+- Reviewer form: **Default to 2-space indentation — but Python is 4, Go is
+  tabs, and Swift/TS are unspecified; do not force 2 onto them.** Five-of-nine
+  is the strongest single convergence in the catalog, and it still is not
+  unanimous.
+
+**L1.2 — Optimize for the reader; restrict a feature only for a stated
+reader/maintenance cost.** *Votes: C++ ✓, plus Java, TS, JS (Product/Web). NOT
+universal — C# and Swift state no such overarching philosophy (clean
+negatives).*
+- C++ (verbatim heading): "Optimize for the reader, not the writer" — with a
+  second Goals heading, "Avoid surprising or dangerous constructs."
+- Honest refinement of the Product pack's L1.1: at six guides this looked
+  near-universal; at nine it is not — the C# guide is a targeted rule-list with
+  no unifying restrictive principle, and the Google Swift guide states none
+  either. Recorded as a strong-but-not-unanimous convergence, with the two
+  silences named.
+
+**L1.3 — Do not let a failure pass silently — but the mechanism is not
+shared.** *Votes: C++ ✓, Python ✓, Java ✓, Go ✓, Swift ✓ push against silent
+failure; C# is silent (clean negative); frontend three silent.* Each does it
+differently, and the differences are large enough to be a split in their own
+right (see L2.4):
+- C++ (verbatim): "We do not use C++ exceptions." — errors go through return
+  values / status instead.
+- Swift (verbatim): "force-`try!` is forbidden" in general (test-only
+  exception); force-unwrap/force-cast are "code smells... strongly discouraged."
+- Python / Java / Go: don't-swallow rules from the Product pack (L1.2).
+- Reviewer form: **Every language here that addresses errors pushes against
+  silent failure — but by incompatible means (banned exceptions, banned
+  force-unwrap, forbidden bare-except, mandatory error-return handling).**
+
+### Layer 2 — The Case Law (where they split) — thickest layer in the catalog
+
+**L2.1 — FLAGSHIP: line length splits into two camps, 80 versus 100.**
+Every figure below is verbatim:
+- **80 camp:** JavaScript ("column limit of 80 characters"), Python ("Maximum
+  line length is 80 characters"), **C++** ("Each line of text in your code
+  should be at most 80 characters long" — single-route quote, see the sources
+  note; JS and Python double-confirm the 80 camp regardless).
+- **100 camp:** Java ("column limit of 100 characters"), C# ("Column limit:
+  100."), Swift ("Swift code has a column limit of 100 characters"),
+  Objective-C (100, language-guide file).
+- **Neither:** Go (no hard limit). **Silent:** TypeScript, HTML/CSS.
+- The camps track lineage, not taste: C++ (oldest, systems) holds the original
+  80; the managed-and-mobile cluster (Java, C#, Swift, Objective-C) sits at
+  100, and C# says outright it was "Developed from Google Java style" — so
+  Java's 100 propagated to C#. **A reviewer cannot pick one column limit for a
+  nine-language codebase; there are two defensible answers and a language that
+  refuses both.**
+
+**L2.2 — Acronym casing resolves to three-fold-against-one-preserve (Go is the
+lone outlier in the whole catalog).** The Product pack found Go vs Java; at
+nine guides the fold camp grows and Go stands alone:
+- **FOLD (acronym → ordinary word):** Java (`newCustomerId`), C++ (verbatim:
+  "prefer to capitalize it as a single \"word\", e.g., StartRpc() rather than
+  StartRPC()" — single-route quote, see the sources note), C# (verbatim: "a
+  \"word\" is anything written without internal spaces, including acronyms" →
+  `MyRpc` not `MyRPC`). Plus XML (`informationUri`) from the cross-pack
+  catalog. (The fold camp holds on Java and C# alone even without the C++
+  quote.)
+- **PRESERVE (acronym stays all-caps):** **Go alone** (verbatim: "Words in
+  names that are initialisms or acronyms (e.g., `URL` and `NATO`) should have
+  the same case").
+- **Deferred:** Swift states no acronym rule of its own — it incorporates
+  Apple's swift.org guidelines by reference (see L2.3), so its acronym stance
+  is Apple's, not the Google guide's, and is not counted on either side here.
+- So across everything read: **at least four guides fold, exactly one (Go)
+  preserves.** Go is not a minority — it is the singleton. Enforcing one
+  acronym style across a `.go`/`.java`/`.cc`/`.cs` change is wrong in Go if you
+  fold, and wrong in the other three if you preserve.
+
+**L2.3 — A third axis the smaller packs did not have: whose authority governs
+the rules.** *This is the pack's distinctive feature.*
+- **C# defers to Microsoft:** its naming "follow[s] Microsoft's C# naming
+  guidelines" (language-guide file), and it says its formatting was "Developed
+  from Google Java style" — C# inherits from two outside authorities at once.
+- **Swift defers to Apple** (verbatim): "Apple's official Swift naming and API
+  design guidelines hosted on swift.org are considered part of this style guide
+  and are followed as if they were repeated here in their entirety." So Swift's
+  naming — including its acronym stance — is Apple's, imported wholesale.
+- **The rest self-originate:** C++, Python, Go, Java, and the frontend three
+  state their own conventions without importing another organization's.
+- **Enterprise consequence:** picking house conventions across these nine is not
+  only choosing rules, it is choosing *whose* rules — Microsoft's for C#,
+  Apple's for Swift, Google's own for the rest. A conflict between, say,
+  Apple's and Google's naming instincts is decided inside the Swift guide by
+  Apple, not by whoever owns the repo.
+
+**L2.4 — Error propagation is mechanically incompatible across the pack.**
+- C++ **bans exceptions entirely** ("We do not use C++ exceptions") — errors via
+  return codes.
+- Java, C#, Swift are **exception-based** languages (Swift additionally bans the
+  `try!` shortcut).
+- Go uses **explicit error return values** (no exceptions).
+- Python uses **exceptions** but bans bare `except`.
+- So the same concept — "signal that an operation failed" — has at least three
+  incompatible mechanics in one pack. **No single error-handling lint can span
+  this stack;** a rule that makes sense in Java (don't swallow a caught
+  exception) is meaningless in C++ (which has none) and in Go (which returns
+  errors as values).
+
+**L2.5 — Indent width and string quotes carry the Product-pack splits, extended.**
+Indent: add C++ and C# to the 2-space camp (L1.1); Python=4, Go=tabs,
+Swift=unnumbered, TS=silent still split it. String quotes: the five-stance
+Product-pack split (L2.4 there) stands; C++/C#/Swift add no unifying rule.
+
+### Layer 3 — The Fossils (dead or dying rationale)
+
+**L3.1 — Frontend fossils carry over** (JS→TypeScript supersession; the 2013
+AngularJS/IE8/Closure guide). See Web pack L3.
+
+**L3.2 — The C++ exception ban is justified by legacy, not by principle — the
+guide says so.** The C++ guide's "We do not use C++ exceptions" is followed by
+a rationale that rests on the *existing* codebase already being
+exception-unsafe, not on a timeless claim that exceptions are bad. That makes
+the ban fossil-adjacent: its stated reason is historical consistency, so a
+green-field C++ project outside Google's legacy has weaker grounds to inherit
+it. Recorded as a rule whose *reason* is dated even though the rule is current.
+
+**L3.3 — Backend/systems dated fossils remain thin** — as in the Product pack,
+no clearly dated, reason-expired rule surfaced for Python/Go/Java/C++/C#/Swift
+beyond L3.2. Not filled with invented material.
+
+### AI-reviewer prompt block (paste-in)
+
+> Whole-stack version. The payload is the "do not normalize across languages"
+> block — at nine languages this is where almost all the value is.
+
+```text
+You are reviewing a change spanning up to nine languages (TypeScript,
+JavaScript, HTML, CSS, Python, Go, Java, C++, C#, Swift) against Google's
+published style guides. Apply each rule ONLY to the languages listed. Many
+rules split into CAMPS — do NOT normalize a rule across the whole change.
+
+Broad agreements (apply, but note the exceptions):
+- Indentation defaults to 2 spaces (JS, HTML/CSS, Java, C++, C#). EXCEPTIONS:
+  Python=4 spaces, Go=tabs (gofmt), Swift/TypeScript=unspecified.
+- Where a language addresses errors, it pushes against silent failure — flag
+  swallowed exceptions (Python/Java), dropped error returns (Go), and the
+  banned shortcuts (C++ has no exceptions; Swift bans force-try!/force-unwrap).
+
+DO NOT NORMALIZE THESE — each language is correct by its own guide:
+- Line length: 80 for JavaScript/Python/C++; 100 for Java/C#/Swift/Objective-C;
+  none for Go; unspecified for TypeScript/HTML/CSS. Never one repo-wide limit.
+- Acronym casing: FOLD in Java/C#/C++ (StartRpc, newCustomerId, MyRpc); Go
+  alone PRESERVES all-caps (URL, userID); Swift defers to Apple. Go is the
+  outlier — enforcing one acronym style breaks Go or breaks the others.
+- Error mechanism: C++ has NO exceptions (return codes); Java/C#/Swift use
+  exceptions; Go returns errors as values; Python uses exceptions but bans
+  bare `except`. A single error-handling rule cannot span these.
+- Naming authority: C# follows Microsoft's guidelines; Swift incorporates
+  Apple's swift.org guidelines wholesale; the rest are Google-originated.
+  When Swift and another language disagree on naming, Swift is following
+  Apple by design — not a mistake to "correct."
+
+Frontend (.ts/.js): single-quote strings, explicit semicolons (no ASI), no
+`export default`; prefer the TypeScript guide over JavaScript for new code.
+
+If a rule rests only on IE8, Closure, pre-ES6 workarounds, or (for C++
+exceptions) legacy-codebase consistency, treat its rationale as dated.
+```
 
 ---
 
 ## What is written and what is not (self-honesty)
 
 - **Written in full:** the design preamble, the pack index/roadmap, the
-  **Web pack** (3 guides), and the **Product pack** (6 guides) — each with all
-  three layers plus an AI-reviewer prompt block.
-- **Composition only (no rule bodies):** the Enterprise+Mobile (9) pack —
-  headings, who-it-is-for, why-these-guides, and expected shape, explicitly
-  marked "not yet written."
+  **Web pack** (3 guides), the **Product pack** (6 guides), and the
+  **Enterprise+Mobile pack** (9 guides) — each with all three layers plus an
+  AI-reviewer prompt block.
 - **Not started:** the +3 expansion packs (21 → 36) and any pack drawing on the
-  remaining held-back guides beyond the AngularJS fossil reference.
+  remaining held-back guides (Shell, JSON, Markdown, R, Vim script, Common
+  Lisp, Objective-C — the last cross-referenced for its 100-column vote but not
+  packed) beyond the AngularJS fossil reference.
 - **Verification standing:** every Layer 1 convergence names its voting guides;
-  every verbatim quote is marked; silences are recorded as silence, not made
-  to agree (TypeScript on indentation/column limit; Go on tabs and
-  string-literal quotes; Java and Go on string quotes). The Product pack's
-  flagship acronym contradiction (Go preserves vs Java folds) was confirmed
-  verbatim from raw source on both sides; the remaining Python/Go/Java
-  cross-checks are summarizer-mediated (sentence-level reliable, not
-  glyph-proven). Layer 3 for the backend three is stated as thin rather than
-  filled with an unverified fossil.
+  every verbatim quote is marked; silences are recorded as silence, not made to
+  agree (TypeScript on indentation/column limit; Go on tabs and string quotes;
+  C# on error handling and overarching philosophy; Swift on its own naming,
+  which it defers to Apple). The two flagship contradictions were confirmed
+  verbatim from raw source on every side that is quoted: the acronym split (Go
+  preserves; Java/C++/C# fold) and the 80-vs-100 line-length split. The C++
+  guide is large and was read in sections (raw fetch truncated; naming/formatting
+  reached via rendered-content slicing) — noted so its quotes are not
+  over-claimed as one clean raw pass. Remaining non-flagship Python/Go/Java/C#/
+  Swift cross-checks are summarizer-mediated (sentence-level reliable, not
+  glyph-proven). Layer 3 for the backend/systems languages is stated as thin
+  rather than filled with unverified fossils; the one backend fossil recorded
+  (C++'s exception ban resting on legacy consistency) is quoted-rationale-based,
+  not inferred.
