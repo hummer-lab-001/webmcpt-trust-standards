@@ -1430,11 +1430,16 @@ point worth stating because assuming so would have been easy and wrong.
   exist valid reasons in particular circumstances to ignore the demands
   of the guideline, but the full implications must be understood and
   carefully weighed before choosing a different course"; MAY "means that
-  an item is truly optional." No other guide read in this file grades the
-  binding strength of its individual rules with a formal, defined
-  vocabulary — the rest express force through ordinary prose ("strongly
-  discouraged", "avoid", "never"), leaving the reader to infer how hard
-  each rule is. This one makes the gradient explicit and machine-legible.
+  an item is truly optional." One other guide read in this file also
+  grades its rules with RFC 2119 keywords — the XML section below — but
+  the two differ in a way worth stating: the XML guide merely *cites*
+  RFC 2119 ("used in this document in the sense of RFC 2119") and leaves
+  the terms undefined, whereas this guide re-*defines* each level in its
+  own words. Every other guide read here expresses rule force through
+  ordinary prose ("strongly discouraged", "avoid", "never"), leaving the
+  reader to infer how hard each rule is; these two make the gradient
+  explicit and machine-legible, and this one is the only one that writes
+  its own definitions of the levels rather than pointing at the RFC's.
 - **And it names its own deviation from the standard it borrowed** —
   "Unlike RFCs, we don't capitalize every instance of one of the above
   keywords when it is used." A guide that adopts an external convention
@@ -1534,6 +1539,123 @@ of which this guide explicitly declines to simply adopt (see its hedged
 treatment of Norvig and Pitman's guide, quoted in the Cross-language
 pattern section below). The guide's "Future Topics" list is itself an
 admission that several major areas of Lisp style are not covered here.
+
+## XML: a data-format guide that grades its rules, then licenses breaking every one of them
+
+Read directly from Google's public XML Document Format Style Guide
+(google.github.io/styleguide/xmlstyle.html) — canonical URL confirmed via
+Google's style-guide index page, with every quotation below verified
+against the raw HTML source
+(`raw.githubusercontent.com/google/styleguide/gh-pages/xmlstyle.html`)
+across two passes (a four-quote re-verification pass confirmed the
+load-bearing ones character-for-character). Like the JSON section above,
+this guide governs a data-interchange format rather than a programming
+language, and it is explicit that it is about *format design*, not code:
+"This document provides a set of guidelines for general use when
+designing new XML document formats." It also fixes its own scope by
+exclusion: "Its rules are not applicable to formats such as XHTML (which
+should be formatted as much like HTML as possible) or ODF which are meant
+to express rich text" — the guide is for machine-generated and
+machine-consumed XML, not human-readable documents.
+
+- **It grades its rules with RFC 2119 keywords — the second guide in this
+  file to do so, but by citation rather than definition** — "The terms
+  MUST, MUST NOT, SHOULD, SHOULD NOT, and MAY are used in this document in
+  the sense of RFC 2119." Where the Common Lisp section above re-defines
+  each keyword in its own words, this guide points at RFC 2119 and stops
+  there. Two of the sixteen guides read here grade rule strength with a
+  formal compliance vocabulary, and both are among the least
+  code-like — one governs a Lisp dialect's conventions, the other a data
+  format's design; the observation is recorded as a two-case convergence,
+  not a rule.
+- **The strongest rules use MUST, and are genuinely categorical** — the
+  keyword grading is not decorative. Element naming: "All names MUST use
+  lowerCamelCase." Character set: "Names MUST contain only ASCII letters
+  and digits." Binary data: "Binary data MUST NOT be included directly
+  as-is in XML documents, but MUST be encoded using Base64 encoding."
+  Namespaces: "Element names MUST be in a namespace, except when
+  extending pre-existing document types that do not use namespaces." Each
+  is a hard requirement in the guide's own graded vocabulary, not a
+  preference.
+- **lowerCamelCase with acronyms folded to words — the second explicit
+  instance of the same acronym rule** — "All names MUST use
+  lowerCamelCase. That is, they start with an initial lower-case letter,
+  then each new word within the name starts with an initial capital
+  letter." And, verbatim: "Acronyms MUST be treated as words for
+  camel-casing purposes: informationUri, not informationURI." This is the
+  same acronym-as-one-word convention the C# section records (`MyRpc` not
+  `MyRPC`) — the only other guide in this file that spells the acronym
+  rule out. (The JSON section's camelCase rule is *not* a third instance:
+  it requires camelCase property names but says nothing about how
+  acronyms are cased, so it is deliberately not counted here — the same
+  care taken after an earlier draft over-claimed a JSON acronym rule that
+  the JSON guide does not contain.) Two Google guides, one for C# code and
+  one for XML formats, independently spelling out "an acronym is one word
+  for casing" — recorded as a two-case convergence, with the caveat that
+  both are Google's own guides and so may share lineage rather than having
+  reached it independently.
+- **Dates use RFC 3339 — matching the JSON guide exactly** — "Dates
+  should be represented using RFC 3339 format, a subset of both ISO 8601
+  format and XML Schema xsd:dateTime format." The JSON section above
+  records the same RFC 3339 / ISO 8601 date convention; here the two
+  data-format guides agree outright, which (unlike the acronym case) is
+  unsurprising since RFC 3339 is the obvious interoperable choice for
+  both.
+- **Boolean values are discouraged in favour of enumerations, and if used
+  are pinned to two spellings** — "Boolean values SHOULD NOT be used (use
+  enumerations instead)." If a boolean is unavoidable it "MUST be
+  expressed as true or false" and "The alternative values 1 and 0 MUST
+  NOT be used." The stated preference for enumerations over booleans is a
+  design-for-extensibility move — a two-valued field cannot grow a third
+  case without a schema break, an enumerated one can.
+- **RELAX NG compact syntax is the recommended schema language, with a
+  stated reason** — "The schema language SHOULD be RELAX NG compact
+  syntax. Embedded Schematron rules MAY be added to the schema for
+  additional fine control." Stated reason: "RELAX NG is the most flexible
+  schema language, with very few arbitrary restrictions on designs."
+  Notable because RELAX NG is *not* the most widely deployed choice —
+  W3C XML Schema is — so the guide is recommending against the market
+  default on a stated flexibility rationale, keyword SHOULD.
+- **The design decision the guide puts first is whether to design at
+  all** — its opening section is titled "To design or not to design, that
+  is the question," and its counsel is to avoid the work where possible:
+  "Attempt to reuse existing XML formats whenever possible, especially
+  those which allow extensions." / "Creating an entirely new format
+  should be done only with care and consideration." This is the same
+  "the benefit must justify the cost" instinct the Objective-C guide's
+  "Style rules should pull their weight" applies to rules — here applied
+  to the very existence of the format.
+- **The two-decision question it explicitly refuses to answer with a
+  rule** — Section 12, "Elements vs. Attributes," opens: "There are no
+  hard and fast rules for deciding when to use attributes and when to use
+  elements." A guide otherwise full of MUSTs marks its single most famous
+  XML-design controversy as un-ruleable and offers considerations
+  instead of a verdict — an honest refusal of the kind the JSON guide
+  never needed to make (JSON has no attribute/element distinction).
+- **And then, in closing, it licenses breaking all of it — including the
+  MUSTs** — the "Parting words" section ends: "Break ANY OR ALL of these
+  rules (yes, even the ones that say MUST) rather than create a crude,
+  arbitrary, disgusting mess of a design if that's what following them
+  slavishly would give you." This is the sharpest self-subversion in any
+  guide read for this file. The Common Lisp guide built an elaborate
+  permission/forgiveness procedure around violating a MUST; this guide,
+  having graded its rules with the same RFC 2119 vocabulary, explicitly
+  authorizes ignoring even a MUST in the name of good taste — parenthetically
+  naming the MUST tier so no reader can miss that the license reaches the
+  guide's own strongest rules. The HTML/CSS guide's "Parting Words" and
+  the Objective-C guide's principles both elevate consistency and judgment
+  over literal rule-following, but neither goes as far as naming its own
+  top compliance tier as breakable.
+
+**Scope note**: this is Google's own convention for designing Google's own
+machine-oriented XML formats, not the W3C XML specification, not XML
+Schema, and not a claim about how the wider XML world designs formats —
+and by its own statement it does not apply to human-facing XML vocabularies
+like XHTML or ODF. Several sections were read only in part — Section 3
+Namespaces beyond the rules above, Section 5 Elements, Section 6
+Attributes, Section 8 Key-value pairs, Section 10 Processing instructions,
+and Section 11 Representation of XML document instances — and are not
+assumed to follow the same pattern.
 
 ## Cross-language pattern (relative to this catalog's other findings)
 
@@ -1923,10 +2045,34 @@ The companion references it names — the Common Lisp HyperSpec, Practical
 Common Lisp, and Norvig and Pitman's style guide — have not been read for
 this file and none of their content is assumed.
 
-With Common Lisp now read, one guide from Google's public style-guide
-index remains unread first-hand among those covered by this file's
-scope — AngularJS — which should not be assumed to follow this pattern.
-The index also links guides hosted outside the `google/styleguide`
+Google's XML Document Format Style Guide
+(google.github.io/styleguide/xmlstyle.html) has since been read, with all
+quotations verified against the raw HTML source
+(`raw.githubusercontent.com/google/styleguide/gh-pages/xmlstyle.html`)
+across two passes, and the four load-bearing quotations (the "Break ANY
+OR ALL" closing, the RFC 2119 citation, the lowerCamelCase/acronym rule,
+and the boolean rule) confirmed character-for-character in a dedicated
+re-verification pass. The rules and framing statements quoted — the
+machine-oriented scope and its XHTML/ODF exclusion, the RFC 2119 keyword
+citation, the lowerCamelCase and acronym-as-word rules, the ASCII and
+namespace MUSTs, the Base64 binary-data rule, the RFC 3339 date rule, the
+booleans-discouraged rule, the RELAX-NG schema recommendation, the
+"design or not to design" reuse counsel, the explicit no-rule on
+elements-vs-attributes, and the "Break ANY OR ALL of these rules" closing
+(see the XML section above) — are quoted directly. Two cross-guide
+observations were made carefully: the RFC 2119 grading is recorded as a
+two-case convergence with Common Lisp (with the citation-vs-definition
+difference stated), and the acronym-as-word rule as a two-case
+convergence with C# — the JSON guide was deliberately *not* counted as a
+third acronym instance, because it states no acronym rule, the same
+over-claim avoided once before in this file. Several sections of the
+guide were read only in part and are not assumed to follow the same
+pattern: most of Namespaces, Elements, Attributes, Key-value pairs,
+Processing instructions, and Representation of XML document instances.
+
+With XML now read, one guide from Google's public style-guide index
+remains unread first-hand among those covered by this file's scope —
+AngularJS — which should not be assumed to follow this pattern. The
+index also links guides hosted outside the `google/styleguide`
 repository (Effective Dart at dartlang.org, the Kotlin guide at
-developer.android.com) and a non-language XML document guide, none of
-which have been read here.
+developer.android.com), which have not been read here.
