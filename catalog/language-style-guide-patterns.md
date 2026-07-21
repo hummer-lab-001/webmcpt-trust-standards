@@ -1657,6 +1657,95 @@ Attributes, Section 8 Key-value pairs, Section 10 Processing instructions,
 and Section 11 Representation of XML document instances — and are not
 assumed to follow the same pattern.
 
+## AngularJS: a dated guide for a framework and an internal toolchain, extending another Google guide
+
+Read directly from Google's public AngularJS Style Guide
+(google.github.io/styleguide/angularjs-google-style.html) — canonical URL
+confirmed via Google's style-guide index page, with all quotations below
+verified against the raw HTML source
+(`raw.githubusercontent.com/google/styleguide/gh-pages/angularjs-google-style.html`)
+across two passes. This is the only guide read in this file that targets a
+*framework* rather than a language or data format, and it is explicit
+about a second, narrower target too: its own subtitle is "An AngularJS
+Style Guide for Closure Users at Google," and it opens "This is the
+external version of a document that was primarily written for Google
+engineers," describing "a recommended style for AngularJS apps that use
+Closure, as used internally at Google."
+
+- **It is visibly, datably old — and it carries its own last-modified
+  date on the page, which most other guides read here do not** — the page
+  states "Last modified Feb 07 2013." Most guides in this file carry no
+  modification date in their text at all; the two prior date signals were
+  both indirect and of a different kind — the C# guide's future-tense
+  "when C# 7 is live" (a rule frozen at its 2016-era drafting) and the
+  Swift guide's host repository being "archived read-only in January
+  2023" (a repository event, not the guide's own stated date). This one
+  is stamped in its own body, and Feb 2013 is older than either of those
+  signals — the oldest concrete date encountered anywhere in this file's
+  reading. The content matches the date:
+  the guide contrasts pre- and post-AngularJS-1.2 controller patterns,
+  and elsewhere notes that "For custom elements... IE8 requires special
+  support (html5shiv-like hacks) to enable css styling." A guide written
+  for AngularJS 1.x, Closure, and IE8 is a period piece — and the value
+  of reading it here is precisely as a dated point of comparison, not as
+  current guidance. (AngularJS 1.x itself reached end of official support
+  after this guide's era; that end-of-life is not stated on the page and
+  is noted here as outside context, not as the guide's own words.)
+- **It extends another Google guide wholesale — a stronger version of a
+  move the C# guide only made in part** — "This guide supplements and
+  extends the Google JavaScript Style Guide." Where the C# section above
+  records "Developed from Google Java style" as the stated *origin of one
+  rule group* (its whitespace rules), this guide declares its whole self
+  to sit on top of another Google guide — supplement and extension, not
+  mere inheritance. It is a different kind of deference from the five
+  external-authority cases in the Cross-language pattern section below:
+  those defer outward to Microsoft, Apple, or the Tidyverse community;
+  this one defers *inward*, to another document in the same
+  `google/styleguide` repository. Recorded as the first wholly-internal
+  deference among the guides read here, with the C# partial-origin
+  citation noted as the nearest precedent.
+- **Where C#'s examples silently revealed a platform, this guide names its
+  toolchain in the title and argues from it in the rules** — the C#
+  section above records a guide whose Unity-typed examples betray a
+  platform its prose never names. AngularJS is the clean opposite: Closure
+  is in the subtitle, and specific rules are justified *by* Closure
+  compatibility. The controller-as pattern: "Putting methods and
+  properties directly onto the controller, instead of building up a scope
+  object, fits better with the Google Closure class style." Module
+  dependencies: "Using a property of my.submoduleA prevents Closure
+  presubmit failures complaining that the file is required but never
+  used." This is a guide whose rules are shaped by an internal build tool,
+  and it says so — the "the examples say X, the prose never does" pattern
+  from the C# section is not merely absent here, it is inverted.
+- **A `$`-prefix reservation rule that leans on the JavaScript guide it
+  extends** — "It's useful to distinguish between Angular / jQuery
+  builtins and things you add yourself. In addition, $ is not an
+  acceptable character for variables names in the JS style guide." The
+  rule's second half borrows its force directly from the parent guide —
+  concrete evidence of the "supplements and extends" relationship in
+  action, not just declared.
+- **A minification-safety rationale tied to Angular's dependency
+  injection** — a rule (on how controllers are declared) is justified
+  because it "removes the need to add `myCtrl['$inject'] = ...` to prevent
+  minification from messing up Angular's dependency injection." A
+  correctness rationale specific to how AngularJS wires dependencies by
+  parameter name, which a minifier would rename — the kind of rule that
+  only makes sense inside one framework's runtime model.
+- **Testing is addressed through the framework's own adapters** —
+  "Angular provides easy adapters to load modules and use the injector in
+  Jasmine tests." Recorded as evidence that the guide's scope includes
+  test style, though the testing rules themselves were not read closely.
+
+**Scope note**: this is Google's own convention, as of early 2013, for
+Google engineers writing AngularJS 1.x applications on the Closure
+toolchain — not an AngularJS specification, not the official AngularJS or
+Angular style guide, and not current guidance for any modern framework. It
+is included in this catalog as a dated, framework-and-toolchain-specific
+data point — useful for what it shows about how a style guide ages and how
+one Google guide builds on another — not as a live recommendation. Large
+parts were read only in part: most of the Language Rules, Style Rules, and
+Tips sections beyond the rules quoted above.
+
 ## Cross-language pattern (relative to this catalog's other findings)
 
 The same "restrict what the language allows, for a stated scale-driven or
@@ -2070,9 +2159,31 @@ guide were read only in part and are not assumed to follow the same
 pattern: most of Namespaces, Elements, Attributes, Key-value pairs,
 Processing instructions, and Representation of XML document instances.
 
-With XML now read, one guide from Google's public style-guide index
-remains unread first-hand among those covered by this file's scope —
-AngularJS — which should not be assumed to follow this pattern. The
-index also links guides hosted outside the `google/styleguide`
+Google's AngularJS Style Guide
+(google.github.io/styleguide/angularjs-google-style.html) has since been
+read, with all quotations verified against the raw HTML source
+(`raw.githubusercontent.com/google/styleguide/gh-pages/angularjs-google-style.html`)
+across two passes. The rules and framing statements quoted — the "Last
+modified Feb 07 2013" date, the Closure-users subtitle and internal-origin
+opening, the "supplements and extends the Google JavaScript Style Guide"
+relationship, the pre/post-1.2 and IE8 period markers, the controller-as
+and module-dependency rules with their Closure rationales, the `$`-prefix
+rule, the `$inject` minification-safety rule, and the Jasmine-testing
+mention (see the AngularJS section above) — are quoted directly. Two
+claims were counterexample-checked before writing: that this is the only
+framework-targeted guide read here (no other section targets a framework
+or library), and that its whole-guide extension of another Google guide
+goes beyond the C# guide's partial "Developed from Google Java style"
+citation (the C# precedent is named rather than ignored). Large parts of
+this guide were read only in part and are not assumed to follow the same
+pattern: most of the Language Rules, Style Rules, and Tips/Best-Practices
+sections beyond the rules above.
+
+With AngularJS now read, Google's public style-guide index holds no
+further guides unread first-hand within this file's scope — the
+seventeen language and format guides above plus this framework guide
+complete the set of Google style guides hosted in the `google/styleguide`
+repository and read here. The index also links guides hosted outside that
 repository (Effective Dart at dartlang.org, the Kotlin guide at
-developer.android.com), which have not been read here.
+developer.android.com), which have not been read here and are not claimed
+to follow this pattern.
