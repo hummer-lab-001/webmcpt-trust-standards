@@ -38,7 +38,7 @@ Each step's reason for landing is *different from the one before it* and
 |---|---|---|
 | **3 — The hook** | Google's three self-contradictions | **written below, source-checked both sides** |
 | **6 — The empathy** | + three cross-stack lint collisions | **written below, source-checked both sides** |
-| **9 — The tool** | nine paste-in reviewer prompts | **structure only — body NOT YET WRITTEN** |
+| **9 — The tool** | nine paste-in reviewer prompts | **in progress — 1 of 9 written (TypeScript); 8 remaining** |
 
 The 9 section below is headings and intended content only. Where it says
 **`[NOT YET WRITTEN]`**, it means exactly that — do not read the absence of a
@@ -237,7 +237,8 @@ recognition is the trust the 9-section then converts into use.
 
 ## 9 — The tool: nine paste-in reviewer prompt blocks, one per language
 
-**Status: `[NOT YET WRITTEN]` — structure and constraints only.**
+**Status: 1 of 9 blocks written — TypeScript (below). The other eight are
+marked `[NOT YET WRITTEN]` per block and will be added one at a time.**
 
 Why this is the adopt-step: it is the immediate, selfish payoff. Nine blocks,
 each the single most important, least-ambiguous rules for that language,
@@ -265,6 +266,63 @@ Hard constraints each block must satisfy when written:
 > carry rules that still hold and flag the legacy-only ones — it will not
 > pretend the 2019-era reasons are timeless.
 
+### Block order and status
+
+| # | Block | Applies to | Status |
+|---|---|---|---|
+| 1 | **TypeScript** | `.ts`, `.tsx` | **written below** |
+| 2 | JavaScript | `.js` | `[NOT YET WRITTEN]` |
+| 3 | HTML/CSS | `.html`, `.css` | `[NOT YET WRITTEN]` |
+| 4 | Python | `.py` | `[NOT YET WRITTEN]` |
+| 5 | Go | `.go` | `[NOT YET WRITTEN]` |
+| 6 | Java | `.java` | `[NOT YET WRITTEN]` |
+| 7 | C++ | `.cc`, `.h` | `[NOT YET WRITTEN]` (carry Hook 3's fossil honesty) |
+| 8 | C# | `.cs` | `[NOT YET WRITTEN]` |
+| 9 | Swift | `.swift` | `[NOT YET WRITTEN]` |
+
+---
+
+### Block 1 — TypeScript (`.ts`, `.tsx`)
+
+Every rule here is drawn from the already-source-verified Web-pack Layer 1 in
+`combination-packs.md` (the agreed frontend rules) — **no new verbatim quote
+is introduced in this block**, so there is nothing here for the mothership to
+re-source; it is a re-cut of quotes already confirmed. Rules are stated in
+imperative reviewer form; the underlying wording was marked verbatim at its
+first appearance in the packs file.
+
+```text
+You are reviewing TypeScript. Apply these rules ONLY to .ts and .tsx files.
+Do not extend them to .js, .css, or any other file type. Do not invent rules
+beyond this list.
+
+- String literals use single quotes ('...'), not double quotes.
+- Every statement ends with an explicit semicolon. Flag any reliance on
+  automatic semicolon insertion (ASI).
+- Ban `export default`. Require named exports.
+- Do NOT enforce an 80-column line limit here: the 80-character limit is a
+  JavaScript (.js) rule and Google's TypeScript guide does not state one.
+  Flag a reviewer that imports the .js column limit into .ts.
+- For any frontend code that could be written in either language, prefer the
+  TypeScript rules: Google now directs new frontend code to TypeScript.
+```
+
+Scope notes (why each line is safe to enforce, and where it stops):
+
+- **Single quotes / semicolons / named-exports** are the three rules the Web
+  pack records as holding across the TS+JS family; they are enforceable
+  (a reviewer can check each mechanically) and are not IE-era fossils.
+- The **"no 80-column here"** line is included on purpose: the most common way
+  this block gets misused is a reviewer carrying JavaScript's 80-column rule
+  onto `.ts`. Naming the boundary is the whole point of surface-scoping.
+- Nothing about acronym casing, indentation width, or naming case is asserted
+  for TypeScript, because the Web pack does not record a *verbatim* TS rule
+  for those — and this file does not assert what it cannot source.
+
+> Source: `combination-packs.md` Web-pack Layer 1 and its paste-in block
+> (the TS/JS agreed rules, and the L2.2 note that the 80-column limit is
+> JavaScript-only). No guide was re-fetched for this block.
+
 ---
 
 ## Honesty ledger for this file
@@ -277,9 +335,11 @@ Hard constraints each block must satisfy when written:
 - Sections **3 and 6 are complete** and source-checked on every quoted side;
   where a claim was not already in the prior corpus (the naming tables), the
   guide was fetched and the quote confirmed, and that is stated inline.
-- Section **9 is deliberately unfinished** and says `[NOT YET WRITTEN]` in its
-  body; its sourcing is mapped but the prose is not written. Do not treat the
-  heading as finished content.
+- Section **9 is in progress**: block 1 (TypeScript) is written; blocks 2–9
+  are each marked `[NOT YET WRITTEN]` in the block-status table and will be
+  added one at a time. The TypeScript block introduces **no new verbatim** — it
+  re-cuts Web-pack Layer 1 rules already source-verified in
+  `combination-packs.md`. Do not treat the eight pending blocks as finished.
 - One honesty correction made while writing 6: **Go's indentation is recorded
   as a guide *silence* plus a `gofmt` tooling note — not as a quoted rule.**
   Presenting "Go mandates tabs" as a third quoted camp would over-claim.
