@@ -680,9 +680,12 @@ exceptions) legacy-codebase consistency, treat its rationale as dated.
   **Enterprise+Mobile pack** (9 guides) — each with all three layers plus an
   AI-reviewer prompt block.
 - **Not started:** the +3 expansion packs (21 → 36) and any pack drawing on the
-  remaining held-back guides (Shell, JSON, Markdown, R, Vim script, Common
-  Lisp, Objective-C — the last cross-referenced for its 100-column vote but not
-  packed) beyond the AngularJS fossil reference.
+  remaining held-back guides — Shell, JSON, Markdown, R, Vim script, Common
+  Lisp, XML, Objective-C, and AngularJS. Three of these are already
+  *cross-referenced* by the written packs without being pack members:
+  Objective-C for its 100-column vote (L2.1), XML for its acronym-fold vote
+  (L2.2), and AngularJS as the frontend fossil source (Web pack L3.2). The
+  other six are untouched material for the +3 expansions.
 - **Verification standing:** every Layer 1 convergence names its voting guides;
   every verbatim quote is marked; silences are recorded as silence, not made to
   agree (TypeScript on indentation/column limit; Go on tabs and string quotes;
