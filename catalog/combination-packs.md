@@ -60,7 +60,7 @@ system prompt, surface-scoped so it is not misapplied.
 | Pack | Guides | Status |
 |---|---|---|
 | **Web** (3) | TypeScript, JavaScript, HTML/CSS | **written below** |
-| **Product** (6) | + Python, Go, Java | composition only (below) |
+| **Product** (6) | + Python, Go, Java | **written below** |
 | **Enterprise + Mobile** (9) | + C++, C#, Swift | composition only (below) |
 
 The remaining nine guides read (Shell, JSON, Markdown, R, Vim script, Common
@@ -266,30 +266,204 @@ outdated instead.
 
 ## Product Pack — TypeScript · JavaScript · HTML/CSS · Python · Go · Java (6)
 
-**Composition and intent only — body not yet written.**
-
-**Who it is for:** a product team reviewing a full-stack change (frontend plus
-a backend in Python, Go, or Java).
+**Who it is for:** a product team reviewing a full-stack change — frontend
+(`.ts`, `.js`, `.html`, `.css`) plus a backend in Python, Go, or Java.
 
 **Why these six:** the Web three cover the client; Python, Go, and Java are the
-three backend languages in this catalog with the richest cross-cutting rules
-(Python's dynamic-feature restrictions, Go's interface-ownership and
-concurrency decisions, Java's compiler-legality-as-a-floor). Together they
-span the two halves of a typical product's codebase.
+three backend languages in this catalog with the richest cross-cutting rules.
+Together they span the two halves of a typical product's codebase.
 
-**Expected shape when written:** Layer 1 will again be small — the backend
-three and the frontend three share little at the rule level — but the pack's
-value is the *pairwise* convergences it can surface (e.g. brace-discipline
-between Java and JavaScript, which the language-guide file already notes) and
-the splits (e.g. line length — the Java guide's 100-column limit is recorded in
-the language-guide file, and the JavaScript guide's 80-column limit was
-confirmed by raw-source check while building the Web pack above; 80≠100 is a
-concrete cross-guide conflict, though the JS figure is not yet written into the
-language-guide file itself). Layer 3 fossils will draw on Python 2-era residue
-and the JS fossil noted above.
+**The headline finding, up front:** this pack's most useful content is its
+**splits**, not its agreements — and one of them is a *direct contradiction*
+between two of the six guides. Adding three backend languages to the frontend
+three does not grow the shared-rule set; it grows the number of places where a
+reviewer must **not** normalize one rule across the whole stack. The pack's job
+is to mark exactly where.
 
-*Not yet written: all three layers and the prompt block. Only the composition
-and rationale above exist.*
+Sources: the Web pack above (TS/JS/HTML-CSS) plus a raw-source cross-check of
+Python, Go, and Java (indentation, line length, string quotes, naming,
+error handling) done while building this pack, against
+`pyguide.md`, `go/decisions.md`, and `javaguide.html` in the `google/styleguide`
+repo. Those checks are summarizer-mediated except where noted; the flagship
+naming contradiction below was confirmed verbatim from raw text.
+
+### Layer 1 — The Law (convergence)
+
+**L1.1 — Restrict a language feature when its reader-cost outweighs its
+power; state the reason.** *Votes: all six, at the level of a shared
+philosophy rather than a shared mechanical rule.* This is the one thing all
+six guides genuinely share — and it is a principle, not a line a linter can
+check, so it is recorded as such.
+- Python (verbatim, "Power Features"): "It's harder to read, understand, and
+  debug code that's using unusual features underneath."
+- Go (verbatim): "Do not use this feature in the Google codebase; it makes it
+  harder to tell where the functionality is coming from."
+- Java: "compiler legality as a floor, not a target" (language-guide file).
+- TypeScript / JavaScript: "restrict what the language permits" (language-guide
+  file — e.g. JS's ES-module-cycle ban naming the spec it overrides).
+- HTML/CSS: the `id`-attribute rule justified by a JavaScript-namespace side
+  effect (language-guide file).
+- Reviewer form: **A rule that removes a working language feature should cite
+  the reader/maintenance cost it prevents. If it cannot, question the rule.**
+
+**L1.2 — Never silently discard an error or exception.** *Votes: the three
+backend guides — Python ✓, Java ✓, Go ✓ — converge on the principle, each by
+a different mechanism. Frontend three: silent (no cataloged error rule → not
+votes).*
+- Python (verbatim): "Never use catch-all except: statements, or catch
+  Exception or StandardError" (except to re-raise or as a recorded, suppressed
+  isolation point).
+- Java (verbatim): "It is very rarely correct to do nothing in response to a
+  caught exception."
+- Go (verbatim): "By convention, error is the last result parameter." — and the
+  guide requires the returned error be handled, not dropped (Go's mechanism is
+  an explicit return value, not a caught exception).
+- Note the shape: Python and Java forbid *ignoring a caught exception*; Go has
+  no exceptions and instead requires *handling a returned error*. One
+  principle — an error condition must not vanish silently — three
+  language-specific mechanics. Recorded as a principle-level convergence, not
+  a claim of identical rules.
+- Reviewer form: **In Python/Java/Go, flag any error or exception that is
+  caught-and-ignored (Python/Java) or returned-and-dropped (Go).**
+
+**L1.3 — An 80-column line limit (JavaScript and Python only).** *Votes:
+JavaScript ✓, Python ✓ (both verbatim). This is a real pairwise agreement —
+and also one side of the split in L2.2, because Java says 100 and Go says
+none.*
+- JavaScript (verbatim): "JavaScript code has a column limit of 80 characters."
+- Python (verbatim): "Maximum line length is 80 characters."
+- Reviewer form: **Enforce 80 columns on `.js` and `.py`. Do not extend it to
+  `.ts`, `.java`, `.go`, or `.css` — they disagree or are silent (see L2.2).**
+
+**L1.4 — Frontend-subset rules carry over.** The TS↔JS convergences from the
+Web pack (single quotes, explicit semicolons / no ASI, no default exports)
+apply unchanged to this pack's frontend third. See Web pack L1.1–L1.3; not
+repeated here.
+
+### Layer 2 — The Case Law (where they split)
+
+**L2.1 — FLAGSHIP CONTRADICTION: acronym casing. Go preserves it; Java folds
+it. The two guides say opposite things.** This is the clearest case of Google's
+own guides directly contradicting each other, and both sides are verbatim:
+- **Go — preserve the acronym's case** (verbatim, re-confirmed from raw source
+  on both sides of this contradiction): "Words in names that are initialisms or
+  acronyms (e.g., `URL` and `NATO`) should have the same case." So an acronym
+  keeps one consistent case — `URL` stays `URL` (or `url`), never `Url`
+  (`userID`, `parseURL` illustrate the rule; these are derived from it, not
+  quoted from the guide, whose own examples are `URL` and `NATO`).
+- **Java — fold the acronym into an ordinary word** (verbatim): "Now lowercase
+  everything (including acronyms), then uppercase only the first character of:"
+  — the guide then continues with which characters to uppercase (each word for
+  UpperCamelCase; each word except the first for lowerCamelCase). Its own
+  examples table: "XML HTTP request" → `XmlHttpRequest` (not `XMLHTTPRequest`);
+  "new customer ID" → `newCustomerId` (not `newCustomerID`).
+- So the *same* identifier is spelled two *opposite* ways depending on the
+  language: Go `newCustomerID`, Java `newCustomerId`. A reviewer who enforces
+  one house acronym style across a full-stack change would be **wrong in one of
+  the two languages by that language's own Google guide.**
+- Cross-pack note: Java is not alone on the "fold" side — the C# guide (`MyRpc`
+  not `MyRPC`) and the XML guide (`informationUri`) fold acronyms too (see the
+  9-guide pack). Across the whole catalog, **Go is the outlier** that preserves
+  initialism case; every other guide that states an acronym rule folds it.
+- **Recommended default (recommendation, not fact):** do not normalize acronym
+  casing across languages. Follow Go's preserve-case in `.go` and Java's
+  fold-to-word in `.java`. This is not a style whim on either side — each is
+  that language community's established convention, which is why the guides
+  differ.
+
+**L2.2 — Line length: three different answers across the pack.**
+- JavaScript = **80** (verbatim, L1.3). Python = **80** (verbatim, L1.3).
+- Java = **100** (verbatim): "Java code has a column limit of 100 characters."
+- Go = **no hard limit** (verbatim): "There is no fixed line length for
+  comments in Go." — the guide adds that 80 or 100 are common but "not a hard
+  cut-off." (Nuance: this explicit statement is in the comment-length section
+  and cross-references a companion page for source lines; the no-hard-limit
+  stance is Go's, but the exact figure for code lines is deferred to gofmt.)
+- TypeScript = silent. HTML/CSS = silent.
+- **Recommended default:** three limits (80 / 100 / none) coexist in one
+  product. Enforce each language's own; never impose a single column rule
+  repo-wide.
+
+**L2.3 — Indent width and character: 2 spaces, 4 spaces, or tabs.**
+- JavaScript = 2 spaces, no tabs (verbatim). HTML/CSS = 2 spaces, no tabs
+  (verbatim). Java = 2 spaces, no tabs (verbatim: "Tab characters are not used
+  for indentation," +2 per block).
+- Python = **4 spaces**, no tabs (verbatim): "Indent your code blocks with 4
+  spaces. Never use tabs."
+- Go = **tabs** — but this is a clean *silence* in the guide text: the Decisions
+  page never states tabs-vs-spaces or a width; the well-known "Go uses tabs"
+  fact is gofmt's behavior, not a rule asserted on the page read. Recorded as
+  silence with the tooling caveat, not as a quoted rule.
+- TypeScript = silent (Web pack).
+- **Recommended default:** 2 spaces in JS/HTML/CSS/Java, 4 in Python, whatever
+  gofmt emits (tabs) in Go. A single indent rule cannot span the stack.
+
+**L2.4 — String quotes: five stances, no shared rule.**
+- TS / JS strings → single (Web pack). CSS values → single; HTML attributes →
+  double (Web pack L2.1).
+- Python → **no fixed choice; consistency within a file** (verbatim): "Pick '
+  or \" and stick with it." — a distinctive stance: consistency over a mandated
+  character.
+- Go → silent (no source-literal quote-style rule; a clean negative).
+- Java → not a style choice: Java syntax mandates double-quoted strings, so the
+  guide states no rule (clean negative).
+- **Recommended default:** apply each surface's own rule; there is no coherent
+  cross-stack quote convention to enforce.
+
+### Layer 3 — The Fossils (dead or dying rationale)
+
+**L3.1 — The frontend fossils carry over.** The JavaScript-guide-superseded-by-
+TypeScript fact (Web pack L3.1) and the 2013 AngularJS/IE8/Closure guide (Web
+pack L3.2) remain this pack's fossil references for the frontend third.
+
+**L3.2 — No dated backend fossil surfaced in this pass — stated rather than
+invented.** The Python, Go, and Java raw-source checks for this pack did not
+surface a clearly dated, reason-expired rule of the AngularJS kind. Rather than
+manufacture one (Python-2 residue would be a plausible candidate but was not
+verified against the guide's current text in this pass), this layer is recorded
+as **thin for the backend three, pending a dedicated fossil pass.** A small
+verified note that *is* fossil-adjacent: the Java guide's current text uses the
+term `UPPER_SNAKE_CASE` for constants, not the older `CONSTANT_CASE`; downstream
+material still saying `CONSTANT_CASE` is citing a superseded revision.
+
+### AI-reviewer prompt block (paste-in)
+
+> For a full-stack change. Layer 1 (agreed rules) plus — critically — the
+> "do not normalize across the stack" warnings, which are the practical payload
+> of this pack.
+
+```text
+You are reviewing a full-stack change (TypeScript, JavaScript, HTML, CSS,
+Python, Go, Java) against Google's published style guides. Apply each rule
+ONLY to the languages listed for it. Several rules DIFFER by language — do
+NOT normalize them across the change.
+
+All languages:
+- A rule that bans a working language feature should state the reader- or
+  maintenance-cost it prevents; be skeptical of rules that cannot.
+
+Python, Go, Java (backend):
+- Never silently discard an error/exception. Flag a caught-and-ignored
+  exception (Python/Java) or a returned-and-dropped error (Go).
+
+DO NOT NORMALIZE THESE ACROSS LANGUAGES — each is correct per its own guide:
+- Acronym casing: Go PRESERVES it (userID, parseURL). Java FOLDS it
+  (newCustomerId, XmlHttpRequest). Enforcing one style across .go and .java
+  is wrong in one of them. (C# and XML fold like Java; Go is the outlier.)
+- Line length: JavaScript=80, Python=80, Java=100, Go=no hard limit,
+  TypeScript/HTML/CSS=unspecified. Enforce each language's own; never one
+  repo-wide column rule.
+- Indentation: JS/HTML/CSS/Java=2 spaces, Python=4 spaces, Go=tabs (gofmt),
+  TypeScript=unspecified. No single indent rule spans the stack.
+- String quotes: JS/TS/CSS single; HTML attributes double; Python "pick one
+  and be consistent per file"; Go and Java state no source-literal rule.
+
+Frontend (.ts/.js): single-quote strings, explicit semicolons (no ASI),
+no `export default`. Prefer the TypeScript guide over JavaScript for new code.
+
+If a rule rests only on IE8, Closure, or pre-ES6 workarounds, flag it as
+outdated rather than enforcing it.
+```
 
 ## Enterprise + Mobile Pack — + C++ · C# · Swift (9)
 
@@ -321,16 +495,20 @@ and rationale above exist.*
 
 ## What is written and what is not (self-honesty)
 
-- **Written in full:** the design preamble, the pack index/roadmap, and the
-  **Web pack** (all three layers + AI-reviewer prompt block).
-- **Composition only (no rule bodies):** the Product (6) and Enterprise+Mobile
-  (9) packs — headings, who-it-is-for, why-these-guides, and expected shape,
-  explicitly marked "not yet written."
+- **Written in full:** the design preamble, the pack index/roadmap, the
+  **Web pack** (3 guides), and the **Product pack** (6 guides) — each with all
+  three layers plus an AI-reviewer prompt block.
+- **Composition only (no rule bodies):** the Enterprise+Mobile (9) pack —
+  headings, who-it-is-for, why-these-guides, and expected shape, explicitly
+  marked "not yet written."
 - **Not started:** the +3 expansion packs (21 → 36) and any pack drawing on the
-  nine held-back guides beyond the AngularJS fossil reference.
-- **Verification standing:** every Layer 1 convergence in the Web pack names
-  its voting guides; every verbatim quote is marked; TypeScript's silence on
-  indentation and column limit is recorded as silence, not made to agree; and
-  the two-guide "identical wording" observations (single quotes, default-export
-  prohibition) are scoped to "returned identically through the summarizer," not
-  claimed as proven glyph-by-glyph.
+  remaining held-back guides beyond the AngularJS fossil reference.
+- **Verification standing:** every Layer 1 convergence names its voting guides;
+  every verbatim quote is marked; silences are recorded as silence, not made
+  to agree (TypeScript on indentation/column limit; Go on tabs and
+  string-literal quotes; Java and Go on string quotes). The Product pack's
+  flagship acronym contradiction (Go preserves vs Java folds) was confirmed
+  verbatim from raw source on both sides; the remaining Python/Go/Java
+  cross-checks are summarizer-mediated (sentence-level reliable, not
+  glyph-proven). Layer 3 for the backend three is stated as thin rather than
+  filled with an unverified fossil.
