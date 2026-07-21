@@ -1,0 +1,336 @@
+# Combination Packs — from "eighteen guides read" to "what you can hand an agent"
+
+`catalog/language-style-guide-patterns.md` reads eighteen Google style guides
+one at a time. This file does the next thing: it **combines** them into
+review-ready packs, so an engineer (or an AI code reviewer) can be handed one
+bundle and told "review a frontend change against this."
+
+A pack is not a summary. It is built to do three things a normal
+"style-guide roundup" does not:
+
+### 1. Surprise — contradictions are shown, not averaged away
+
+The usual roundup keeps only the points everyone agrees on and quietly drops
+the rest. That throws away the most useful information. These packs keep the
+**splits** — the places where Google's own guides disagree — and show both
+sides with each side's stated reason. "Google says so" is a cargo-cult
+argument; the fastest way to kill it is with Google's own documents
+disagreeing with each other. That is the part a working programmer most wants
+to read.
+
+### 2. Necessity — every rule is in reviewer form
+
+Each rule is written at a grain you can paste straight into a code-review
+checklist or an AI reviewer's system prompt. Not an essay about the rule — the
+rule, as an instruction, with its source. The pack ends with a ready-to-paste
+prompt block for exactly this.
+
+### 3. Novelty — obey the reason, not the authority
+
+Every rule carries **the reason the guide itself gave** (marked verbatim or
+paraphrase, with the source guide named). When a rule's reason is dead — it
+was written for IE8, or for a pre-module world — the pack says so plainly and
+files it under "fossils." Reading eighteen guides in sequence, and dating
+them, is what makes that layer possible.
+
+---
+
+## The three layers (every pack has these)
+
+- **Layer 1 — The Law (convergence).** Rules the guides in the pack *agree*
+  on. Each entry: the rule as an imperative, which guides vote for it (and
+  which are *silent* — silence is not a vote), each guide's stated reason, and
+  a verbatim/paraphrase marker. A small Law layer is an honest result, not a
+  failure — the count is never padded, and the number of agreements is itself
+  a finding.
+- **Layer 2 — The Case Law (where they split).** Rules where the guides in
+  the pack *conflict*, or where one legislates and another is silent in a way
+  that matters. Both sides, both reasons, then a one-line **recommended
+  default** clearly marked as a recommendation, not a fact.
+- **Layer 3 — The Fossils (dead rationale).** Rules whose reason has expired.
+  Why it was right then, why you need not follow it now, with the source.
+
+Then: **an AI-reviewer prompt block** — Layer 1, rewritten as a paste-in
+system prompt, surface-scoped so it is not misapplied.
+
+---
+
+## Pack index and expansion roadmap
+
+| Pack | Guides | Status |
+|---|---|---|
+| **Web** (3) | TypeScript, JavaScript, HTML/CSS | **written below** |
+| **Product** (6) | + Python, Go, Java | composition only (below) |
+| **Enterprise + Mobile** (9) | + C++, C#, Swift | composition only (below) |
+
+The remaining nine guides read (Shell, JSON, Markdown, R, Vim script, Common
+Lisp, XML, AngularJS, Objective-C) are held as material for +3 expansions
+(21 → 24 → 27 → 30 → 33 → 36). **AngularJS is a cross-pack fossil source** —
+its 2013 IE8/Closure rationale is referenced from the Web pack's Layer 3 even
+though it is not one of the Web pack's three guides.
+
+**Verification discipline (same as the language-guide file):** a Layer 1
+"all agree" claim is made only after checking each guide's own text, and each
+such claim carries its source set. Verbatim quotes are marked; paraphrases are
+marked; rules a guide is silent on are called silent, not made to agree.
+
+---
+
+## Web Pack — TypeScript · JavaScript · HTML/CSS
+
+**Who it is for:** a reviewer (human or agent) looking at a frontend change —
+`.ts`, `.js`, `.html`, `.css`.
+
+**The headline finding, stated up front because it is the honest one:** across
+these three guides, the set of rules *all three* state explicitly is
+**essentially empty**. That is not a gap in the reading — it is the shape of
+the material. TypeScript and JavaScript are one language family and converge
+heavily *with each other*; HTML/CSS is a markup-plus-style pair that shares
+almost no *language constructs* with them, so it joins only at the level of
+foundational file formatting. This pack therefore records **pairwise**
+convergence with explicit vote-counting, rather than inventing a three-way
+consensus that the sources do not support.
+
+Sources for this pack are the TypeScript, JavaScript, and HTML/CSS sections of
+`catalog/language-style-guide-patterns.md`, plus two targeted raw-source
+checks (TS and JS indentation / quotes / semicolons / column limit) done while
+building this pack; those checks went through the page-summarizing fetch layer,
+so sentence-level quotes are reliable but glyph-level identity between two
+guides is noted as "returned identically," not proven character-by-character.
+
+### Layer 1 — The Law (convergence)
+
+> Read the vote count on each rule. "TS + JS" means those two state it and
+> HTML/CSS is silent (no equivalent construct) — silence is not dissent. A
+> reviewer applies each rule only to the surfaces that vote for it.
+
+**L1.1 — Use single-quoted string literals.**
+*Votes: TypeScript ✓, JavaScript ✓ (verbatim, returned identically in both).
+CSS ✓ for values (see L2.1). HTML ✗ — attributes use double quotes (L2.1).*
+- TypeScript (verbatim): "Ordinary string literals are delimited with single
+  quotes (`'`), rather than double quotes (`"`)."
+- JavaScript (verbatim): the JS guide's sentence was returned identically to
+  the TS one. Recorded as sentence-level identical, not proven glyph-by-glyph.
+- Reviewer form: **In `.ts` and `.js`, string literals use `'single'` quotes,
+  not `"double"`.** (For `.css` values, also single — but this is a different
+  guide's rule; see L2.1 for the HTML exception.)
+
+**L1.2 — End every statement with a semicolon; do not rely on ASI.**
+*Votes: TypeScript ✓, JavaScript ✓. HTML/CSS — not applicable (not an
+ASI-bearing language).*
+- JavaScript (verbatim): "Every statement must be terminated with a semicolon.
+  Relying on automatic semicolon insertion is forbidden."
+- TypeScript (verbatim): "Do not rely on Automatic Semicolon Insertion (ASI).
+  Explicitly end all statements using a semicolon."
+- Reviewer form: **In `.ts` and `.js`, every statement ends with an explicit
+  `;`. Flag any reliance on automatic semicolon insertion.**
+
+**L1.3 — Do not use default exports.**
+*Votes: TypeScript ✓, JavaScript ✓ (opening prohibition word-for-word
+identical; reasons worded differently). HTML/CSS — silent (no module system).*
+- TypeScript (verbatim): "Do not use default exports. This ensures that all
+  imports follow a uniform pattern."
+- JavaScript (verbatim): "Do not use default exports. Importing modules must
+  give a name to these values, which can lead to inconsistencies in naming
+  across modules."
+- Note: the *prohibition* is identical; the *reasons* differ (TS: "no canonical
+  name / central maintenance"; JS: naming "inconsistencies"). Recorded as a
+  real convergence with differently-worded rationale — not a claim of identical
+  reasoning.
+- Reviewer form: **In `.ts` and `.js`, ban `export default`; require named
+  exports.**
+
+**L1.4 — Indent by two spaces; never use tabs.**
+*Votes: JavaScript ✓, HTML/CSS ✓ (both verbatim). TypeScript — **silent** in
+the guide text checked (the TS guide states no indentation rule in the passages
+read; likely delegated to its formatter, but that is not asserted here).*
+- JavaScript (verbatim): "Each time a new block or block-like construct is
+  opened, the indent increases by two spaces." / "Tab characters are not used
+  for indentation."
+- HTML/CSS (verbatim): "Indent by 2 spaces at a time." / "Don't use tabs or mix
+  tabs and spaces for indentation."
+- Reviewer form: **In `.js`, `.html`, and `.css`, indent 2 spaces, no tabs.**
+  For `.ts`, this pack does not have a cited indentation rule — do not claim
+  the TS guide requires it.
+
+**Honest tally for L1.** There is no rule in this pack that all three guides
+state. The pack's real spine is a **TS↔JS language-family convergence** (L1.1,
+L1.2, L1.3) plus a **JS↔HTML/CSS foundational-formatting convergence** (L1.4).
+The count is small on purpose; it is not padded to look like a consensus.
+
+### Layer 2 — The Case Law (where they split)
+
+**L2.1 — String quotes across the frontend surface: single everywhere *except
+HTML attributes*.**
+This is the split a frontend reviewer actually hits, because one change can
+touch JS, CSS, and HTML in one file-set:
+- JS strings → single (L1.1). TS strings → single (L1.1). **CSS** values →
+  single: HTML/CSS guide (verbatim) "Use single ('') rather than double (\"\")
+  quotation marks for attribute selectors and property values."
+- **HTML attributes → double**: HTML/CSS guide (verbatim) "When quoting
+  attributes values, use double quotation marks." And the guide names its own
+  further twist: the CSS `@charset` at-rule reverts to double quotes.
+- Why it is not mere taste: the HTML double-quote rule is about
+  attribute-value parsing, not preference; normalizing everything to single
+  quotes would fight the HTML guide directly.
+- **Recommended default (recommendation, not fact):** do *not* apply one
+  global quote style across a frontend change. Enforce single quotes in
+  JS/TS/CSS and double quotes in HTML attributes — i.e. follow each surface's
+  own guide rather than a repo-wide lint rule that flattens them.
+
+**L2.2 — Line length: JavaScript legislates 80; TypeScript and CSS do not.**
+- JavaScript (verbatim): "JavaScript code has a column limit of 80 characters.
+  Except as noted below, any line that would exceed this limit must be
+  line-wrapped." (with exceptions for module/require/import/export lines and
+  URLs).
+- TypeScript: **no column limit stated** in the guide text checked.
+- HTML/CSS: **no column limit stated**.
+- **Recommended default:** enforce 80 columns on `.js` only. Do not silently
+  extend it to `.ts` or `.css` — the pack has no cited basis for that, and
+  asserting it would be exactly the "Google says so" over-reach these packs
+  exist to prevent.
+
+### Layer 3 — The Fossils (dead or dying rationale)
+
+**L3.1 — The JavaScript guide is a fossil-in-progress by its own admission.**
+Google's own JavaScript guide page "now recommends TypeScript for new code and
+points to the TypeScript guide" (recorded in the JavaScript section of the
+language-guide file). So for *new* frontend code, the JS-specific rules are
+being superseded by the TS guide.
+- Why it was right then: the JS guide predates Google's TS-first posture.
+- Why you need not treat it as primary now: for greenfield code the vendor
+  itself redirects you to TypeScript.
+- **Reviewer consequence:** for new code, weight the **TypeScript** guide over
+  the JavaScript guide where they overlap; treat JS-only rules as legacy
+  maintenance guidance. (The JS rules are not *wrong* — they still govern
+  existing `.js` — they are simply no longer the recommended target.)
+
+**L3.2 — AngularJS (cross-pack fossil): a whole guide dated to 2013.**
+Not one of this pack's three guides, but the sharpest frontend fossil in the
+whole catalog, so it is referenced here for context. Google's AngularJS guide
+carries, on the page, "Last modified Feb 07 2013," contrasts pre- and
+post-AngularJS-1.2 controller patterns, and notes that custom elements need
+"IE8... html5shiv-like hacks." Its rules are justified by Closure-toolchain
+compatibility.
+- Why it was right then: IE8 support and the Closure compiler were real
+  constraints for Google frontend code in 2013.
+- Why you need not follow it now: IE8 is gone, the Closure-specific rationale
+  does not generalize, and AngularJS 1.x is itself end-of-life.
+- **Reviewer consequence:** if a rule's only stated reason is IE8 support,
+  Closure presubmit behavior, or pre-ES6 module workarounds, it is a fossil —
+  record it as historical, do not enforce it on modern code.
+
+### AI-reviewer prompt block (paste-in)
+
+> Copy the block below into an AI code reviewer's system prompt when reviewing a
+> frontend change. It is Layer 1 only (the agreed rules), surface-scoped so it
+> is not misapplied, plus the one split that a cross-file frontend change
+> forces (L2.1). It deliberately omits rules the guides do not agree on.
+
+```text
+You are reviewing a frontend change (TypeScript, JavaScript, HTML, CSS)
+against Google's published style guides. Apply each rule ONLY to the file
+types listed for it. Do not invent rules; do not extend a rule to a file
+type not listed.
+
+TypeScript (.ts) and JavaScript (.js):
+- String literals use single quotes ('...'), not double quotes.
+- Every statement ends with an explicit semicolon; flag reliance on
+  automatic semicolon insertion (ASI).
+- Ban `export default`; require named exports.
+
+JavaScript (.js) only:
+- Indent 2 spaces, never tabs.
+- Column limit is 80 characters (exceptions: import/export/require lines,
+  URLs). Do NOT apply this limit to .ts or .css.
+
+HTML and CSS (.html, .css):
+- Indent 2 spaces, never tabs.
+- CSS values and attribute selectors use single quotes.
+- HTML attribute values use DOUBLE quotes (this is the one place single
+  quotes are wrong). The CSS @charset rule also uses double quotes.
+
+Do not globally normalize quote style across the change: single quotes in
+JS/TS/CSS, double quotes in HTML attributes. This split is intentional and
+follows each surface's own guide.
+
+For NEW code, prefer the TypeScript rules over JavaScript rules where they
+overlap: Google now directs new frontend code to TypeScript.
+
+If a rule you are tempted to enforce rests only on IE8 support, Closure
+toolchain behavior, or pre-ES6 workarounds, do not enforce it — flag it as
+outdated instead.
+```
+
+---
+
+## Product Pack — TypeScript · JavaScript · HTML/CSS · Python · Go · Java (6)
+
+**Composition and intent only — body not yet written.**
+
+**Who it is for:** a product team reviewing a full-stack change (frontend plus
+a backend in Python, Go, or Java).
+
+**Why these six:** the Web three cover the client; Python, Go, and Java are the
+three backend languages in this catalog with the richest cross-cutting rules
+(Python's dynamic-feature restrictions, Go's interface-ownership and
+concurrency decisions, Java's compiler-legality-as-a-floor). Together they
+span the two halves of a typical product's codebase.
+
+**Expected shape when written:** Layer 1 will again be small — the backend
+three and the frontend three share little at the rule level — but the pack's
+value is the *pairwise* convergences it can surface (e.g. brace-discipline
+between Java and JavaScript, which the language-guide file already notes) and
+the splits (e.g. line length — the Java guide's 100-column limit is recorded in
+the language-guide file, and the JavaScript guide's 80-column limit was
+confirmed by raw-source check while building the Web pack above; 80≠100 is a
+concrete cross-guide conflict, though the JS figure is not yet written into the
+language-guide file itself). Layer 3 fossils will draw on Python 2-era residue
+and the JS fossil noted above.
+
+*Not yet written: all three layers and the prompt block. Only the composition
+and rationale above exist.*
+
+## Enterprise + Mobile Pack — + C++ · C# · Swift (9)
+
+**Composition and intent only — body not yet written.**
+
+**Who it is for:** an organization reviewing across systems code (C++), a
+managed enterprise stack (C#), and mobile (Swift/Objective-C).
+
+**Why these nine:** they extend the Product six into the two remaining
+large-surface domains — native/systems (C++) and the two platform-vendor
+languages (C#→Microsoft, Swift→Apple). This is where the catalog's **external
+deference gradient** becomes a first-class pack feature: C# *follows*
+Microsoft's naming, Swift *incorporates* Apple's by reference — a split about
+*whose* authority governs naming, which an enterprise picking conventions must
+decide.
+
+**Expected shape when written:** Layer 2 will be unusually rich here — the C#
+guide's Unity-typed examples versus its silent prose, the contrast between that
+silent-platform pattern (C#) and a guide that names its toolchain openly
+(AngularJS naming Closure in its subtitle), and the 100-column agreement across
+Java/C#/Swift/Objective-C are all already-recorded material in the language-guide
+file. Layer 1 will lean on the RFC-2119-style graded-rule convergence if the
+pack is later widened to Common Lisp/XML.
+
+*Not yet written: all three layers and the prompt block. Only the composition
+and rationale above exist.*
+
+---
+
+## What is written and what is not (self-honesty)
+
+- **Written in full:** the design preamble, the pack index/roadmap, and the
+  **Web pack** (all three layers + AI-reviewer prompt block).
+- **Composition only (no rule bodies):** the Product (6) and Enterprise+Mobile
+  (9) packs — headings, who-it-is-for, why-these-guides, and expected shape,
+  explicitly marked "not yet written."
+- **Not started:** the +3 expansion packs (21 → 36) and any pack drawing on the
+  nine held-back guides beyond the AngularJS fossil reference.
+- **Verification standing:** every Layer 1 convergence in the Web pack names
+  its voting guides; every verbatim quote is marked; TypeScript's silence on
+  indentation and column limit is recorded as silence, not made to agree; and
+  the two-guide "identical wording" observations (single quotes, default-export
+  prohibition) are scoped to "returned identically through the summarizer," not
+  claimed as proven glyph-by-glyph.
