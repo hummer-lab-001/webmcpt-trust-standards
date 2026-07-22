@@ -38,7 +38,7 @@ Each step's reason for landing is *different from the one before it* and
 |---|---|---|
 | **3 — The hook** | Google's three self-contradictions | **written below, source-checked both sides** |
 | **6 — The empathy** | + three cross-stack lint collisions | **written below, source-checked both sides** |
-| **9 — The tool** | nine paste-in reviewer prompts | **in progress — 2 of 9 written (TypeScript, JavaScript); 7 remaining** |
+| **9 — The tool** | nine paste-in reviewer prompts | **in progress — 3 of 9 written (TypeScript, JavaScript, HTML/CSS); 6 remaining** |
 
 The 9 section below is headings and intended content only. Where it says
 **`[NOT YET WRITTEN]`**, it means exactly that — do not read the absence of a
@@ -272,7 +272,7 @@ Hard constraints each block must satisfy when written:
 |---|---|---|---|
 | 1 | **TypeScript** | `.ts`, `.tsx` | **written below** |
 | 2 | **JavaScript** | `.js` | **written below** |
-| 3 | HTML/CSS | `.html`, `.css` | `[NOT YET WRITTEN]` |
+| 3 | **HTML/CSS** | `.html`, `.css` | **written below** |
 | 4 | Python | `.py` | `[NOT YET WRITTEN]` |
 | 5 | Go | `.go` | `[NOT YET WRITTEN]` |
 | 6 | Java | `.java` | `[NOT YET WRITTEN]` |
@@ -382,6 +382,59 @@ Scope notes and sourcing:
 
 ---
 
+### Block 3 — HTML/CSS (`.html`, `.css`)
+
+HTML and CSS are grouped as one block because the Google guide covering them
+is itself one document (the HTML/CSS Style Guide) and their quoting rules only
+make sense stated against each other — this is the surface where "single
+quotes everywhere" (correct for JS/TS/CSS) goes wrong the moment it touches
+`.html`. Every rule here is drawn from the already-source-verified Web-pack
+Layer 1/1.4 and L2.1 in `combination-packs.md` — **no new verbatim quote is
+introduced in this block**.
+
+```text
+You are reviewing HTML or CSS. Apply these rules ONLY to .html and .css files.
+Do not extend them to .js or .ts. Do not invent rules beyond this list.
+
+- CSS values and attribute selectors use single quotes ('...'), not double.
+- HTML attribute values use DOUBLE quotes ("..."). This is the one place in
+  the whole stack where single quotes are WRONG — do not apply the JS/TS/CSS
+  single-quote rule to HTML attributes.
+- Exception inside CSS itself: the @charset at-rule reverts to double quotes,
+  even though ordinary CSS values are single-quoted.
+- Indent 2 spaces per block; never use tabs or mix tabs and spaces.
+- Do NOT enforce a column limit here: the HTML/CSS guide states no line-length
+  rule. Flag a reviewer that imports JavaScript's 80-column limit into .html
+  or .css.
+```
+
+Scope notes and sourcing:
+
+- **Quotes.** CSS values/attribute selectors single, HTML attributes double,
+  `@charset` double-again is the exact three-way split recorded at Collision 4
+  above and at `combination-packs.md` L2.1 (verbatim on both sides: HTML/CSS
+  guide *"Use single ('') rather than double (\"\")..."* for CSS values, and
+  *"When quoting attributes values, use double quotation marks."* for HTML
+  attributes). No new fetch — this block re-cuts that quote.
+- **Indentation.** *"Indent by 2 spaces at a time."* / *"Don't use tabs or mix
+  tabs and spaces."* is the HTML/CSS guide's own wording, recorded at
+  Collision 5 above and `combination-packs.md` L1.4. (Note the correction
+  already logged in Collision 5: this exact sentence belongs to HTML/CSS, not
+  JavaScript — the JavaScript block above deliberately quoted JavaScript's own
+  §4.2 sentence instead of borrowing this one, to keep attribution exact. This
+  block is the one place this sentence is correctly cited.)
+- **No column limit.** The Web pack records HTML/CSS as silent on line length
+  (`combination-packs.md` L2.2, L1.4) — silence, not a stated exception, so
+  the block says "do not enforce" rather than naming a number.
+- Nothing about acronym casing or naming case is asserted for HTML/CSS,
+  because neither the Web pack nor Collision 1–6 records a verbatim HTML/CSS
+  rule for those — this file does not assert what it cannot source.
+
+> Source: `combination-packs.md` L1.4, L2.1, L2.2 (all verbatim already
+> confirmed there). No guide was re-fetched by 021 for this block.
+
+---
+
 ## Honesty ledger for this file
 
 - No new guides were read; still eighteen. This file re-cuts verified
@@ -392,13 +445,16 @@ Scope notes and sourcing:
 - Sections **3 and 6 are complete** and source-checked on every quoted side;
   where a claim was not already in the prior corpus (the naming tables), the
   guide was fetched and the quote confirmed, and that is stated inline.
-- Section **9 is in progress**: blocks 1–2 (TypeScript, JavaScript) are
-  written; blocks 3–9 are each marked `[NOT YET WRITTEN]` in the block-status
-  table and will be added one at a time. The TypeScript block introduces **no
-  new verbatim**; the JavaScript block re-cuts the same shared rules **plus**
-  two verbatim quotes (80-column §4.4, indentation §4.2) that were already
-  source-verified in `combination-packs.md` and are flagged there for
-  re-confirmation. Do not treat the seven pending blocks as finished.
+- Section **9 is in progress**: blocks 1–3 (TypeScript, JavaScript, HTML/CSS)
+  are written; blocks 4–9 are each marked `[NOT YET WRITTEN]` in the
+  block-status table and will be added one at a time. The TypeScript block
+  introduces **no new verbatim**; the JavaScript block re-cuts the same shared
+  rules **plus** two verbatim quotes (80-column §4.4, indentation §4.2) that
+  were already source-verified in `combination-packs.md` and are flagged there
+  for re-confirmation. The HTML/CSS block also introduces **no new verbatim**
+  — it re-cuts the quoting (single/double/@charset) and indentation quotes
+  already confirmed at Collisions 4–5 and `combination-packs.md` L1.4/L2.1.
+  Do not treat the six pending blocks as finished.
 - One honesty correction made while writing 6: **Go's indentation is recorded
   as a guide *silence* plus a `gofmt` tooling note — not as a quoted rule.**
   Presenting "Go mandates tabs" as a third quoted camp would over-claim.
