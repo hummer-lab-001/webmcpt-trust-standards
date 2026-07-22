@@ -38,7 +38,7 @@ Each step's reason for landing is *different from the one before it* and
 |---|---|---|
 | **3 — The hook** | Google's three self-contradictions | **written below, source-checked both sides** |
 | **6 — The empathy** | + three cross-stack lint collisions | **written below, source-checked both sides** |
-| **9 — The tool** | nine paste-in reviewer prompts | **in progress — 1 of 9 written (TypeScript); 8 remaining** |
+| **9 — The tool** | nine paste-in reviewer prompts | **in progress — 2 of 9 written (TypeScript, JavaScript); 7 remaining** |
 
 The 9 section below is headings and intended content only. Where it says
 **`[NOT YET WRITTEN]`**, it means exactly that — do not read the absence of a
@@ -237,8 +237,8 @@ recognition is the trust the 9-section then converts into use.
 
 ## 9 — The tool: nine paste-in reviewer prompt blocks, one per language
 
-**Status: 1 of 9 blocks written — TypeScript (below). The other eight are
-marked `[NOT YET WRITTEN]` per block and will be added one at a time.**
+**Status: 2 of 9 blocks written — TypeScript and JavaScript (below). The other
+seven are marked `[NOT YET WRITTEN]` per block and will be added one at a time.**
 
 Why this is the adopt-step: it is the immediate, selfish payoff. Nine blocks,
 each the single most important, least-ambiguous rules for that language,
@@ -271,7 +271,7 @@ Hard constraints each block must satisfy when written:
 | # | Block | Applies to | Status |
 |---|---|---|---|
 | 1 | **TypeScript** | `.ts`, `.tsx` | **written below** |
-| 2 | JavaScript | `.js` | `[NOT YET WRITTEN]` |
+| 2 | **JavaScript** | `.js` | **written below** |
 | 3 | HTML/CSS | `.html`, `.css` | `[NOT YET WRITTEN]` |
 | 4 | Python | `.py` | `[NOT YET WRITTEN]` |
 | 5 | Go | `.go` | `[NOT YET WRITTEN]` |
@@ -325,6 +325,63 @@ Scope notes (why each line is safe to enforce, and where it stops):
 
 ---
 
+### Block 2 — JavaScript (`.js`)
+
+JavaScript shares the TypeScript family's agreed rules (quotes, semicolons,
+named exports) but — unlike TypeScript — its guide **does** legislate line
+length and indentation in its own words. So this block carries two rules the
+TypeScript block deliberately omitted, and it is the block that *owns* the
+80-column limit the TS block warned against importing.
+
+```text
+You are reviewing JavaScript. Apply these rules ONLY to .js files. Do not
+extend them to .ts or .tsx (TypeScript is scoped separately). Do not invent
+rules beyond this list.
+
+- String literals use single quotes ('...'), not double quotes.
+- Every statement ends with an explicit semicolon. Flag any reliance on
+  automatic semicolon insertion (ASI).
+- Ban `export default`. Require named exports.
+- Indent 2 spaces per block; never use tabs.
+- Column limit is 80 characters. Any line over 80 must be line-wrapped,
+  EXCEPT: module/import/export/require statements, and lines containing a
+  URL. This 80-column limit is a JavaScript rule — do NOT apply it to .ts.
+- For new frontend code, prefer TypeScript: Google now directs new code there.
+```
+
+Scope notes and sourcing:
+
+- **Quotes / semicolons / named exports** are identical to the TypeScript
+  block and come from the same already-verified Web-pack Layer 1 — **no new
+  verbatim** for these three.
+- **Two rules DO introduce verbatim quotes** the mothership should re-source
+  (both were already recorded verbatim in `combination-packs.md`, cited here
+  so they can be cross-checked against the raw Google JavaScript Style Guide):
+  - **80-column limit** — verbatim: *"JavaScript code has a column limit of 80
+    characters. Except as noted below, any line that would exceed this limit
+    must be line-wrapped."* (exceptions: module/require/import/export lines and
+    URLs). Google JavaScript Style Guide, **"Column limit: 80" (§4.4)**.
+    Recorded at `combination-packs.md` L1.3 and L2.2.
+  - **Indentation** — verbatim: *"Each time a new block or block-like
+    construct is opened, the indent increases by two spaces."* and *"Tab
+    characters are not used for indentation."* Google JavaScript Style Guide,
+    **"Block indentation: +2" (§4.2)**. Recorded at `combination-packs.md` L1.4.
+- **Honesty note on the indentation wording:** the *JavaScript* guide's own
+  phrasing is *"...the indent increases by two spaces"* — **not** *"Indent by
+  2 spaces at a time,"* which is the **HTML/CSS** guide's wording for the same
+  practical rule. This block quotes JavaScript's own sentence, not the HTML/CSS
+  one, so the attribution stays exact.
+- The **§ numbers (§4.2, §4.4) are stated to help the mothership locate the
+  passages** in the current Google JavaScript Style Guide; if the live guide's
+  numbering differs, the verbatim sentence is the anchor, not the number.
+
+> Source: `combination-packs.md` Web-pack Layer 1 (quotes/semicolons/exports,
+> no new verbatim) + L1.3/L1.4/L2.2 (80-column and indentation verbatim).
+> No guide was re-fetched by 021 for this block; the two verbatim quotes are
+> flagged above for mothership raw-source re-confirmation.
+
+---
+
 ## Honesty ledger for this file
 
 - No new guides were read; still eighteen. This file re-cuts verified
@@ -335,11 +392,13 @@ Scope notes (why each line is safe to enforce, and where it stops):
 - Sections **3 and 6 are complete** and source-checked on every quoted side;
   where a claim was not already in the prior corpus (the naming tables), the
   guide was fetched and the quote confirmed, and that is stated inline.
-- Section **9 is in progress**: block 1 (TypeScript) is written; blocks 2–9
-  are each marked `[NOT YET WRITTEN]` in the block-status table and will be
-  added one at a time. The TypeScript block introduces **no new verbatim** — it
-  re-cuts Web-pack Layer 1 rules already source-verified in
-  `combination-packs.md`. Do not treat the eight pending blocks as finished.
+- Section **9 is in progress**: blocks 1–2 (TypeScript, JavaScript) are
+  written; blocks 3–9 are each marked `[NOT YET WRITTEN]` in the block-status
+  table and will be added one at a time. The TypeScript block introduces **no
+  new verbatim**; the JavaScript block re-cuts the same shared rules **plus**
+  two verbatim quotes (80-column §4.4, indentation §4.2) that were already
+  source-verified in `combination-packs.md` and are flagged there for
+  re-confirmation. Do not treat the seven pending blocks as finished.
 - One honesty correction made while writing 6: **Go's indentation is recorded
   as a guide *silence* plus a `gofmt` tooling note — not as a quoted rule.**
   Presenting "Go mandates tabs" as a third quoted camp would over-claim.
