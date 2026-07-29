@@ -113,3 +113,9 @@ Full procedure: [`skills/c4-selection-criteria/SKILL.md`](skills/c4-selection-cr
 MIT. See [LICENSE](LICENSE).
 (Chosen because the catalog's own value is in being maximally reusable — the same
 lightweight-reuse standard we apply as our own Axis 0.)
+
+**Third-party material:** the MIT grant covers this repository's own work. The style
+guides quoted inside it stay under their own licenses — Google's style guides under
+**CC BY 3.0**, and the Google R guide additionally under **CC BY-SA 2.0** as a fork of the
+Tidyverse Style Guide. Both were read from the upstream license text, not a platform
+label. See [NOTICE](NOTICE) for the full attribution and the scope of each.

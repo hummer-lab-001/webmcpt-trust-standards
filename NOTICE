@@ -1,0 +1,106 @@
+NOTICE — third-party material quoted in this repository
+=======================================================
+
+The MIT License in `LICENSE` applies to **the original work in this
+repository** — the analysis, taxonomies, packs, prompts, catalog entries and
+skills authored here.
+
+It does **not** apply to the third-party material quoted inside those files.
+Quoted passages remain under the license of the guide they were taken from,
+as recorded below. This file exists so that separation is stated at the
+license level, not left implicit in prose.
+
+All license facts below were read from the upstream primary sources (the
+upstream LICENSE / README text itself), not from a hosting platform's
+auto-detected label — the same standard this catalog applies to every
+repository it scores.
+
+
+1. Google style guides — CC BY 3.0
+----------------------------------
+
+Source:      https://github.com/google/styleguide
+             (rendered at https://google.github.io/styleguide/)
+Copyright:   Google LLC
+License:     Creative Commons Attribution 3.0 Unported (CC BY 3.0)
+             https://creativecommons.org/licenses/by/3.0/
+Verified:    the upstream `LICENSE` file is the full text of "Attribution 3.0
+             Unported", and the upstream `README.md` states verbatim:
+             "The style guides in this project are licensed under the CC-By
+             3.0 License, which encourages you to share these documents."
+
+Which guides:  the eighteen guides read for this catalog — including the
+             C++, Java, JavaScript, TypeScript, Python, Go, Objective-C,
+             Swift, C#, HTML/CSS, Shell, XML and R guides — are all files of
+             that single repository and are covered by that single license.
+
+How this repository uses them:  short verbatim sentences are quoted, marked
+             as verbatim (italicised and in quotation marks), attributed to
+             the named guide at the point of quotation, and surrounded by
+             this repository's own analysis. Quotations are excerpts; no
+             guide is reproduced in whole or in substantial part, and no
+             quoted sentence has been altered. Where a rule is condensed
+             rather than quoted, the files mark it "paraphrase" so that
+             Google's wording is never attributed to a sentence Google did
+             not write.
+
+
+2. Google R Style Guide — CC BY-SA 2.0 (a fork of the Tidyverse guide)
+---------------------------------------------------------------------
+
+The R guide inside the same Google repository carries an additional upstream
+license, because it is a fork rather than an original document. Its own text
+states verbatim:
+
+  "The Google R Style Guide is a fork of the [Tidyverse Style
+  Guide](https://style.tidyverse.org/) by Hadley Wickham
+  [license](https://creativecommons.org/licenses/by-sa/2.0/)."
+
+Upstream:    Tidyverse Style Guide, by Hadley Wickham
+             https://style.tidyverse.org/
+License:     Creative Commons Attribution-ShareAlike 2.0 Generic (CC BY-SA 2.0)
+             https://creativecommons.org/licenses/by-sa/2.0/
+
+Note that CC BY-SA is share-alike, unlike item 1. Material quoted from the R
+guide is quoted as excerpt with attribution; this repository does not
+reproduce or adapt that guide as a whole, and nothing here is offered as a
+ShareAlike-licensed adaptation of it. Anyone who *does* wish to build an
+adaptation of the R guide's content should work from the upstream document
+under its own terms rather than treating this repository's MIT grant as
+covering it.
+
+
+3. Swift API Design Guidelines — referenced, not quoted from
+-----------------------------------------------------------
+
+Google's Swift guide incorporates the Swift API Design Guidelines
+(https://swift.org/documentation/api-design-guidelines/) by reference. This
+catalog quotes *Google's* guide describing that incorporation; it does not
+reproduce text from swift.org. The URL is recorded so a reader can follow the
+chain to the live upstream document.
+
+
+Attribution summary (CC BY 3.0 §4(c) / CC BY-SA 2.0 §4(b))
+----------------------------------------------------------
+
+For every quotation, this repository states: the name of the guide quoted,
+its author (Google LLC; for the R guide additionally Hadley Wickham as the
+upstream author), a URI for the source, and — through the verbatim /
+paraphrase marking described above — whether the wording is the original's or
+this repository's. Quoted sentences are unmodified; any modification would be
+a defect, not an adaptation. `tools/check-verbatim.sh` enforces one part of
+this mechanically: a verbatim quote appearing in a newly written block must
+already appear, character-for-character after whitespace normalisation, in the
+already-source-verified corpus files — so a quote cannot silently drift or be
+introduced unsourced. It does not re-check the quotes against the upstream
+guides; that remains a human step.
+
+
+Scope of this notice
+--------------------
+
+This notice was written after reading the upstream license texts directly on
+2026-07-29. It is not legal advice. If material from a further source is ever
+quoted in this repository, it must be added here in the same form — source,
+copyright holder, license name, URI, and how it is used — before the quoting
+file is published.
