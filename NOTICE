@@ -29,10 +29,16 @@ Verified:    the upstream `LICENSE` file is the full text of "Attribution 3.0
              "The style guides in this project are licensed under the CC-By
              3.0 License, which encourages you to share these documents."
 
-Which guides:  the eighteen guides read for this catalog — including the
-             C++, Java, JavaScript, TypeScript, Python, Go, Objective-C,
-             Swift, C#, HTML/CSS, Shell, XML and R guides — are all files of
-             that single repository and are covered by that single license.
+Which guides:  the guides read for this catalog — including the C++, Java,
+             JavaScript, TypeScript, Python, Go, Objective-C, C#, HTML/CSS,
+             Shell, JSON, Markdown, Vim script, Common Lisp, XML, AngularJS
+             and R guides — are files of that single repository and are
+             covered by that single license.
+
+             **Exception — the Swift guide is not in that repository.** See
+             item 2 below. An earlier revision of this NOTICE listed Swift
+             here; that was wrong, and it flattened a difference this
+             catalog's own Swift section had already recorded.
 
 How this repository uses them:  short verbatim sentences are quoted, marked
              as verbatim (italicised and in quotation marks), attributed to
@@ -45,7 +51,37 @@ How this repository uses them:  short verbatim sentences are quoted, marked
              not write.
 
 
-2. Google R Style Guide — CC BY-SA 2.0 (a fork of the Tidyverse guide)
+2. Google Swift Style Guide — Apache 2.0 with Runtime Library Exception
+----------------------------------------------------------------------
+
+Source:      https://google.github.io/swift/
+             published from the `gh-pages` branch of
+             https://github.com/google/swift
+             (raw source: raw.githubusercontent.com/google/swift/gh-pages/index.md)
+Copyright:   Google LLC
+License:     Apache License, Version 2.0, with the Swift Runtime Library
+             Exception — the licence carried by that repository, which is a
+             fork of the Swift language project.
+             https://www.apache.org/licenses/LICENSE-2.0
+Verified:    the `gh-pages` branch carries `LICENSE.txt` (the full Apache 2.0
+             text plus "Runtime Library Exception to the Apache 2.0 License")
+             and `LICENSE.md`, which only includes that file. Read on
+             2026-07-29.
+
+Why it is separate:  this is the one guide read for this catalog that does
+             **not** live under `google.github.io/styleguide/`, so the CC BY
+             3.0 grant in item 1 does not reach it. The catalog's own Swift
+             section records the same structural anomaly. Anyone reusing this
+             repository's Swift quotations must satisfy Apache 2.0's
+             attribution terms rather than CC BY's.
+
+Apache 2.0 NOTICE-file propagation (§4(d)): the `gh-pages` branch contains no
+             NOTICE file, so there is no upstream NOTICE text to carry
+             forward. This file is checked against that fact rather than
+             assuming it.
+
+
+3. Google R Style Guide — CC BY-SA 2.0 (a fork of the Tidyverse guide)
 ---------------------------------------------------------------------
 
 The R guide inside the same Google repository carries an additional upstream
@@ -70,25 +106,27 @@ under its own terms rather than treating this repository's MIT grant as
 covering it.
 
 
-3. Swift API Design Guidelines — referenced, not quoted from
------------------------------------------------------------
+4. Swift API Design Guidelines (Apple) — referenced, not quoted from
+-------------------------------------------------------------------
 
 Google's Swift guide incorporates the Swift API Design Guidelines
-(https://swift.org/documentation/api-design-guidelines/) by reference. This
-catalog quotes *Google's* guide describing that incorporation; it does not
-reproduce text from swift.org. The URL is recorded so a reader can follow the
-chain to the live upstream document.
+(https://swift.org/documentation/api-design-guidelines/) by reference, stating
+that they are followed as if repeated in their entirety. This catalog quotes
+*Google's* guide describing that incorporation; it does not reproduce text
+from swift.org. The URL is recorded so a reader can follow the chain to the
+live upstream document. If a future revision does quote swift.org directly,
+that source must be added here with its own license before publishing.
 
 
-Attribution summary (CC BY 3.0 §4(c) / CC BY-SA 2.0 §4(b))
-----------------------------------------------------------
+Attribution summary (CC BY 3.0 §4(c) / CC BY-SA 2.0 §4(b) / Apache 2.0 §4)
+--------------------------------------------------------------------------
 
 For every quotation, this repository states: the name of the guide quoted,
 its author (Google LLC; for the R guide additionally Hadley Wickham as the
 upstream author), a URI for the source, and — through the verbatim /
 paraphrase marking described above — whether the wording is the original's or
 this repository's. Quoted sentences are unmodified; any modification would be
-a defect, not an adaptation. `tools/check-verbatim.sh` enforces one part of
+a defect, not an adaptation. `tools/check_verbatim.py` enforces one part of
 this mechanically: a verbatim quote appearing in a newly written block must
 already appear, character-for-character after whitespace normalisation, in the
 already-source-verified corpus files — so a quote cannot silently drift or be

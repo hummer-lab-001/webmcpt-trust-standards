@@ -95,7 +95,9 @@ MIT（[LICENSE](LICENSE)）
 
 **第三者素材について：** MITが適用されるのは本リポジトリ自身の著作部分です。
 内部で引用しているスタイルガイドは各ガイドのライセンスに従います——Googleの
-スタイルガイド群は **CC BY 3.0**、GoogleのRガイドはTidyverse Style Guideの
-フォークであるため追加で **CC BY-SA 2.0** です。いずれも配布元のライセンス本文を
+スタイルガイド群は **CC BY 3.0**、Googleの**Swift**ガイドだけは配布元が別リポジトリ
+（`google/styleguide` ではなく `google/swift`）のため **Apache 2.0＋Runtime Library
+Exception**、Googleの**R**ガイドはTidyverse Style Guideのフォークであるため追加で
+**CC BY-SA 2.0** です。3件とも配布元のライセンス本文を
 直接読んで確認しました（プラットフォームの自動判定ラベルではありません）。
 帰属表示と適用範囲の全文は [NOTICE](NOTICE) を参照してください。

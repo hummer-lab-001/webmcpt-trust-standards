@@ -116,6 +116,9 @@ lightweight-reuse standard we apply as our own Axis 0.)
 
 **Third-party material:** the MIT grant covers this repository's own work. The style
 guides quoted inside it stay under their own licenses — Google's style guides under
-**CC BY 3.0**, and the Google R guide additionally under **CC BY-SA 2.0** as a fork of the
-Tidyverse Style Guide. Both were read from the upstream license text, not a platform
-label. See [NOTICE](NOTICE) for the full attribution and the scope of each.
+**CC BY 3.0**; the Google **Swift** guide under **Apache 2.0 with the Runtime Library
+Exception**, because it is published from a different repository (`google/swift`) rather
+than `google/styleguide`; and the Google **R** guide additionally under **CC BY-SA 2.0** as
+a declared fork of the Tidyverse Style Guide. All three were read from the upstream license
+text, not a platform label. See [NOTICE](NOTICE) for the full attribution and the scope of
+each.
