@@ -38,7 +38,7 @@ Each step's reason for landing is *different from the one before it* and
 |---|---|---|
 | **3 — The hook** | Google's three self-contradictions | **written below, source-checked both sides** |
 | **6 — The empathy** | + three cross-stack lint collisions | **written below, source-checked both sides** |
-| **9 — The tool** | nine paste-in reviewer prompts | **in progress — 4 of 9 written (TypeScript, JavaScript, HTML/CSS, Python); 5 remaining** |
+| **9 — The tool** | nine paste-in reviewer prompts | **in progress — 5 of 9 written (TypeScript, JavaScript, HTML/CSS, Python, Go); 4 remaining** |
 
 The 9 section below is headings and intended content only. Where it says
 **`[NOT YET WRITTEN]`**, it means exactly that — do not read the absence of a
@@ -283,8 +283,8 @@ Hard constraints each block must satisfy when written:
 | 2 | **JavaScript** | `.js` | **written below** |
 | 3 | **HTML/CSS** | `.html`, `.css` | **written below** |
 | 4 | **Python** | `.py` | **written below** |
-| 5 | Go | `.go` | `[NOT YET WRITTEN]` |
-| 6 | Java | `.java` | `[NOT YET WRITTEN]` |
+| 5 | **Go** | `.go` | **written below** (pairs with Block 6) |
+| 6 | Java | `.java` | `[NOT YET WRITTEN]` (pairs with Block 5: acronym boundary) |
 | 7 | C++ | `.cc`, `.h` | `[NOT YET WRITTEN]` (carry Hook 3's fossil honesty) |
 | 8 | C# | `.cs` | `[NOT YET WRITTEN]` |
 | 9 | Swift | `.swift` | `[NOT YET WRITTEN]` |
@@ -502,6 +502,89 @@ Scope notes and sourcing:
 
 ---
 
+### Block 5 — Go (`.go`)
+
+Go is the block that has to be written in the negative as much as the
+positive. It is the **only** guide in the corpus that preserves acronym case,
+so a repo-wide naming lint imported from the Java block will rewrite correct
+Go into a Go-guide violation — and it is the guide that states **no** column
+limit and says **nothing at all** about indentation, so two of the rules every
+other block carries must be explicitly switched off here. This block is
+designed as the pair to Block 6 (Java): the acronym boundary is closed from
+both sides, so neither block can be pasted over the other's files.
+
+Everything below comes from the Go Style Guide's **Decisions** page as
+recorded in `language-style-guide-patterns.md`, plus Hook 1 / Hook 2 /
+Collision 5 above — **no new verbatim quote is introduced in this block**.
+
+```text
+You are reviewing Go. Apply these rules ONLY to .go files. Do not extend them
+to .java, .py, or any other file type. Do not invent rules beyond this list.
+
+- Acronyms and initialisms KEEP their case: newCustomerID, parseURL, NATO.
+  Do NOT fold them to newCustomerId / parseUrl. Go is the one language here
+  that preserves acronym case — if a house rule says "fold acronyms," that
+  rule comes from Java/C++/C#/XML and is WRONG in .go.
+- Do NOT enforce any column limit. The Go guide sets no hard line length.
+  Flag a reviewer that imports 80 (JavaScript/Python/C++) or 100 (Java/C#/
+  Swift) into .go.
+- Do NOT flag indentation. The Go guide states no indent-width or
+  tabs-vs-spaces rule; gofmt already settles it. A tabs-vs-spaces comment on
+  a .go file is enforcing a rule the guide never wrote.
+- Function and method names must not use a Get or get prefix, unless the
+  underlying concept itself uses the word "get".
+- The CONSUMER of an interface defines it, not the package implementing it.
+- Blank imports (import _ "package") may appear only in a main package, or
+  in a test that requires them. Never in a library package.
+- context.Context is always the FIRST parameter of a function or method.
+- Never define a custom context type, and never use an interface other than
+  context.Context in a signature. The guide states no exceptions to this.
+- Prefer synchronous functions over asynchronous ones; let the caller add
+  concurrency by wrapping the call in a goroutine.
+- Errors are returned values, not exceptions. Do not port a "never catch a
+  broad exception" rule here — there is nothing to catch.
+```
+
+Scope notes and sourcing:
+
+- **Acronym case** — verbatim at Hook 1: *"Words in names that are initialisms
+  or acronyms (e.g., `URL` and `NATO`) should have the same case."* Hook 1
+  also records the honest scope: Go is the **lone outlier**, not one half of a
+  symmetric split. Block 6 (Java) states the same boundary from the other
+  side.
+- **No column limit** — Hook 2, as corrected: the guide's quotable sentence
+  (*"There is no fixed line length for comments in Go."*) is scoped to
+  comments, with 80/100 described as common but *"not a hard cut-off."* So
+  this block says "enforce no limit," which is what the guide supports, rather
+  than quoting a source-line rule the guide does not state.
+- **Indentation is a silence, not a rule** — Collision 5. `gofmt` uses tabs,
+  but the guide's Decisions page states no indent rule, so the prompt tells a
+  reviewer to stay off the topic entirely rather than to enforce tabs. Writing
+  "the Go guide mandates tabs" would be the over-claim this file exists to
+  avoid.
+- **Get/get prefix, interface ownership, blank imports, context-first, no
+  custom context types, prefer synchronous** — all six are verbatim in
+  `language-style-guide-patterns.md`'s Go section (quoted there from the
+  Decisions page). Condensed here into imperative reviewer form; the exact
+  wording lives at the source. The "no exceptions to this rule" phrasing on
+  custom context types is the guide's own and is the strongest absolute on
+  that list — it is reproduced as an absolute deliberately, not softened.
+- **Errors as returned values** — Hook 3 records this as a *fact about the
+  mechanism*, not as a verbatim sentence. Marked **paraphrase**, same
+  treatment as the Python block's bare-`except` line.
+- **Scope of the source itself:** the Go rules were read from the Decisions
+  page only — *not* the Guide or Best Practices companion pages Google also
+  publishes for Go. Rules that live only on those companion pages are
+  therefore absent from this block, and their absence is not evidence that Go
+  has no opinion on them.
+
+> Source: `language-style-guide-patterns.md` Go section (Decisions page, all
+> six rules verbatim there); Hook 1 (acronym case), Hook 2 (no fixed length),
+> Collision 5 (indentation silence), Hook 3 (errors as values, paraphrase).
+> No guide was re-fetched by 021 for this block.
+
+---
+
 ## Honesty ledger for this file
 
 - No new guides were read; still eighteen. This file re-cuts verified
@@ -512,9 +595,9 @@ Scope notes and sourcing:
 - Sections **3 and 6 are complete** and source-checked on every quoted side;
   where a claim was not already in the prior corpus (the naming tables), the
   guide was fetched and the quote confirmed, and that is stated inline.
-- Section **9 is in progress**: blocks 1–4 (TypeScript, JavaScript, HTML/CSS,
-  Python) are written; blocks 5–9 are each marked `[NOT YET WRITTEN]` in the
-  block-status table and will be added one at a time. The TypeScript block
+- Section **9 is in progress**: blocks 1–5 (TypeScript, JavaScript, HTML/CSS,
+  Python, Go) are written; blocks 6–9 are each marked `[NOT YET WRITTEN]` in
+  the block-status table and will be added one at a time. The TypeScript block
   introduces **no new verbatim**; the JavaScript block re-cuts the same shared
   rules **plus** two verbatim quotes (80-column §4.4, indentation §4.2) that
   were already source-verified in `combination-packs.md` and are flagged there
@@ -525,7 +608,13 @@ Scope notes and sourcing:
   4-space-indent re-cut Hook 2 / Collision 5, naming re-cuts Collision 6, and
   the bare-`except` line is explicitly marked as a **paraphrase**, not a
   verbatim quote, since Hook 3 does not carry the guide's exact sentence.
-  Do not treat the five pending blocks as finished.
+  The Go block introduces **no new verbatim** either — its six positive rules
+  are already verbatim in `language-style-guide-patterns.md`'s Go section and
+  are condensed here into imperative form, and its "errors are values" line is
+  marked paraphrase for the same reason as Python's. The Go block also records
+  that its source is the **Decisions page only** (not Google's Guide or Best
+  Practices companion pages for Go), so a rule's absence there is not evidence
+  that Go lacks one. Do not treat the four pending blocks as finished.
 - One honesty correction made while writing 6: **Go's indentation is recorded
   as a guide *silence* plus a `gofmt` tooling note — not as a quoted rule.**
   Presenting "Go mandates tabs" as a third quoted camp would over-claim.
