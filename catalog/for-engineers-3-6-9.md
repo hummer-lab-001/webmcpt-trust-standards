@@ -38,7 +38,7 @@ Each step's reason for landing is *different from the one before it* and
 |---|---|---|
 | **3 — The hook** | Google's three self-contradictions | **written below, source-checked both sides** |
 | **6 — The empathy** | + three cross-stack lint collisions | **written below, source-checked both sides** |
-| **9 — The tool** | nine paste-in reviewer prompts | **in progress — 6 of 9 written (TypeScript, JavaScript, HTML/CSS, Python, Go, Java); 3 remaining** |
+| **9 — The tool** | nine paste-in reviewer prompts | **in progress — 7 of 9 written (TypeScript, JavaScript, HTML/CSS, Python, Go, Java, C++); 2 remaining** |
 
 The 9 section below is headings and intended content only. Where it says
 **`[NOT YET WRITTEN]`**, it means exactly that — do not read the absence of a
@@ -285,7 +285,7 @@ Hard constraints each block must satisfy when written:
 | 4 | **Python** | `.py` | **written below** |
 | 5 | **Go** | `.go` | **written below** (pairs with Block 6) |
 | 6 | **Java** | `.java` | **written below** (pairs with Block 5: acronym boundary) |
-| 7 | C++ | `.cc`, `.h` | `[NOT YET WRITTEN]` (carry Hook 3's fossil honesty) |
+| 7 | **C++** | `.cc`, `.h` | **written below** (carries Hook 3's fossil honesty) |
 | 8 | C# | `.cs` | `[NOT YET WRITTEN]` |
 | 9 | Swift | `.swift` | `[NOT YET WRITTEN]` |
 
@@ -677,6 +677,92 @@ Scope notes and sourcing:
 
 ---
 
+### Block 7 — C++ (`.cc`, `.h`)
+
+This is the block that has to carry a **dated rationale honestly**, and it is
+the reason the file said so in advance rather than discovering it here. Almost
+every C++ rule below is justified in the guide by the *scale and age of
+Google's existing codebase* — a hundred million lines of code that predates
+the rule — not by a claim about C++ in general. A reviewer prompt that repeats
+the rules while dropping the reasons turns "this does not fit our existing
+code" into "this is bad engineering." Those are different claims, and only one
+of them is sourced.
+
+So this block states each rule **with its stated reason attached**, and flags
+the exceptions ban as legacy-driven rather than universal. C++ also sits in
+the **80**-column camp with JavaScript and Python.
+
+Re-cut from the C++ section of `language-style-guide-patterns.md` and Hooks
+1–3 above — **no new verbatim quote is introduced in this block**.
+
+```text
+You are reviewing C++. Apply these rules ONLY to .cc and .h files. Do not
+extend them to other languages. Do not invent rules beyond this list.
+
+- Exceptions are not used. State the reason when flagging: most existing C++
+  code at Google is not prepared to deal with exceptions, so the conversion
+  cost outweighs the benefit at that codebase's scale. This is a
+  legacy-compatibility rule, NOT a claim that exceptions are bad design. Do
+  not carry it into a new codebase as a universal principle.
+- Errors travel through return values, since exceptions are unavailable.
+- RTTI (dynamic_cast / typeid) is discouraged: querying an object's type at
+  run time usually indicates a design problem. Prefer virtual dispatch or the
+  Visitor pattern.
+- `using namespace foo;` is banned. Reason: at 100+ million lines, name
+  collisions are hard to avoid and painful to work with.
+- Single-argument constructors must be `explicit` — implicit conversions can
+  hide type-mismatch bugs.
+- Keep functions short (roughly 40 lines as the stated yardstick). Reason is
+  reader cost over time, not a hard syntactic limit — do not fail a function
+  purely for crossing the line count.
+- Never call a virtual function from a constructor: such calls do not
+  dispatch to the subclass implementation.
+- Acronyms are folded, not preserved: StartRpc(), not StartRPC(). If a house
+  rule says preserve acronym case, that rule comes from Go and is wrong here.
+- Column limit is 80 characters. Do NOT import Java/C#/Swift's 100.
+- The guide's own unifying principle, worth stating when a rule feels
+  strict: it optimizes for READER experience over writer convenience,
+  because code is read and maintained far longer than it is written.
+```
+
+Scope notes and sourcing:
+
+- **Exceptions — the fossil flag.** Verbatim at Hook 3: *"We do not use C++
+  exceptions."* The corpus records the guide's stated reason as *"most
+  existing C++ code at Google is not prepared to deal with exceptions."* Hook
+  3 already labels this a **fossil**: a legacy-consistency rationale, not a
+  timeless one. The prompt block above is written so a reviewer *cannot*
+  quote the rule without also carrying the reason — that is the whole point
+  of this block, promised in the Block-order note above and delivered here.
+- **Acronym fold** — verbatim at Hook 1: C++ *"prefer to capitalize it as a
+  single \"word\", e.g., `StartRpc()` rather than `StartRPC()`"*. Same
+  boundary as Blocks 5 and 6, now closed on a third side.
+- **80 columns** — verbatim at Hook 2: *"Each line of text in your code
+  should be at most 80 characters long."*
+- **RTTI, `using namespace`, explicit constructors, ~40-line functions,
+  virtual-call-in-constructor, reader-over-writer** — all six are quoted in
+  the C++ section of the corpus, with their rationale fragments quoted
+  alongside; condensed here into imperative form with the reasons preserved.
+  The 40-line figure is stated in the corpus as *roughly* 40 — this block
+  keeps the hedge instead of hardening it into a checkable threshold, because
+  hardening it would assert more than the source does.
+- **Errors as return values** — Hook 3 records the mechanism, not a verbatim
+  sentence. **Paraphrase**, same treatment as Go's line.
+- **Nothing is asserted about indentation for C++**, because neither the
+  corpus's C++ section nor Collision 5 records a verbatim C++ indentation
+  rule. Silence, not permission.
+- **Scope of the source itself:** the corpus's C++ section was read from
+  Google's C++ Style Guide; Google's separate C++ *Tips of the Week* and the
+  Abseil guidance were **not** read, so a rule's absence here is not evidence
+  that Google states nothing on the subject.
+
+> Source: `language-style-guide-patterns.md` C++ section (all six rules and
+> their rationale fragments verbatim there); Hook 1 (acronym fold), Hook 2
+> (80 columns), Hook 3 (exceptions ban + fossil framing). No guide was
+> re-fetched by 021 for this block.
+
+---
+
 ## Honesty ledger for this file
 
 - No new guides were read; still eighteen. This file re-cuts verified
@@ -687,9 +773,9 @@ Scope notes and sourcing:
 - Sections **3 and 6 are complete** and source-checked on every quoted side;
   where a claim was not already in the prior corpus (the naming tables), the
   guide was fetched and the quote confirmed, and that is stated inline.
-- Section **9 is in progress**: blocks 1–6 (TypeScript, JavaScript, HTML/CSS,
-  Python, Go, Java) are written; blocks 7–9 are each marked `[NOT YET WRITTEN]`
-  in the block-status table and will be added one at a time. The TypeScript block
+- Section **9 is in progress**: blocks 1–7 (TypeScript, JavaScript, HTML/CSS,
+  Python, Go, Java, C++) are written; blocks 8–9 are each marked
+  `[NOT YET WRITTEN]` in the block-status table. The TypeScript block
   introduces **no new verbatim**; the JavaScript block re-cuts the same shared
   rules **plus** two verbatim quotes (80-column §4.4, indentation §4.2) that
   were already source-verified in `combination-packs.md` and are flagged there
@@ -713,7 +799,13 @@ Scope notes and sourcing:
   alignment) are marked **paraphrase**. It also records that Java-adjacent
   material Google publishes elsewhere was not read. Blocks 5 and 6 close the
   acronym boundary from both sides — deliberately, so neither can be pasted
-  over the other's files. Do not treat the three pending blocks as finished.
+  over the other's files. The C++ block introduces **no new verbatim** either,
+  and it is the block that **keeps each rule attached to its stated reason**:
+  the exceptions ban is delivered as legacy-compatibility (Hook 3's fossil
+  flag), not as a universal claim, and the ~40-line function figure keeps the
+  guide's own hedge instead of hardening into a threshold. It records that
+  Google's C++ Tips of the Week and Abseil guidance were not read. Do not
+  treat the two pending blocks as finished.
 - One honesty correction made while writing 6: **Go's indentation is recorded
   as a guide *silence* plus a `gofmt` tooling note — not as a quoted rule.**
   Presenting "Go mandates tabs" as a third quoted camp would over-claim.
