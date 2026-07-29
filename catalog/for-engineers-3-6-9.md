@@ -38,7 +38,7 @@ Each step's reason for landing is *different from the one before it* and
 |---|---|---|
 | **3 — The hook** | Google's three self-contradictions | **written below, source-checked both sides** |
 | **6 — The empathy** | + three cross-stack lint collisions | **written below, source-checked both sides** |
-| **9 — The tool** | nine paste-in reviewer prompts | **in progress — 3 of 9 written (TypeScript, JavaScript, HTML/CSS); 6 remaining** |
+| **9 — The tool** | nine paste-in reviewer prompts | **in progress — 4 of 9 written (TypeScript, JavaScript, HTML/CSS, Python); 5 remaining** |
 
 The 9 section below is headings and intended content only. Where it says
 **`[NOT YET WRITTEN]`**, it means exactly that — do not read the absence of a
@@ -273,7 +273,7 @@ Hard constraints each block must satisfy when written:
 | 1 | **TypeScript** | `.ts`, `.tsx` | **written below** |
 | 2 | **JavaScript** | `.js` | **written below** |
 | 3 | **HTML/CSS** | `.html`, `.css` | **written below** |
-| 4 | Python | `.py` | `[NOT YET WRITTEN]` |
+| 4 | **Python** | `.py` | **written below** |
 | 5 | Go | `.go` | `[NOT YET WRITTEN]` |
 | 6 | Java | `.java` | `[NOT YET WRITTEN]` |
 | 7 | C++ | `.cc`, `.h` | `[NOT YET WRITTEN]` (carry Hook 3's fossil honesty) |
@@ -435,6 +435,64 @@ Scope notes and sourcing:
 
 ---
 
+### Block 4 — Python (`.py`)
+
+Python is the block on the other side of every collision named so far: where
+JavaScript and Java land on 80/100 columns and 2-space indent, Python's own
+guide states the opposite numbers in its own words. This block also owns the
+one *behavioral* (not formatting) rule sourced from Hook 3 — the bare-`except`
+ban — which has no equivalent in the blocks written so far.
+
+```text
+You are reviewing Python. Apply these rules ONLY to .py files. Do not extend
+them to .js, .ts, .java, or any other file type. Do not invent rules beyond
+this list.
+
+- Column limit is 80 characters. This is Python's OWN number — do not treat
+  it as borrowed from JavaScript; Java's 100-column limit does NOT apply here.
+- Indent 4 spaces per block; never use tabs. Do NOT apply the 2-space rule
+  from JavaScript/HTML/CSS/Java to Python — 4 spaces is correct here and
+  2 spaces is a violation.
+- Functions and local variables use lower_with_under naming (e.g.
+  parse_customer_record), NOT lowerCamelCase. Classes use CapWords. Modules
+  use lower_with_under.py. Flag any camelCase introduced into .py by a
+  cross-language lint rule.
+- Never use a bare `except:` clause. Catch specific exception types.
+```
+
+Scope notes and sourcing:
+
+- **80-column limit** — verbatim: *"Maximum line length is 80 characters."*
+  Recorded at Hook 2 above and `combination-packs.md` L1.3. This is Python's
+  own stated number, not an import from the JS block — the two guides happen
+  to agree on 80, but for independent reasons, so this block states its own
+  source rather than pointing at Block 2.
+- **4-space indent** — verbatim: *"Indent your code blocks with 4 spaces.
+  Never use tabs."* Recorded at Collision 5 above and `combination-packs.md`
+  L2.3. This is the rule every other block written so far (2-space) is wrong
+  for — the boundary is stated explicitly in the prompt block itself.
+- **Naming** — verbatim, Google Python Style Guide §3.16 summary table:
+  `function_name`, `local_var_name` (lower_with_under), *"Use CapWords for
+  class names, but lower\_with\_under.py for module names."* Already source-
+  verified at Collision 6 above (re-confirmed by direct fetch while writing
+  that section, not carried from the original 18-guide corpus). **No new
+  fetch for this block** — it re-cuts Collision 6.
+- **Bare `except` ban** — this is a paraphrase of Hook 3's Python line
+  ("Python — exceptions, but bare `except` is banned"), not a fresh verbatim
+  quote; Hook 3 does not carry the guide's exact banning sentence, only the
+  fact of the ban. Marked as paraphrase here, consistent with the
+  verbatim-or-marked constraint — do not read this line as verbatim.
+- Nothing about acronym casing is asserted for Python beyond what §3.16's
+  naming table already covers, because Hook 1 does not record a Python-
+  specific acronym rule.
+
+> Source: `combination-packs.md` L1.3 (80-column), L2.3 (4-space indent);
+> Collision 6 above for naming (already independently fetched and confirmed
+> there); Hook 3 above for the bare-except fact (paraphrase, not verbatim).
+> No guide was re-fetched by 021 for this block.
+
+---
+
 ## Honesty ledger for this file
 
 - No new guides were read; still eighteen. This file re-cuts verified
@@ -445,8 +503,8 @@ Scope notes and sourcing:
 - Sections **3 and 6 are complete** and source-checked on every quoted side;
   where a claim was not already in the prior corpus (the naming tables), the
   guide was fetched and the quote confirmed, and that is stated inline.
-- Section **9 is in progress**: blocks 1–3 (TypeScript, JavaScript, HTML/CSS)
-  are written; blocks 4–9 are each marked `[NOT YET WRITTEN]` in the
+- Section **9 is in progress**: blocks 1–4 (TypeScript, JavaScript, HTML/CSS,
+  Python) are written; blocks 5–9 are each marked `[NOT YET WRITTEN]` in the
   block-status table and will be added one at a time. The TypeScript block
   introduces **no new verbatim**; the JavaScript block re-cuts the same shared
   rules **plus** two verbatim quotes (80-column §4.4, indentation §4.2) that
@@ -454,7 +512,11 @@ Scope notes and sourcing:
   for re-confirmation. The HTML/CSS block also introduces **no new verbatim**
   — it re-cuts the quoting (single/double/@charset) and indentation quotes
   already confirmed at Collisions 4–5 and `combination-packs.md` L1.4/L2.1.
-  Do not treat the six pending blocks as finished.
+  The Python block introduces **no new verbatim** either — 80-column and
+  4-space-indent re-cut Hook 2 / Collision 5, naming re-cuts Collision 6, and
+  the bare-`except` line is explicitly marked as a **paraphrase**, not a
+  verbatim quote, since Hook 3 does not carry the guide's exact sentence.
+  Do not treat the five pending blocks as finished.
 - One honesty correction made while writing 6: **Go's indentation is recorded
   as a guide *silence* plus a `gofmt` tooling note — not as a quoted rule.**
   Presenting "Go mandates tabs" as a third quoted camp would over-claim.
