@@ -38,7 +38,7 @@ Each step's reason for landing is *different from the one before it* and
 |---|---|---|
 | **3 — The hook** | Google's three self-contradictions | **written below, source-checked both sides** |
 | **6 — The empathy** | + three cross-stack lint collisions | **written below, source-checked both sides** |
-| **9 — The tool** | nine paste-in reviewer prompts | **in progress — 5 of 9 written (TypeScript, JavaScript, HTML/CSS, Python, Go); 4 remaining** |
+| **9 — The tool** | nine paste-in reviewer prompts | **in progress — 6 of 9 written (TypeScript, JavaScript, HTML/CSS, Python, Go, Java); 3 remaining** |
 
 The 9 section below is headings and intended content only. Where it says
 **`[NOT YET WRITTEN]`**, it means exactly that — do not read the absence of a
@@ -284,7 +284,7 @@ Hard constraints each block must satisfy when written:
 | 3 | **HTML/CSS** | `.html`, `.css` | **written below** |
 | 4 | **Python** | `.py` | **written below** |
 | 5 | **Go** | `.go` | **written below** (pairs with Block 6) |
-| 6 | Java | `.java` | `[NOT YET WRITTEN]` (pairs with Block 5: acronym boundary) |
+| 6 | **Java** | `.java` | **written below** (pairs with Block 5: acronym boundary) |
 | 7 | C++ | `.cc`, `.h` | `[NOT YET WRITTEN]` (carry Hook 3's fossil honesty) |
 | 8 | C# | `.cs` | `[NOT YET WRITTEN]` |
 | 9 | Swift | `.swift` | `[NOT YET WRITTEN]` |
@@ -585,6 +585,98 @@ Scope notes and sourcing:
 
 ---
 
+### Block 6 — Java (`.java`)
+
+This is the mirror of Block 5. Go preserves acronym case; Java folds it. If
+only one of the two blocks states that boundary, a reviewer holding the other
+one will still "fix" files it has no business touching — so the rule is
+written twice, once from each side, in the negative as well as the positive.
+Java also sits in the **100**-column camp against Go's no-limit and
+JavaScript/Python's 80, and it is the guide whose stated character is
+*compiler legality is a floor, not a target*: several rules below demand more
+than `javac` requires.
+
+Everything is re-cut from the Java section of `language-style-guide-patterns.md`
+and Hooks 1–2 / Collisions 5–6 above — **no new verbatim quote is introduced
+in this block**.
+
+```text
+You are reviewing Java. Apply these rules ONLY to .java files. Do not extend
+them to .go, .py, .js, or any other file type. Do not invent rules beyond
+this list.
+
+- Acronyms are FOLDED into ordinary words: newCustomerId, parseUrl, MyRpc —
+  not newCustomerID or parseURL. If a house rule says "preserve acronym
+  case," that rule comes from Go and is WRONG in .java.
+- Methods and local variables are lowerCamelCase. Do NOT accept
+  lower_with_under here; that is the Python rule.
+- Column limit is 100 characters. Do NOT import the 80-column limit from
+  JavaScript, Python, or C++.
+- Indent 2 spaces; tab characters are not used for indentation.
+- Wildcard imports are banned outright, static or otherwise.
+- Mark a method @Override whenever it is legal to do so. The one documented
+  exception: it may be omitted when the parent method is @Deprecated.
+- Every switch must be exhaustive, even where the language does not require
+  it.
+- Braces are always required for if/else/for/do/while, even for a single
+  statement or an empty body.
+- A constant (static final, UPPER_SNAKE_CASE) must be DEEPLY immutable and
+  its methods free of detectable side effects. A mutable object behind a
+  static final reference is not a constant and must not be named like one.
+- An empty catch block is acceptable ONLY when a comment explains why taking
+  no action is justified. Flag any silent catch with no such comment.
+- Declare local variables close to first use, not grouped at the top.
+- Array declarations use the String[] args form; String args[] is
+  disallowed.
+- Do NOT require horizontal alignment of tokens across lines — the guide
+  deliberately declines to mandate it.
+```
+
+Scope notes and sourcing:
+
+- **Acronym fold** — verbatim at Hook 1: *"Now lowercase everything
+  (including acronyms), then uppercase only the first character of:"* each
+  word. Hook 1 records the honest scope from the other direction too: Java is
+  **not** the outlier here — C++, C# and XML fold as well; **Go alone
+  preserves.** So this block's "if a house rule says preserve, it came from
+  Go" is accurate, and Block 5 states the same boundary in reverse. Between
+  the two, neither block can be pasted over the other's files without the
+  conflict being named.
+- **lowerCamelCase naming** — verbatim at Collision 6 (Java SG 5.2):
+  *"Method names are written in lowerCamelCase."* / *"Local variable names
+  are written in lowerCamelCase."* These two are among the three quotes
+  fetched directly from the published guide while writing Collision 6 — they
+  are **not** in the earlier corpus, which records no Java naming table, and
+  they are allowlisted with that reason in `tools/check_verbatim.py`.
+- **100 columns** — verbatim at Hook 2: *"Java code has a column limit of 100
+  characters."* The corpus notes no rationale accompanies the number in the
+  passage read; this block therefore states the limit without inventing a
+  reason for it.
+- **2-space indent, no tabs** — verbatim at Collision 5: *"Tab characters are
+  not used for indentation."* Note what this quote does and does not say: it
+  bans tabs. The "2 spaces" half is recorded in Collision 5's grouping of
+  Java with JavaScript and HTML/CSS, not carried by this sentence alone.
+- **Wildcard imports, @Override, exhaustive switch, deep immutability of
+  constants, justified empty catch** — all five are verbatim in the Java
+  section of `language-style-guide-patterns.md` and are condensed here into
+  imperative form; the exact wording lives there.
+- **Braces, local-variable placement, array form, no horizontal alignment** —
+  these four are recorded in the corpus as rules **without** an accompanying
+  verbatim sentence (the corpus states them in its own words). They are
+  therefore **paraphrase**, not verbatim, and are marked as such here — the
+  same treatment as Python's bare-`except` and Go's errors-as-values lines.
+- **Scope of the source itself:** these rules come from Google's Java Style
+  Guide as read for the corpus. Google also publishes Java-adjacent material
+  (for example the Android Java conventions) that was **not** read; a rule's
+  absence from this block is not evidence that no such rule exists elsewhere.
+
+> Source: `language-style-guide-patterns.md` Java section; Hook 1 (acronym
+> fold), Hook 2 (100 columns), Collision 5 (tabs), Collision 6 (naming,
+> allowlisted with its fetch reason). No guide was re-fetched by 021 for this
+> block.
+
+---
+
 ## Honesty ledger for this file
 
 - No new guides were read; still eighteen. This file re-cuts verified
@@ -595,9 +687,9 @@ Scope notes and sourcing:
 - Sections **3 and 6 are complete** and source-checked on every quoted side;
   where a claim was not already in the prior corpus (the naming tables), the
   guide was fetched and the quote confirmed, and that is stated inline.
-- Section **9 is in progress**: blocks 1–5 (TypeScript, JavaScript, HTML/CSS,
-  Python, Go) are written; blocks 6–9 are each marked `[NOT YET WRITTEN]` in
-  the block-status table and will be added one at a time. The TypeScript block
+- Section **9 is in progress**: blocks 1–6 (TypeScript, JavaScript, HTML/CSS,
+  Python, Go, Java) are written; blocks 7–9 are each marked `[NOT YET WRITTEN]`
+  in the block-status table and will be added one at a time. The TypeScript block
   introduces **no new verbatim**; the JavaScript block re-cuts the same shared
   rules **plus** two verbatim quotes (80-column §4.4, indentation §4.2) that
   were already source-verified in `combination-packs.md` and are flagged there
@@ -614,7 +706,14 @@ Scope notes and sourcing:
   marked paraphrase for the same reason as Python's. The Go block also records
   that its source is the **Decisions page only** (not Google's Guide or Best
   Practices companion pages for Go), so a rule's absence there is not evidence
-  that Go lacks one. Do not treat the four pending blocks as finished.
+  that Go lacks one. The Java block introduces **no new verbatim** either: its
+  five quoted rules are verbatim in the corpus, its naming quotes are the
+  allowlisted Collision 6 fetches, and four rules the corpus states in its own
+  words (braces, local-variable placement, array form, no horizontal
+  alignment) are marked **paraphrase**. It also records that Java-adjacent
+  material Google publishes elsewhere was not read. Blocks 5 and 6 close the
+  acronym boundary from both sides — deliberately, so neither can be pasted
+  over the other's files. Do not treat the three pending blocks as finished.
 - One honesty correction made while writing 6: **Go's indentation is recorded
   as a guide *silence* plus a `gofmt` tooling note — not as a quoted rule.**
   Presenting "Go mandates tabs" as a third quoted camp would over-claim.
