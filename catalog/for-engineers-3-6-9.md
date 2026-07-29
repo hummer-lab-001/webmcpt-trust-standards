@@ -95,8 +95,17 @@ Not two camps — three.
 - **100 camp** (verbatim): Java *"Java code has a column limit of 100
   characters."*; C# *"Column limit: 100."*; Swift *"Swift code has a column
   limit of 100 characters."*; Objective-C also votes 100.
-- **No-limit camp** (verbatim): Go *"There is no fixed line length for Go
-  source code."*
+- **No-limit camp** (verbatim, with its scope stated): Go *"There is no fixed
+  line length for comments in Go."* — the guide adds that 80 or 100 columns
+  are common but *"not a hard cut-off."* **Read the scope honestly:** this
+  sentence sits in the guide's *comment-length* section and cross-references a
+  companion page for source lines. So the accurate claim is "the Go guide
+  states no hard line-length rule, and the sentence available to quote is
+  about comments" — **not** a verbatim rule about Go source lines. An earlier
+  revision of this file ended that quote with `for Go source code`, which
+  widened the guide's own wording; that was wrong and is corrected here.
+  (Italic-quoted text in this file always means "the guide's own words," so a
+  misquote must not be reproduced in that form even to describe it.)
 
 So a reviewer literally cannot pick one column limit that is correct for a
 change spanning `.py`, `.java`, and `.go`: 80 is wrong for Java, 100 is wrong
@@ -312,7 +321,7 @@ Scope notes (why each line is safe to enforce, and where it stops):
 - **Single quotes / semicolons / named-exports** are the three rules the Web
   pack records as holding across the TS+JS family; they are enforceable
   (a reviewer can check each mechanically) and are not IE-era fossils.
-- The **"no 80-column here"** line is included on purpose: the most common way
+- The **no-80-column-here** line is included on purpose: the most common way
   this block gets misused is a reviewer carrying JavaScript's 80-column rule
   onto `.ts`. Naming the boundary is the whole point of surface-scoping.
 - Nothing about acronym casing, indentation width, or naming case is asserted
@@ -520,6 +529,31 @@ Scope notes and sourcing:
 - One honesty correction made while writing 6: **Go's indentation is recorded
   as a guide *silence* plus a `gofmt` tooling note — not as a quoted rule.**
   Presenting "Go mandates tabs" as a third quoted camp would over-claim.
+- **A widened quote was found and corrected in Hook 2.** This file previously
+  presented Go's line-length rule as a verbatim sentence ending
+  `...for Go source code` (not reproduced here in quote form, per the marking
+  rule below). The corpus records the guide's actual sentence as
+  *"There is no fixed line length for comments in Go."* — scoped to comments,
+  with a companion page covering source lines. The quote had been broadened
+  past its source while keeping the verbatim marking. Hook 2 now carries the
+  guide's own wording plus its scope. The underlying claim (the Go guide
+  states no hard limit) survives; the false precision did not.
+- **The "no new verbatim" claim is now machine-checked**, because it was
+  previously only checkable by a reader who thought to normalise whitespace
+  first — Markdown wraps long quotes across lines, so a plain grep for one
+  returns zero hits and looks like a failure. `tools/check_verbatim.py`
+  normalises both sides and fails red when a quote here is absent from the
+  corpus. It found the Hook 2 defect above on its first run. Three quotes are
+  allowlisted with reasons (the Java 5.2 / Python 3.16 naming quotes, fetched
+  directly while writing Collision 6 and stated inline). Run
+  `python tools/check_verbatim.py --self-test` to watch it reject a fabricated
+  quote before trusting a green run.
+- **Italic-quoted text in this file always means the guide's own words.** Not
+  emphasis, not a phrase this file coined. The marking is what the checker
+  keys on, so overloading it would both mislead a reader and blind the check.
+- Third-party licensing of the quoted material is recorded in the repository
+  `NOTICE` (Google style guides: CC BY 3.0; the R guide additionally CC BY-SA
+  2.0 as a Tidyverse fork), read from the upstream license text on 2026-07-29.
 - Counts (3 / 6 / 9) are a *presentation ladder*, not a claim of completeness
   — they are chosen for impact, not because the corpus contains exactly that
   many findings.
