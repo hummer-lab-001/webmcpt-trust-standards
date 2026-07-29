@@ -133,14 +133,20 @@ the honesty ledger of both files, and it is the point: the corpus does not conta
 three contradictions because the universe rounded to three.
 
 > **On the famous 3-6-9.** The line "if you only knew the magnificence of the 3, 6 and 9,
-> then you would have a key to the universe" circulates as Nikola Tesla's. It has no
-> primary source: the closest documented origin is a second-hand recollection in O'Neill's
-> 1944 biography, not anything in Tesla's own writing, lectures or contemporaneous
-> interviews. (His documented preoccupation with the number 3 is a separate, better-attested
-> matter.) We mention it because it is a perfect specimen of what this catalog is about — a
-> claim repeated at scale on the strength of *who supposedly said it*, which nobody checked.
-> That is the same move as "because Google does it." The difference we are aiming for: every
-> number in this repository is one you can count yourself.
+> then you would have a key to the universe" circulates as Nikola Tesla's. **We could not
+> find a primary source for it** — searching for one, we found no instance in Tesla's own
+> writing, lectures or contemporaneous interviews, but we have not surveyed the full Tesla
+> archive and do not claim the attribution is impossible. Secondary sources widely trace the
+> line to a second-hand recollection in John J. O'Neill, *Prodigal Genius: The Life of
+> Nikola Tesla* (1944); **we have not read that book and have not located the passage**, so
+> we record the pointer without endorsing it. (Tesla's preoccupation with the number 3 is a
+> separate and better-attested matter.)
+>
+> We mention it because it is a specimen of what this catalog is about — a claim repeated at
+> scale on the strength of *who supposedly said it*, which few readers check. That is the
+> same move as "because Google does it." The difference we are aiming for: every number in
+> this repository is one you can count yourself. Which is also why this note says how far we
+> looked instead of claiming we looked everywhere.
 
 ## Why it matters
 
