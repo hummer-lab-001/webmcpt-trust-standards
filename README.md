@@ -21,6 +21,34 @@ Everything is packaged as Skills (`SKILL.md` + topic-split `references/`), so an
 load exactly the depth it needs: a one-line description, a ~100-line procedure, or the full
 worked evidence.
 
+## Start here — Google's own style guides contradict each other
+
+Not a hot take. Two of Google's published style guides legislate the *same* identifier in
+exactly opposite directions:
+
+- **Go** — *"Words in names that are initialisms or acronyms (e.g., `URL` and `NATO`) should
+  have the same case."* → `newCustomerID`
+- **Java** — *"Now lowercase everything (including acronyms), then uppercase only the first
+  character of:"* each word → `newCustomerId`
+
+Same company, same concept, opposite spelling. Line length has three answers (80 / 100 /
+none). Error handling has four. So a single house lint rule cannot be correct across a
+stack — and "because Google does it" stops being an argument.
+
+[`catalog/for-engineers-3-6-9.md`](catalog/for-engineers-3-6-9.md) is the engineer-facing
+read: **3** contradictions, **6** places one lint rule breaks across a stack, **9** paste-in
+reviewer prompts (one per language, scoped so they don't misfire on a sibling language).
+
+**What we do about being wrong ourselves.** An early draft of that file quoted Go's
+line-length rule as covering *Go source code*. The guide's sentence is about *comments*.
+We had widened a quote past its source while marking it verbatim — the exact failure this
+catalog exists to name. It was caught not by a careful reader but by
+[`tools/check_verbatim.py`](tools/check_verbatim.py), on its first run, because a quote
+that cannot be found in the source-verified corpus makes the check go red. Two more
+self-contradictions were later found the same way by
+[`tools/check_selfclaims.py`](tools/check_selfclaims.py). Every one is recorded in the
+files' honesty ledgers rather than quietly fixed.
+
 ## Quickstart — use it in 30 seconds
 
 **With an AI coding agent (Claude Code, Cursor, or any MCP/Skills-aware agent):**
@@ -76,8 +104,43 @@ working example, released under MIT so the entire ecosystem can use it without a
 | `catalog/governance-patterns.md` | Seven governance lineages (CNCF, ASF, foundation-mandated, elected boards, …) plus recurring safeguards found to converge independently: pre-work gates, employer seat caps, module-boundary discipline. |
 | `catalog/language-style-guide-patterns.md` | Google's Python, C++, Java, Go, TypeScript, Shell, JavaScript, JSON, HTML/CSS, Markdown, C#, Swift, Objective-C, R, Vim script, Common Lisp, XML, and AngularJS style guides read directly, with the guide's own stated rationale for each restriction — the "restrict the language for a stated scale/correctness reason" pattern, and how it echoes the project-governance module-boundary pattern above. Verbatim rules are separated from paraphrased ones, each entry records what was *not* read, and two cross-guide hypotheses that failed to replicate are recorded as negative results rather than dropped. |
 | `catalog/combination-packs.md` | Combines the style guides above into review-ready packs (3/6/9). Each pack has three layers: the rules the guides *agree* on (with vote-counting — silence is not a vote), the rules they *split* on (both sides + a marked recommendation), and the *fossils* whose rationale has expired (IE8, pre-module). Ends with a paste-in AI-reviewer prompt block. All three packs are written in full — **Web** (3 guides), **Product** (6), and **Enterprise+Mobile** (9). Flagships: Go and Java's Google guides *contradict* each other on acronym casing (Go preserves `URL`, Java folds to `Url`); line length splits into an 80 camp (JS/Python/C++) versus a 100 camp (Java/C#/Swift/Objective-C). |
+| `catalog/for-engineers-3-6-9.md` | The same eighteen guides re-cut on an engineer-facing axis: **3** places Google contradicts itself, **6** places one house lint rule breaks across a stack, **9** paste-in AI-reviewer prompts (TypeScript, JavaScript, HTML/CSS, Python, Go, Java, C++, C#, Swift) — each surface-scoped to its own file types, because the blocks are designed so that pasting one over another language's files is a named error rather than a silent one. Carries its own honesty ledger, including the quotes it got wrong and corrected. |
+| `tools/check_verbatim.py` | Makes the "no new verbatim" claim checkable instead of trusted. Normalises whitespace on both sides (Markdown line-wrapping is why a plain `grep` for a quoted sentence returns zero hits) and fails red when a quote is absent from the source-verified corpus. `--self-test` injects a fabricated quote and proves it goes red first. It caught a real widened quote on its first run. |
+| `tools/check_selfclaims.py` | Checks the claims this repository makes *about itself* — progress counters against the sections that exist, status-table rows, `[NOT YET WRITTEN]` markers, repo-local path references, corpus guide counts. This is the class of error a reader cannot catch: two statements of one fact, hundreds of lines apart, one maintained and one not. Its docstring also records a second design that was prototyped, **measured, and rejected** for a 27-flag false-positive rate. |
 | `catalog/genai-and-webmcpt.md` | Reads Japan's GENAI (the Digital Agency's OSS government-AI release, 2026-04-24) alongside WebMCPT to make the case that open AI infrastructure needs a paired, independent verification discipline — including a worked example of this catalog's own primary-source rule declining an unverified adoption-count claim. No official relationship between the two. |
 | `catalog/INDEX.md` | The curated registry: each entry names the repository, its domain, license (primary-verified), and the evidence level for its production use. |
+
+## Why 3 / 6 / 9 — a definition, not a law
+
+Two files here are cut into threes, and it is fair to ask where that comes from.
+
+The honest answer is that **the 3/6/9 split is inherited, not discovered.** It comes from
+the packaging structure of the organisation that produced this catalog (NEWXUS ships its
+service packs in 3 / 6 / 9), and it was kept because it happened to fit: review surfaces
+nest cleanly (Web → +Product → +Enterprise/Mobile), and an escalating set is easier to
+adopt than a flat list. No claim is made that 3, 6 and 9 are inherently correct sizes for
+anything.
+
+So this is a **definition**, not a law. A definition is something you can check by
+counting: 3 = the Web pack's guides, 6 = plus Product, 9 = plus Enterprise and Mobile;
+3 contradictions, 6 collisions, 9 language blocks. Count them and the number is either
+there or it isn't. A "law" would claim these numbers hold beyond this catalog, and nothing
+here tests that — a law needs the conditions under which it holds and the counter-examples
+where it doesn't, and we collected neither.
+
+The counts are a **presentation ladder**, not evidence of completeness. That sentence is in
+the honesty ledger of both files, and it is the point: the corpus does not contain exactly
+three contradictions because the universe rounded to three.
+
+> **On the famous 3-6-9.** The line "if you only knew the magnificence of the 3, 6 and 9,
+> then you would have a key to the universe" circulates as Nikola Tesla's. It has no
+> primary source: the closest documented origin is a second-hand recollection in O'Neill's
+> 1944 biography, not anything in Tesla's own writing, lectures or contemporaneous
+> interviews. (His documented preoccupation with the number 3 is a separate, better-attested
+> matter.) We mention it because it is a perfect specimen of what this catalog is about — a
+> claim repeated at scale on the strength of *who supposedly said it*, which nobody checked.
+> That is the same move as "because Google does it." The difference we are aiming for: every
+> number in this repository is one you can count yourself.
 
 ## Why it matters
 
