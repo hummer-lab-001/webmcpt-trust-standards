@@ -1527,8 +1527,8 @@ versions." The deferred list includes file and directory structure,
 packages and modularity, threads and locking, CLOS style, and when not to
 use conditional compilation. Where C# marked two individual rules as
 unsettled, this guide publishes a map of its own unfinished scope. Two
-instances across sixteen guides, in different forms, is enough to record
-the habit as real but not enough to call it a house style — the Swift
+instances across the guides read here, in different forms, is enough to
+record the habit as real but not enough to call it a house style — the Swift
 negative stands as evidence against generalizing it.
 
 **Scope note**: this is Google's own convention for Google's own Common
@@ -1563,7 +1563,7 @@ machine-consumed XML, not human-readable documents.
   MUST, MUST NOT, SHOULD, SHOULD NOT, and MAY are used in this document in
   the sense of RFC 2119." Where the Common Lisp section above re-defines
   each keyword in its own words, this guide points at RFC 2119 and stops
-  there. Two of the sixteen guides read here grade rule strength with a
+  there. Two of the guides read here grade rule strength with a
   formal compliance vocabulary, and both are among the least
   code-like — one governs a Lisp dialect's conventions, the other a data
   format's design; the observation is recorded as a two-case convergence,
@@ -2182,8 +2182,14 @@ sections beyond the rules above.
 With AngularJS now read, Google's public style-guide index holds no
 further guides unread first-hand within this file's scope — the
 seventeen language and format guides above plus this framework guide
-complete the set of Google style guides hosted in the `google/styleguide`
-repository and read here. The index also links guides hosted outside that
-repository (Effective Dart at dartlang.org, the Kotlin guide at
-developer.android.com), which have not been read here and are not claimed
-to follow this pattern.
+complete the set of Google style guides read here. Of those, all but one
+are hosted in the `google/styleguide` repository; **the Swift guide is
+the exception** — it is published from the `gh-pages` branch of
+`google/swift`, as its own section above records, and it carries a
+different licence (Apache 2.0 with the Runtime Library Exception, against
+CC BY 3.0 for the rest — see the repository `NOTICE`). An earlier
+revision of this sentence described the whole set as hosted in
+`google/styleguide`, which flattened that exception away. The index also
+links guides hosted outside that repository (Effective Dart at
+dartlang.org, the Kotlin guide at developer.android.com), which have not
+been read here and are not claimed to follow this pattern.
