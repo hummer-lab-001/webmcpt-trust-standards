@@ -38,7 +38,7 @@ Each step's reason for landing is *different from the one before it* and
 |---|---|---|
 | **3 — The hook** | Google's three self-contradictions | **written below, source-checked both sides** |
 | **6 — The empathy** | + three cross-stack lint collisions | **written below, source-checked both sides** |
-| **9 — The tool** | nine paste-in reviewer prompts | **in progress — 7 of 9 written (TypeScript, JavaScript, HTML/CSS, Python, Go, Java, C++); 2 remaining** |
+| **9 — The tool** | nine paste-in reviewer prompts | **in progress — 8 of 9 written (TypeScript, JavaScript, HTML/CSS, Python, Go, Java, C++, C#); 1 remaining** |
 
 The 9 section below is headings and intended content only. Where it says
 **`[NOT YET WRITTEN]`**, it means exactly that — do not read the absence of a
@@ -286,7 +286,7 @@ Hard constraints each block must satisfy when written:
 | 5 | **Go** | `.go` | **written below** (pairs with Block 6) |
 | 6 | **Java** | `.java` | **written below** (pairs with Block 5: acronym boundary) |
 | 7 | **C++** | `.cc`, `.h` | **written below** (carries Hook 3's fossil honesty) |
-| 8 | C# | `.cs` | `[NOT YET WRITTEN]` |
+| 8 | **C#** | `.cs` | **written below** (carries its borrowed lineage and two dated deferrals) |
 | 9 | Swift | `.swift` | `[NOT YET WRITTEN]` |
 
 ---
@@ -763,6 +763,125 @@ Scope notes and sourcing:
 
 ---
 
+### Block 8 — C# (`.cs`)
+
+C# and Java share a column limit, an indent width, and a brace style, so the
+first question this block had to answer was whether it would be Block 6 typed
+twice. It is not — but the reason is worth stating, because it is the most
+unusual thing about this guide: **C# is the guide that names where its own
+rules came from, and leaves its own open questions in the text.**
+
+- Its naming system is deferred wholesale to **Microsoft's** C# guidelines.
+- Its whitespace and brace rules are attributed to **Google's Java guide** —
+  the corpus records the C# guide naming Java as the source, rather than this
+  catalog inferring the resemblance from outside.
+- And it carries **two self-dated deferrals** — a rule to be revisited "when
+  C# 7 is live" (C# 7 shipped in 2017) and an alternative it says it will
+  investigate "if there is enough demand." These are a *different* species of
+  fossil from C++'s: not a dated rationale, but a dated **promise**.
+
+So this block's job is the inverse of Block 7's. C++ needed its reasons
+carried; C# needs its **provenance and its unfinished business** carried, so a
+reviewer doesn't present a borrowed or provisional rule as settled Google
+doctrine. Re-cut from the C# section of `language-style-guide-patterns.md` and
+Hooks 1–2 — **no new verbatim quote is introduced in this block**.
+
+```text
+You are reviewing C#. Apply these rules ONLY to .cs files. Do not extend them
+to .java (C# shares several rules with Java but not all of them). Do not
+invent rules beyond this list.
+
+- Classes, methods, enumerations, public fields, public properties and
+  namespaces: PascalCase. Local variables and parameters: camelCase.
+  Private, protected, internal and protected internal fields and properties:
+  _camelCase (leading underscore). Note: these naming rules are the C#
+  guide's deference to MICROSOFT's C# naming guidelines, not a Google
+  invention.
+- Interfaces start with I, e.g. IInterface.
+- For casing, a "word" is anything written without internal spaces,
+  INCLUDING acronyms: write MyRpc, not MyRPC. (Same fold direction as Java
+  and C++; the opposite of Go.)
+- Filenames and directory names are PascalCase (MyFile.cs), the filename
+  should match the main class, and prefer one core class per file.
+- Column limit is 100. Indentation is 2 spaces, no tabs. Braces are used
+  even when optional; no line break before an opening brace; no line break
+  between a closing brace and else. Note: the guide attributes this group to
+  Google's Java style.
+- Modifiers occur in this exact order: public protected internal private new
+  abstract virtual override sealed static readonly extern unsafe volatile
+  async.
+- `using` declarations go at the top, before any namespaces, in alphabetical
+  order — except System imports, which always go first.
+- Order class members by kind (nested types/enums/delegates/events; static,
+  const and readonly fields; fields and properties; constructors and
+  finalizers; methods), then WITHIN each kind by access level (public,
+  internal, protected internal, protected, private). Group interface
+  implementations together where possible.
+- Anything that can be const should be const; if const isn't possible,
+  readonly is a suitable alternative. Prefer named constants to magic
+  numbers.
+- For single-line read-only properties prefer expression-bodied properties
+  (=>); use { get; set; } for everything else; don't use => on method
+  definitions. FLAG FOR A HUMAN: the guide says this "will be reviewed when
+  C# 7 is live." C# 7 shipped in 2017, so this rule is provisional text that
+  outlived its own review date — do not present it as settled.
+- Prefer returning a success boolean plus a struct `out` value over a
+  nullable struct. Nullable structs are acceptable only where performance
+  isn't a concern AND the result is significantly more readable. FLAG FOR A
+  HUMAN: the guide itself says nullable structs "reinforce the general 'null
+  is failure' pattern Google prefers to avoid," and defers a StatusOr-style
+  alternative to future demand. Report this as an open question, not a
+  resolved rule.
+- Almost always use a class; consider a struct only for small, commonly
+  short-lived or commonly embedded value-like data. Structs are always
+  passed and returned by value.
+```
+
+Scope notes and sourcing:
+
+- **Naming, `I` prefix, `_camelCase`, filenames, modifier order, `using`
+  order, member ordering, const/readonly, expression-bodied properties,
+  struct-vs-class** — all are verbatim in the C# section of
+  `language-style-guide-patterns.md`, quoted there from
+  `google.github.io/styleguide/csharp-style.html`. Condensed here into
+  imperative form.
+- **Two attributions are part of the rules, not decoration.** The corpus
+  records the guide's own words for both: *"Naming rules follow Microsoft's
+  C# naming guidelines."* and, for the whitespace/brace group, *"Developed
+  from Google Java style."* A reviewer who repeats these rules as "Google's
+  C# rules" without the provenance is overstating what the guide claims for
+  itself. That is why both notes are inside the prompt block rather than in
+  a footnote a reader will strip out.
+- **The two dated deferrals are surfaced as FLAG FOR A HUMAN, not enforced.**
+  The corpus records both verbatim (*"This will be reviewed when C# 7 is
+  live, which uses this syntax heavily."* and *"We will investigate a
+  `StatusOr` equivalent in the future, if there is enough demand."*), and
+  notes that C# 7 shipped in 2017 — a fact taken from Microsoft's release
+  history, **not** stated on the guide page. This block reproduces that split:
+  the guide's sentence is the source; the shipped-in-2017 observation is the
+  corpus's, and is presented as context rather than as the guide's own words.
+- **Acronym fold** — Hook 1 lists C# on the fold side; the C# guide's own
+  `MyRpc` / `MyRPC` example (verbatim in the corpus) is the mechanism. Third
+  block to close the boundary against Block 5.
+- **100 columns** — verbatim at Hook 2: *"Column limit: 100."*
+- **The Unity observation is deliberately omitted from the prompt.** The
+  corpus records that the guide's struct examples (`Vector3`, `Quaternion`,
+  `Bounds`) are Unity types although the guide never names Unity, and that a
+  full-page search found no occurrence of "Unity" as a standalone word. That
+  is a genuine finding about the guide's origins, but it is **not a rule a
+  reviewer can enforce**, and this file's constraint is that only enforceable
+  material goes into the blocks. It stays in the corpus where it belongs.
+- **Scope of the source itself:** these are Google's C# conventions only. The
+  Microsoft guidelines they defer to were **not** read for this catalog, so
+  this block cannot be treated as a statement of what Microsoft requires — it
+  states only that Google points there.
+
+> Source: `language-style-guide-patterns.md` C# section (all rules and both
+> attributions verbatim there); Hook 1 (acronym fold), Hook 2 (100 columns).
+> No guide was re-fetched by 021 for this block.
+
+---
+
 ## Honesty ledger for this file
 
 - No new guides were read; still eighteen. This file re-cuts verified
@@ -773,8 +892,8 @@ Scope notes and sourcing:
 - Sections **3 and 6 are complete** and source-checked on every quoted side;
   where a claim was not already in the prior corpus (the naming tables), the
   guide was fetched and the quote confirmed, and that is stated inline.
-- Section **9 is in progress**: blocks 1–7 (TypeScript, JavaScript, HTML/CSS,
-  Python, Go, Java, C++) are written; blocks 8–9 are each marked
+- Section **9 is in progress**: blocks 1–8 (TypeScript, JavaScript, HTML/CSS,
+  Python, Go, Java, C++, C#) are written; block 9 is marked
   `[NOT YET WRITTEN]` in the block-status table. The TypeScript block
   introduces **no new verbatim**; the JavaScript block re-cuts the same shared
   rules **plus** two verbatim quotes (80-column §4.4, indentation §4.2) that
@@ -804,8 +923,21 @@ Scope notes and sourcing:
   the exceptions ban is delivered as legacy-compatibility (Hook 3's fossil
   flag), not as a universal claim, and the ~40-line function figure keeps the
   guide's own hedge instead of hardening into a threshold. It records that
-  Google's C++ Tips of the Week and Abseil guidance were not read. Do not
-  treat the two pending blocks as finished.
+  Google's C++ Tips of the Week and Abseil guidance were not read.
+- The C# block introduces **no new verbatim** either. Its distinguishing job
+  is the opposite of C++'s: where C++ needed its *reasons* carried, C# needs
+  its **provenance and unfinished business** carried. Two attributions the
+  guide makes about itself (naming deferred to Microsoft; whitespace and
+  braces "Developed from Google Java style") are placed inside the prompt
+  block, not in a footnote, so a reviewer cannot restate a borrowed rule as
+  Google doctrine. Its two self-dated deferrals — a rule to be reviewed "when
+  C# 7 is live" (shipped 2017) and a `StatusOr` alternative deferred to future
+  demand — are surfaced as **flags for a human**, not enforced, and the
+  shipped-in-2017 fact is marked as the corpus's observation rather than the
+  guide's words. The Unity-type finding recorded in the corpus is deliberately
+  **left out** of the prompt: it is real, but it is not an enforceable rule,
+  and only enforceable material goes in the blocks. Do not treat the one
+  pending block as finished.
 - One honesty correction made while writing 6: **Go's indentation is recorded
   as a guide *silence* plus a `gofmt` tooling note — not as a quoted rule.**
   Presenting "Go mandates tabs" as a third quoted camp would over-claim.
