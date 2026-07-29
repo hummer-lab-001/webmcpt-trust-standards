@@ -38,13 +38,13 @@ Each step's reason for landing is *different from the one before it* and
 |---|---|---|
 | **3 — The hook** | Google's three self-contradictions | **written below, source-checked both sides** |
 | **6 — The empathy** | + three cross-stack lint collisions | **written below, source-checked both sides** |
-| **9 — The tool** | nine paste-in reviewer prompts | **in progress — 8 of 9 written (TypeScript, JavaScript, HTML/CSS, Python, Go, Java, C++, C#); 1 remaining** |
+| **9 — The tool** | nine paste-in reviewer prompts | **complete — 9 of 9 written (TypeScript, JavaScript, HTML/CSS, Python, Go, Java, C++, C#, Swift)** |
 
-The 9 section below is headings and intended content only. Where it says
-**`[NOT YET WRITTEN]`**, it means exactly that — do not read the absence of a
-body as "nothing to say there." The material exists (it is already verified in
-the combination-packs file); it has simply not been composed into this file's
-form yet. Sections 3 and 6 are written and source-checked.
+All three sections are now written and source-checked. While section 9 was
+being built, each unwritten block carried a `[NOT YET WRITTEN]` marker meaning
+exactly that — not "nothing to say here." No marker remains; the block-status
+table below records nine of nine. What the counts do **not** claim is
+completeness of the corpus: see the honesty ledger at the end.
 
 ---
 
@@ -246,8 +246,11 @@ recognition is the trust the 9-section then converts into use.
 
 ## 9 — The tool: nine paste-in reviewer prompt blocks, one per language
 
-**Status: 2 of 9 blocks written — TypeScript and JavaScript (below). The other
-seven are marked `[NOT YET WRITTEN]` per block and will be added one at a time.**
+**Status: 9 of 9 blocks written.** Each was added one at a time, verified
+against the corpus by `tools/check_verbatim.py` before the next was started.
+(This line read "2 of 9" from the writing of Block 3 until Block 9 — a
+bookkeeping miss recorded here rather than quietly overwritten, since the
+whole point of the per-block markers is that a reader can trust the status.)
 
 Why this is the adopt-step: it is the immediate, selfish payoff. Nine blocks,
 each the single most important, least-ambiguous rules for that language,
@@ -287,7 +290,7 @@ Hard constraints each block must satisfy when written:
 | 6 | **Java** | `.java` | **written below** (pairs with Block 5: acronym boundary) |
 | 7 | **C++** | `.cc`, `.h` | **written below** (carries Hook 3's fossil honesty) |
 | 8 | **C#** | `.cs` | **written below** (carries its borrowed lineage and two dated deferrals) |
-| 9 | Swift | `.swift` | `[NOT YET WRITTEN]` |
+| 9 | **Swift** | `.swift` | **written below** (Apache 2.0 source — see `NOTICE`) |
 
 ---
 
@@ -882,6 +885,116 @@ Scope notes and sourcing:
 
 ---
 
+### Block 9 — Swift (`.swift`)
+
+The last block, and the one with a licensing consequence the other eight do
+not have. Google's Swift guide is the **only guide read for this catalog that
+is not published from `google/styleguide`** — it comes from the `gh-pages`
+branch of `github.com/google/swift`, which carries **Apache 2.0 with the
+Runtime Library Exception**, not the CC BY 3.0 that covers the rest. Quoting
+it therefore pulls a second license into a repository whose `LICENSE` is MIT.
+That is recorded in the repository `NOTICE` as its own item; this block was
+not written until the `NOTICE` matched reality, because a block that quietly
+invalidates the repository's own license notice would be the same defect this
+file keeps flagging in other people's work.
+
+Its subject matter is distinctive too: where the other blocks legislate
+*shape*, this guide spends much of its authority on **safety at the type
+level** — force-unwrapping, implicitly unwrapped optionals, sentinel values.
+And it defers to Apple more completely than any guide in the corpus defers to
+anyone: Apple's naming guidelines are declared to be *part of* this document.
+
+Re-cut from the Swift section of `language-style-guide-patterns.md` and Hook 2
+— **no new verbatim quote is introduced in this block**.
+
+```text
+You are reviewing Swift. Apply these rules ONLY to .swift files. Do not
+extend them to other languages. Do not invent rules beyond this list.
+
+- Apple's Swift naming and API design guidelines (swift.org) are considered
+  PART OF this style guide and are followed as if repeated in it entirely.
+  When a naming question is not answered below, the answer is Apple's, not
+  this prompt's — say so rather than inventing one.
+- Semicolons are not used, to terminate or separate statements. The only
+  place a semicolon may legally appear is inside a string literal or a
+  comment.
+- Column limit is 100 characters.
+- Trailing commas are REQUIRED in array and dictionary literals when each
+  element is on its own line (it produces cleaner diffs when items are added
+  later).
+- Force-unwrapping and force-casting are strongly discouraged. Where one
+  survives, require a comment describing the invariant that makes it safe --
+  unless the surrounding code makes it extremely clear. Do not ban the
+  construct; price it.
+- Implicitly unwrapped optionals are inherently unsafe; prefer non-optional
+  declarations or regular Optional types.
+- Avoid sentinel values (e.g. returning an index of -1 for "not found"); use
+  Optional instead. Sentinels propagate accidentally because the type system
+  cannot tell them from valid data.
+- Throw errors rather than merging error states into the return type; use
+  error types when there are multiple possible error states.
+- Prefer `guard` for early exit: it keeps the main logic flush left and keeps
+  each failure condition next to what triggers it.
+- Use access control (internal, fileprivate, private) to hide information
+  from clients. Naming conventions are NOT a substitute for it; an
+  underscore prefix is for rare cases where a declaration needs more
+  visibility than wanted to work around a language limitation.
+- Import exactly the top-level modules used -- nothing more, nothing less.
+  Prefer whole-module imports over individual declarations or submodules.
+  Never rely on one framework transitively importing another. Import
+  statements are not line-wrapped.
+- Documentation comments use /// on each line. Javadoc-style /** ... */
+  blocks are not permitted.
+- At most one statement per line.
+```
+
+Scope notes and sourcing:
+
+- **Apple incorporation by reference** — verbatim in the corpus: *"Apple's
+  [official Swift naming and API design guidelines](https://swift.org/documentation/api-design-guidelines/)
+  hosted on swift.org are considered part of this style guide and are
+  followed as if they were repeated here in their entirety."* The corpus
+  distinguishes this from the C# guide's weaker *"Naming rules follow
+  Microsoft's C# naming guidelines"* — one commits to obeying an external
+  document, this one declares the external document to **be inside** Google's
+  own. The prompt block therefore instructs the reviewer to *defer* on
+  unanswered naming questions rather than to guess, because the guide's own
+  answer is "Apple's."
+- **Licensing consequence, stated plainly.** The quotations in this block come
+  from a repository under **Apache 2.0 with the Runtime Library Exception**,
+  not CC BY 3.0. Reuse of this block's quoted material must satisfy Apache
+  2.0's attribution terms. See `NOTICE` item 2. This is the block that made
+  the earlier `NOTICE` — which listed Swift among the CC BY 3.0 guides —
+  measurably wrong; it was corrected before this block was written.
+- **Semicolons, 100 columns, trailing commas, force-unwrapping, implicitly
+  unwrapped optionals, sentinel values, thrown errors, `guard`, access
+  control, imports, `///` comments, one statement per line** — all are
+  verbatim in the corpus's Swift section. Condensed into imperative form here;
+  the exact wording, including the emphasis markup the raw source carries on
+  *not used* and *required*, lives there.
+- **A sourcing strength worth naming:** the corpus records that this guide's
+  raw Markdown was directly retrievable, so its quotes were checked against
+  literal source text rather than a rendered page — a stronger guarantee than
+  the Shell and JavaScript sections had. That is why this block carries no
+  glyph-level caveat, while the corpus's Shell section does.
+- **Two glyph-level notes are deliberately not reproduced as rules:** the
+  corpus records that the source writes the sentinel example's −1 with a
+  Unicode minus sign, and that the two independent passes disagreed on the
+  quotation marks around "pyramid of doom." The prompt uses an ASCII hyphen
+  for readability and does not quote the phrase at all — neither is a rule,
+  and asserting either as one would over-claim.
+- **Scope of the source itself:** Apple's own guidelines were **not** read for
+  this catalog, even though this guide absorbs them. So this block states that
+  Apple's document governs the unanswered naming questions; it does **not**
+  state what Apple's document says. That boundary is the whole reason the
+  first prompt line tells the reviewer to defer rather than answer.
+
+> Source: `language-style-guide-patterns.md` Swift section (all rules verbatim
+> there, checked against raw Markdown source); Hook 2 (100 columns); `NOTICE`
+> item 2 for the license. No guide was re-fetched by 021 for this block.
+
+---
+
 ## Honesty ledger for this file
 
 - No new guides were read; still eighteen. This file re-cuts verified
@@ -892,9 +1005,10 @@ Scope notes and sourcing:
 - Sections **3 and 6 are complete** and source-checked on every quoted side;
   where a claim was not already in the prior corpus (the naming tables), the
   guide was fetched and the quote confirmed, and that is stated inline.
-- Section **9 is in progress**: blocks 1–8 (TypeScript, JavaScript, HTML/CSS,
-  Python, Go, Java, C++, C#) are written; block 9 is marked
-  `[NOT YET WRITTEN]` in the block-status table. The TypeScript block
+- Section **9 is complete**: all nine blocks (TypeScript, JavaScript,
+  HTML/CSS, Python, Go, Java, C++, C#, Swift) are written, one commit each,
+  each verified by `tools/check_verbatim.py` before the next was begun. The
+  TypeScript block
   introduces **no new verbatim**; the JavaScript block re-cuts the same shared
   rules **plus** two verbatim quotes (80-column §4.4, indentation §4.2) that
   were already source-verified in `combination-packs.md` and are flagged there
@@ -936,8 +1050,26 @@ Scope notes and sourcing:
   shipped-in-2017 fact is marked as the corpus's observation rather than the
   guide's words. The Unity-type finding recorded in the corpus is deliberately
   **left out** of the prompt: it is real, but it is not an enforceable rule,
-  and only enforceable material goes in the blocks. Do not treat the one
-  pending block as finished.
+  and only enforceable material goes in the blocks.
+- The Swift block introduces **no new verbatim** either, and it is the only
+  block whose source sits under a **different license**: Google's Swift guide
+  is published from `github.com/google/swift` (Apache 2.0 with the Runtime
+  Library Exception), not `google/styleguide` (CC BY 3.0). The repository
+  `NOTICE` had listed Swift among the CC BY 3.0 guides; that was measured,
+  found wrong, and corrected in its own commit **before** this block was
+  written, so the file and the notice cannot disagree. The block also defers
+  on naming rather than answering: Apple's guidelines are declared part of the
+  Swift guide, and Apple's document was **not** read for this catalog, so the
+  prompt tells a reviewer to say the answer is Apple's instead of inventing
+  one. Two glyph-level notes the corpus records (a Unicode minus sign in the
+  sentinel example; disputed quotation marks around "pyramid of doom") are
+  deliberately not asserted as rules.
+- **A bookkeeping miss, recorded rather than smoothed over:** the status line
+  at the head of section 9 read "2 of 9 blocks written" from the writing of
+  Block 3 until Block 9, while the per-block table beside it was kept current.
+  Two status statements, one maintained and one not — the same shape as a
+  commit message that outlives its file. It is fixed, and named here because a
+  status marker that silently rots is worse than no marker.
 - One honesty correction made while writing 6: **Go's indentation is recorded
   as a guide *silence* plus a `gofmt` tooling note — not as a quoted rule.**
   Presenting "Go mandates tabs" as a third quoted camp would over-claim.
