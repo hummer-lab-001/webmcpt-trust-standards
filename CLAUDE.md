@@ -43,6 +43,17 @@ The guarantee is `tools/check_selfclaims.py` **check F**, which reads the
 committed history and fails if any commit carries the trailer — whichever of
 those three holes it arrived through. Constrain the result, not the route.
 
+A fourth hole was found after the hook was first pushed: it went out as mode
+`100644`. `chmod +x` had been run, but `core.filemode` is `false` in this
+working copy, so git recorded nothing — and **git skips a non-executable hook
+silently**, with no error. **Check G1** now verifies the mode recorded in the
+index, so the guard cannot ship in a state where it never fires. If you ever
+re-add the hook:
+
+```
+git update-index --chmod=+x .githooks/commit-msg
+```
+
 ## Claims
 
 Two checks exist because two claims here are easy to state and hard to keep

@@ -35,8 +35,10 @@ What it checks
   E. The corpus guide-count claim ("eighteen guides") equals the number of
      guide sections in language-style-guide-patterns.md.
   F. No commit in the history carries a `Co-Authored-By:` trailer (GR-013).
-  G. Any file that mentions the commit-msg hook also states the hook's three
-     limits, so the guard is never described as more than it is.
+  G. The hook can actually run (G1: recorded executable in the index -- git
+     skips a non-executable hook in silence), and any file that mentions it
+     also states its three limits (G2), so the guard is never described as
+     more than it is.
   H. Commits made after a recorded baseline use the GR-013 author.
 
 Why F, G and H sit here rather than only in the hook
@@ -57,6 +59,15 @@ Check G exists because the hook's presence is itself a claim. A repository that
 says "commits are blocked from carrying the trailer" while shipping a guard that
 a clone silently drops has made the same mistake this whole toolchain is built
 to catch: stating a rule more broadly than the thing that enforces it.
+
+There turned out to be a fourth hole, and it was found the honest way — by
+measuring the pushed result instead of trusting the local action. The hook was
+committed as mode 100644. `chmod +x` had been run, but this working copy has
+`core.filemode = false`, so git recorded nothing; and git skips a
+non-executable hook in complete silence. For one commit, anyone cloning this
+repository onto Linux or macOS would have had a hook that never ran and never
+said so. That is why G1 checks the index mode rather than the file on disk:
+the disk bit is what was already believed, and belief is what failed.
 
 What this does not cover
 ------------------------
@@ -251,6 +262,26 @@ def check(injected: str = "", injected_commit_body: str = "") -> list[str]:
                 )
 
     # --- G: the hook is never described as more than it is ----------------
+    # G1: it has to be able to run at all. Git silently skips a hook that is
+    # not executable -- no error, no output, the guard simply never fires. On
+    # Windows `core.filemode` is false, so a local `chmod +x` is not recorded
+    # in the index and the file reaches every other clone as 100644. This
+    # repository shipped exactly that for one commit.
+    mode = git("ls-files", "-s", HOOK)
+    if mode is None:
+        failures.append(
+            f"G1. skipped: could not read the index mode of `{HOOK}`. "
+            "Unverified, not passed."
+        )
+    elif mode.strip() and not mode.startswith("100755"):
+        failures.append(
+            f"G1. `{HOOK}` is recorded as mode {mode.split()[0]}, not 100755. "
+            "Git skips a non-executable hook without saying so, so the guard "
+            "would never fire for anyone who clones this. Fix with: "
+            f"git update-index --chmod=+x {HOOK}"
+        )
+
+    # G2: wherever the hook is described, its limits are described too.
     for f in md_files():
         text = f.read_text(encoding="utf-8")
         if f.name == pathlib.Path(BLOCKS_FILE).name:
@@ -262,7 +293,7 @@ def check(injected: str = "", injected_commit_body: str = "") -> list[str]:
         if missing:
             rel = f.relative_to(REPO)
             failures.append(
-                f"G. {rel}: describes `{HOOK}` without stating that it is "
+                f"G2. {rel}: describes `{HOOK}` without stating that it is "
                 f"{', and '.join(missing)}. A guard's limits belong next to "
                 f"the claim that it guards."
             )
@@ -292,7 +323,7 @@ def report(failures: list[str]) -> int:
         print("  checked: block counters, status table, [NOT YET WRITTEN] markers,")
         print("           repo-local path references, corpus guide count,")
         print("           Co-Authored-By across the whole history (GR-013),")
-        print("           the hook's limits being stated wherever it is described,")
+        print("           the hook being executable and its limits stated where described,")
         print(f"           commit author since {GR013_BASELINE}.")
         return 0
     print("RED: the repository contradicts itself.\n")
