@@ -1,0 +1,24 @@
+#!/bin/sh
+# GR-013 (2026-07-30): reject a commit whose message carries a Co-Authored-By
+# trailer.
+#
+# This hook is best-effort, and knowing why matters more than having it:
+#
+#   * it is not carried by `git clone` (it needs `git config core.hooksPath
+#     .githooks` to be run once per working copy),
+#   * it is skipped by `git commit --no-verify`,
+#   * it never looks at commits that already exist.
+#
+# So the hook is a convenience at the moment of typing, not the guarantee.
+# The guarantee is `tools/check_selfclaims.py` check F, which scans the
+# committed history itself and therefore catches a violation regardless of
+# which of the three holes above it came through.
+if grep -qi '^Co-Authored-By:' "$1"; then
+  echo "" >&2
+  echo "GR-013 violation: the commit message contains a Co-Authored-By trailer." >&2
+  grep -in '^Co-Authored-By:' "$1" >&2
+  echo "Remove that line and commit again." >&2
+  echo "" >&2
+  exit 1
+fi
+exit 0

@@ -34,6 +34,29 @@ What it checks
      existed — sit in NOTICE while the real file was `check_verbatim.py`.)
   E. The corpus guide-count claim ("eighteen guides") equals the number of
      guide sections in language-style-guide-patterns.md.
+  F. No commit in the history carries a `Co-Authored-By:` trailer (GR-013).
+  G. Any file that mentions the commit-msg hook also states the hook's three
+     limits, so the guard is never described as more than it is.
+  H. Commits made after a recorded baseline use the GR-013 author.
+
+Why F, G and H sit here rather than only in the hook
+----------------------------------------------------
+`.githooks/commit-msg` refuses the trailer while you are typing. It has three
+holes, all of the same kind — they are holes in the *route*:
+
+  * `git clone` does not carry it (`core.hooksPath` lives in `.git/config`),
+  * `git commit --no-verify` walks straight past it,
+  * it never looks at commits that already exist.
+
+Enumerating routes never finishes; a new route is always one flag away. Check F
+constrains the *result* instead: whatever route a commit took, if the trailer is
+in the history, this goes red. That covers all three holes without knowing about
+any of them.
+
+Check G exists because the hook's presence is itself a claim. A repository that
+says "commits are blocked from carrying the trailer" while shipping a guard that
+a clone silently drops has made the same mistake this whole toolchain is built
+to catch: stating a rule more broadly than the thing that enforces it.
 
 What this does not cover
 ------------------------
@@ -60,11 +83,29 @@ from __future__ import annotations
 import argparse
 import pathlib
 import re
+import subprocess
 import sys
 
 REPO = pathlib.Path(__file__).resolve().parent.parent
 BLOCKS_FILE = "catalog/for-engineers-3-6-9.md"
 CORPUS_FILE = "catalog/language-style-guide-patterns.md"
+
+HOOK = ".githooks/commit-msg"
+
+# GR-013 took effect on 2026-07-30. Commits up to and including this one predate
+# it, are published, and are not rewritten -- so check H starts after it. The
+# baseline is named rather than inferred, so that "we comply" can never quietly
+# come to mean "we moved the line."
+GR013_BASELINE = "3608c1a"
+GR013_AUTHOR = "NEWXUS <info@ouen-battle.com>"
+
+# A file that describes the hook must also describe what the hook cannot do.
+# Each entry is (label, regex that must appear somewhere in the same file).
+HOOK_LIMITS = [
+    ("not carried by clone", r"clone"),
+    ("bypassable with --no-verify", r"--no-verify"),
+    ("blind to existing commits", r"(already exist|existing commits|past commits)"),
+]
 
 # Sections in the corpus file that are not a guide read-through.
 NON_GUIDE_SECTIONS = ("Cross-language pattern", "Honesty note")
@@ -97,7 +138,24 @@ def is_local(path: str) -> bool:
     return path.startswith(LOCAL_PREFIXES) or path in LOCAL_ROOT_FILES
 
 
-def check(injected: str = "") -> list[str]:
+def git(*args: str) -> str | None:
+    """Run a git command, or return None if this is not a usable git checkout.
+
+    A checkout is not guaranteed: this repository is also read as a plain
+    directory of files. The history checks report that they were skipped
+    rather than passing silently, because "no data" is not "no violations."
+    """
+    try:
+        out = subprocess.run(
+            ("git", "-C", str(REPO)) + args,
+            capture_output=True, text=True, encoding="utf-8", errors="replace",
+        )
+    except (OSError, ValueError):
+        return None
+    return out.stdout if out.returncode == 0 else None
+
+
+def check(injected: str = "", injected_commit_body: str = "") -> list[str]:
     """Return a list of failure messages. Empty list means green."""
     failures: list[str] = []
     blocks_text = read(BLOCKS_FILE) + injected
@@ -169,6 +227,62 @@ def check(injected: str = "") -> list[str]:
                     f"E. {rel}: claims '{m.group(1)} ... guides' but "
                     f"{CORPUS_FILE} has {actual} guide sections."
                 )
+
+    # --- F: no Co-Authored-By trailer anywhere in the history (GR-013) ----
+    # The result, not the route. A commit made from a fresh clone with no
+    # hooksPath, or with --no-verify, lands here just the same.
+    log = git("log", "--format=%H%x00%B%x00")
+    if log is None:
+        failures.append(
+            "F. skipped: not a usable git checkout, so the history could not be "
+            "read. This is not a pass — GR-013 is unverified here."
+        )
+    else:
+        entries = [e for e in log.split("\x00\x00") if e.strip()]
+        if injected_commit_body:
+            entries.append("0000000injected\x00" + injected_commit_body)
+        for entry in entries:
+            sha, _, body = entry.partition("\x00")
+            if re.search(r"^Co-Authored-By:", body, re.M | re.I):
+                subject = body.strip().splitlines()[0][:60] if body.strip() else ""
+                failures.append(
+                    f"F. commit {sha.strip()[:8]} carries a Co-Authored-By "
+                    f"trailer (GR-013): \"{subject}\""
+                )
+
+    # --- G: the hook is never described as more than it is ----------------
+    for f in md_files():
+        text = f.read_text(encoding="utf-8")
+        if f.name == pathlib.Path(BLOCKS_FILE).name:
+            text += injected
+        if HOOK not in text:
+            continue
+        missing = [label for label, pat in HOOK_LIMITS
+                   if not re.search(pat, text, re.I)]
+        if missing:
+            rel = f.relative_to(REPO)
+            failures.append(
+                f"G. {rel}: describes `{HOOK}` without stating that it is "
+                f"{', and '.join(missing)}. A guard's limits belong next to "
+                f"the claim that it guards."
+            )
+
+    # --- H: GR-013 author on commits after the recorded baseline ----------
+    authors = git("log", f"{GR013_BASELINE}..HEAD", "--format=%H%x1f%an <%ae>")
+    if authors is None:
+        pass  # baseline absent (shallow clone, or before it existed): nothing to check
+    else:
+        for line in authors.splitlines():
+            if not line.strip():
+                continue
+            sha, _, who = line.partition("\x1f")
+            if who.endswith("[bot]") or "users.noreply.github.com" in who:
+                continue  # CI identities are not covered by GR-013
+            if who != GR013_AUTHOR:
+                failures.append(
+                    f"H. commit {sha[:8]} is authored by '{who}', not "
+                    f"'{GR013_AUTHOR}' (GR-013, from baseline {GR013_BASELINE})."
+                )
     return failures
 
 
@@ -176,7 +290,10 @@ def report(failures: list[str]) -> int:
     if not failures:
         print("green: the repository's claims about itself match the repository.")
         print("  checked: block counters, status table, [NOT YET WRITTEN] markers,")
-        print("           repo-local path references, corpus guide count.")
+        print("           repo-local path references, corpus guide count,")
+        print("           Co-Authored-By across the whole history (GR-013),")
+        print("           the hook's limits being stated wherever it is described,")
+        print(f"           commit author since {GR013_BASELINE}.")
         return 0
     print("RED: the repository contradicts itself.\n")
     for f in failures:
@@ -196,15 +313,23 @@ def main() -> int:
 
     if args.self_test:
         injected = "\n\nStatus: 2 of 9 blocks written.\n"
-        print("self-test: injecting a stale progress counter --")
-        print(f"  {injected.strip()}\n")
-        failures = check(injected=injected)
-        if not any(f.startswith("A.") for f in failures):
-            print("SELF-TEST FAILED: the stale counter passed. The check is decorative.")
+        injected_commit = (
+            "Add a thing\n\nCo-Authored-By: Somebody <somebody@example.com>\n"
+        )
+        print("self-test: injecting two defects that actually occurred --")
+        print(f"  (A) a stale counter: {injected.strip()}")
+        print("  (F) a commit body carrying: Co-Authored-By: Somebody <...>\n")
+        failures = check(injected=injected, injected_commit_body=injected_commit)
+        missed = [
+            letter for letter in ("A.", "F.")
+            if not any(f.startswith(letter) for f in failures)
+        ]
+        if missed:
+            print(f"SELF-TEST FAILED: {', '.join(missed)} passed. The check is decorative.")
             return 1
         report(failures)
-        print("\nself-test passed: the stale counter was rejected.")
-        print("now re-running without it --\n")
+        print("\nself-test passed: both injected defects were rejected.")
+        print("now re-running without them --\n")
         return report(check())
 
     return report(check())
