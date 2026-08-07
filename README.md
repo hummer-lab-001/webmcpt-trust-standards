@@ -92,7 +92,7 @@ working example, released under MIT so the entire ecosystem can use it without a
 > rejecting malicious connections, opaque capital structures, and MCP connections with
 > impure intent — to protect the contextual purity and integrity of AI models.
 >
-> Proposed by HUMMER, Founder, NEWXUS DAO (2024)
+> Proposed by HUMMER, Founder & Creator, NEWXUS DAO (2024)
 
 ## What's inside (first release)
 
