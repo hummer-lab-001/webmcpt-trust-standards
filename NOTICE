@@ -118,6 +118,38 @@ live upstream document. If a future revision does quote swift.org directly,
 that source must be added here with its own license before publishing.
 
 
+5. WebMCP specification and explainer — W3C Software and Document License
+-----------------------------------------------------------------------
+
+Source:      https://github.com/webmachinelearning/webmcp
+             (rendered at https://webmachinelearning.github.io/webmcp/)
+Copyright:   the Contributors to the W3C Web Machine Learning Community Group
+License:     W3C Software and Document License (2023)
+             https://www.w3.org/copyright/software-license-2023/
+Verified:    the repository's LICENSE.md states, in its own words: "All Reports
+             in this Repository are licensed by Contributors under the [W3C
+             Software and Document License]". Read 2026-08-14.
+
+             Note what has and has not been verified here: that sentence was
+             read directly, and the linked licence text itself was NOT read.
+             Anyone relying on the specific terms should read
+             www.w3.org/copyright/software-license-2023/ rather than this file.
+
+Where used:  `catalog/webmcp-and-webmcpt.md` quotes short passages from the
+             specification's Security and Privacy Considerations section and
+             from the explainer's Goals and Non-Goals, each attributed at the
+             point of quotation, as excerpts inside this repository's own
+             analysis. Neither document is reproduced whole or in substantial
+             part, and no quoted sentence is altered. Bikeshed markup that
+             appears inside a quotation (`[=agents=]`, `[[MCP]]`) is left as it
+             stands in the source rather than tidied, so the quotation matches
+             what a reader will find there.
+
+             The same file also quotes one sentence from
+             `GoogleChromeLabs/webmcp-tools` (Apache 2.0, per that
+             repository's own LICENSE listing) describing what that project is.
+
+
 Attribution summary (CC BY 3.0 §4(c) / CC BY-SA 2.0 §4(b) / Apache 2.0 §4)
 --------------------------------------------------------------------------
 
