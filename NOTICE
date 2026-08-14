@@ -130,10 +130,16 @@ Verified:    the repository's LICENSE.md states, in its own words: "All Reports
              in this Repository are licensed by Contributors under the [W3C
              Software and Document License]". Read 2026-08-14.
 
-             Note what has and has not been verified here: that sentence was
-             read directly, and the linked licence text itself was NOT read.
-             Anyone relying on the specific terms should read
-             www.w3.org/copyright/software-license-2023/ rather than this file.
+             The licence text itself ("Software and Document license - 2023
+             version") was read on 2026-08-14. Its grant permits copying and
+             distribution of "portions thereof" provided the licence notice
+             and existing IP notices travel with them; its
+             modification-marking condition concerns modified copies of the
+             work, which this repository does not make — it quotes short,
+             unaltered excerpts with attribution and this NOTICE entry.
+             (An earlier revision of this entry recorded the licence text as
+             not yet read; it has been now, before publication rather than
+             after.)
 
 Where used:  `catalog/webmcp-and-webmcpt.md` quotes short passages from the
              specification's Security and Privacy Considerations section and

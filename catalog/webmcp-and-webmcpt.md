@@ -102,9 +102,11 @@ Three mitigations are proposed. Quoted in full by their "What" lines:
 All three act on the **payload** — how long an input may be, whether a defence
 has been tested against known attacks, and whether a response is flagged as
 untrusted content. None of the three asks **who is on the other end**. There is
-no provenance check, no provider identity, no verification of declared intent
-against actual behaviour, and no stated basis on which an agent should decline
-a connection.
+no provenance check, no provider identity, and no verification of declared
+intent against actual behaviour. (The specification does refuse some
+connections — non-secure origins are rejected with a `SecurityError`, and
+permissions policy can deny a context outright — but those refusals check the
+transport and the embedding context, not the provider.)
 
 One risk category is explicitly unwritten:
 
@@ -119,9 +121,18 @@ One risk category is explicitly unwritten:
   verification mechanism is stated as a current gap, and the assumption agents
   are forced to make ("must assume good faith from site developers") is written
   down rather than left implicit.
-- **Not addressed:** any mechanism. Nothing in the specification establishes
-  who may be trusted, verifies a provider's identity or a tool's declared
-  intent, or gives an agent a basis for refusing a connection.
+- **Not addressed:** any mechanism that evaluates the counterparty. The
+  specification does contain refusals — an origin that is not potentially
+  trustworthy is rejected with a `SecurityError`, and a context denied by
+  permissions policy is rejected with a `NotAllowedError` — but both operate at
+  the transport-and-permission floor: they check *how* the connection is made
+  and *whether the embedding context is allowed*, not *who* is offering the
+  tool. Nothing in the specification establishes who may be trusted, verifies
+  a provider's identity or a tool's declared intent against its behaviour, or
+  gives an agent a basis for refusing a connection **on an evaluation of its
+  provider**. (An earlier revision of this entry said there was no basis for
+  refusing a connection at all; that was broader than the source, and the
+  `SecurityError` rejection alone would have refuted it.)
 
 **Scope of this reading.** Read in full: the Security and Privacy
 Considerations section of the specification (`index.bs`, all subsections
@@ -130,9 +141,21 @@ including Mitigations), and the Goals and Non-Goals of the explainer
 `GoogleChromeLabs/webmcp-tools`, which describes itself as
 > "a suite of developer utilities and demos designed to support the adoption of
 > the WebMCP API"
-and which a full-text search found contains none of the words *trust*,
-*provenance*, *identity*, *verify*, *verification*, *reject*, *malicious*, or
-*security*.
+Measured mechanically (a script counting case-insensitive matches, not a
+reader or an AI summary) against its `README.md` at commit `f4e830b1`
+(last changed 2026-07-09; 4,629 bytes): of the words *trust*, *provenance*,
+*identity*, *verification*, *reject* and *malicious*, none occurs. *verify*
+occurs twice — an inspector extension "to verify if WebMCP tools are correctly
+exposed" and an evals CLI, both about testing an integration, not about
+trusting a provider. *security* occurs once, inside the URL of a vulnerability
+rewards programme notice. Nothing in the file concerns who may be trusted.
+
+(An earlier revision of this entry said all eight words occurred zero times.
+The file had not changed; the count had been delegated to an AI fetch summary,
+which answered "none" — and a second summary of the same bytes later gave a
+third, different count. Neither matched the file. The correction here is not
+the numbers; it is that a count delegated to a summariser is not a
+measurement.)
 
 Not read: the specification's other sections in full, the group's issue
 tracker, meeting minutes, and any linked MCP documents. **"Not found in what
